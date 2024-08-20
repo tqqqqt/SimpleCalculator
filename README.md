@@ -6,7 +6,7 @@ This QT project implements a calculator for computers. The interface style is ba
 # Technical specifications:
 **QT version** - 5.12.3 \
 **QT Creator version** - 4.9.1? \
-**System** - Windows 10 x86_64 \
+**System** - Windows 10 x86_64
 
 # Future plans:
 - [x] Make a basic interface
