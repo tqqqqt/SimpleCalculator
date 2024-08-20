@@ -69,5 +69,64 @@ int CalculatorMath::SetString(std::string newString){
 }
 
 std::string CalculatorMath::GetResult(){
-    return result;
+    for(size_t i=0;i<polishEntry.size();){
+        if(polishEntry[i]!="+" && polishEntry[i]!="-" && polishEntry[i]!="/" && polishEntry[i]!="*"){
+            i++;
+            continue;
+        }
+        //for(auto x:polishEntry) std::cout<<x<<" ";
+        //std::cout<<"\n \n";
+        std::string tempRes="";
+        if(polishEntry[i]=="+"){
+            if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-'){
+                polishEntry[i-2].erase(0,1);
+                tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
+            }
+            else if(polishEntry[i-1][0]=='-' && polishEntry[i-2][0]!='-'){
+                polishEntry[i-1].erase(0,1);
+                tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
+            }
+            else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]=='-'){
+                polishEntry[i-1].erase(0,1);
+                polishEntry[i-2].erase(0,1);
+                tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
+            }
+            else tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
+
+        }
+        else if(polishEntry[i]=="-"){
+            if(polishEntry[i-2][0]!='-' && polishEntry[i-1][0]=='-'){
+                polishEntry[i-1].erase(0,1);
+                tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
+            }
+            else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-'){
+                polishEntry[i-2].erase(0,1);
+                tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
+            }
+            else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]=='-'){
+                polishEntry[i-2].erase(0,1);
+                polishEntry[i-1].erase(0,1);
+                tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
+            }
+            else tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
+        }
+        else if(polishEntry[i]=="/") tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
+        else{
+            if((polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-') || (polishEntry[i-2][0]!='-' && polishEntry[i-1][0]=='-')){
+                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
+                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
+                tempRes='-'+MathMul(polishEntry[i-2],polishEntry[i-1]);
+            }
+            else{
+                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
+                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
+                tempRes=MathMul(polishEntry[i-2],polishEntry[i-1]);
+            }
+        }
+        polishEntry[i-2]=tempRes;
+        polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
+        i--;
+    }
+    if(polishEntry[0][0]=='-') return "("+polishEntry[0]+")";
+    return polishEntry[0];
 }

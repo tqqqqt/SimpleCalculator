@@ -5,6 +5,8 @@
 #include <vector>
 #include <stack>
 
+#include "numbermath.h"
+
 class CalculatorMath
 {
 private:
