@@ -28,12 +28,14 @@ SOURCES += \
         History/historywindow.cpp \
         main.cpp \
         mainwindow.cpp \
-        source/calculatormath.cpp
+        source/calculatormath.cpp \
+        source/numbermath.cpp
 
 HEADERS += \
         History/historywindow.h \
         mainwindow.h \
-        source/calculatormath.h
+        source/calculatormath.h \
+        source/numbermath.h
 
 FORMS += \
         History/historywindow.ui \
