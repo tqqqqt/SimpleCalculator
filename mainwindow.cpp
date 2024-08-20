@@ -280,8 +280,7 @@ void MainWindow::ButtonZnak(){
 void MainWindow::ButtonResult(){
     QString tempResult="";
     if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
-    else tempResult="resul1";
-    //else tempResult=QString::fromStdString(calculatorMathObject->GetResult());
+    else tempResult=QString::fromStdString(calculatorMathObject->GetResult());
     historyArr.push_back(curentText+"="+tempResult);
     curentText=tempResult;
     ui->label->setText(curentText);
@@ -309,4 +308,5 @@ void MainWindow::ButtonDeleteLast(){
         else if(temp==')') typeLastSymbol=4;
         else if(temp=='-' || temp=='+' || temp=='*' || temp=='/') typeLastSymbol=5;
     }
+    if(flagAfterResult) flagAfterResult=false;
 }
