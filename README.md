@@ -1,12 +1,12 @@
 ## SimpleCalculator
 # QT calculator
 
-This project implements a calculator for computers. The interface style is based on the android calculator. All numbers are stored in string format, which should allow calculating very large numbers.
+This QT project implements a calculator for computers. The interface style is based on the android calculator. All numbers are stored in string format, which should allow calculating very large numbers.
 
 # Technical specifications:
-**QT version** - 5.12.3
-**QT Creator version** - 4.9.1 ?
-**System** - Windows 10 x86_64
+**QT version** - 5.12.3\
+**QT Creator version** - 4.9.1?\
+**System** - Windows 10 x86_64\
 
 # Future plans:
 - [x] Make a basic interface
