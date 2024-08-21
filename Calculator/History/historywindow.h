@@ -2,6 +2,7 @@
 #define HISTORYWINDOW_H
 
 #include <QMainWindow>
+#include <QStringListModel>
 
 namespace Ui {
 class HistoryWindow;
@@ -13,6 +14,7 @@ class HistoryWindow : public QMainWindow
 
 public:
     explicit HistoryWindow(QWidget *parent = nullptr);
+    HistoryWindow(const QVector<QString>& history, QWidget* parent=nullptr);
     ~HistoryWindow();
 
 private:

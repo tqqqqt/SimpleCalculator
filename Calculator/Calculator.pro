@@ -25,13 +25,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        History/historywindow.cpp \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        source/calculatormath.cpp \
+        source/numbermath.cpp
 
 HEADERS += \
-        mainwindow.h
+        History/historywindow.h \
+        mainwindow.h \
+        source/calculatormath.h \
+        source/numbermath.h
 
 FORMS += \
+        History/historywindow.ui \
         mainwindow.ui
 
 # Default rules for deployment.
