@@ -26,7 +26,7 @@ int CalculatorMath::SetString(std::string newString){
             temp+=x;
             continue;
         }
-        if(operMas.size() && (x=='-' && operMas.top()=='(')){
+        if(operMas.size() && (x=='-' && operMas.top()=='(' && temp=="")){
             temp+='-';
             continue;
         }
