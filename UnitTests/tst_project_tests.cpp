@@ -18,9 +18,12 @@ private slots:
     void test_mathNeg();
     void test_mathMul_data();
     void test_mathMul();
-    void test_polish_entry1();
-    void test_polish_entry2();
-
+    void test_polish_entry_noError_data();
+    void test_polish_entry_noError();
+    void test_polish_entry_error_data();
+    void test_polish_entry_error();
+    void test_full_calculate_data();
+    void test_full_calculate();
 };
 
 project_tests::project_tests()
@@ -90,6 +93,39 @@ void project_tests::test_mathMul_data(){
     QTest::newRow("row14")<<"123456789987654321"<<"123456789987654321"<<"15241578994055784200731595789971041";
 }
 
+void project_tests::test_polish_entry_noError_data(){
+    QTest::addColumn<QString>("expression");
+    QTest::addColumn<int>("result");
+    QTest::newRow("row1")<<"2+2"<<0;
+    QTest::newRow("row2")<<"0+0"<<0;
+    QTest::newRow("row3")<<"2+(2-2)"<<0;
+    QTest::newRow("row4")<<"2+(2-(4*8))"<<0;
+    QTest::newRow("row5")<<"2+(3*(4*(5*(6*(7*(8+9))))))"<<0;
+}
+
+void project_tests::test_polish_entry_error_data(){
+    QTest::addColumn<QString>("expression");
+    QTest::addColumn<int>("result");
+    QTest::newRow("row1")<<"-2+2"<<3;
+    QTest::newRow("row2")<<"(-2+2"<<2;
+    QTest::newRow("row3")<<"2+(-2"<<2;
+    QTest::newRow("row4")<<"2+-2"<<2;
+    QTest::newRow("row5")<<"2+(3-(4*5)"<<2;
+}
+
+void project_tests::test_full_calculate_data(){
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("result");
+    QTest::newRow("row1")<<"2+2"<<"4";
+    QTest::newRow("row2")<<"2-2"<<"0";
+    QTest::newRow("row3")<<"2-4"<<"(-2)";
+    QTest::newRow("row4")<<"2+2*2"<<"6";
+    QTest::newRow("row5")<<"2+(2-2+(4*8))"<<"34";
+    QTest::newRow("row6")<<"2*(3*(4*(5*(6*(7*(8+9))))))"<<"85680";
+    QTest::newRow("row7")<<"(413*826)+(795*234)"<<"527168";
+    QTest::newRow("row8")<<"2*(4*(3+2)+(5+4)*6)"<<"148";
+}
+
 void project_tests::test_mathSum(){
     QFETCH(QString,firstNum);
     QFETCH(QString,secondNum);
@@ -111,15 +147,27 @@ void project_tests::test_mathMul(){
     QCOMPARE(MathMul(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
 }
 
-void project_tests::test_polish_entry1()
+void project_tests::test_polish_entry_noError()
 {
     CalculatorMath* creatorEntry=new CalculatorMath();
-    QCOMPARE(creatorEntry->SetString("2+(2-2+(4*8))"),0);
+    QFETCH(QString,expression);
+    QFETCH(int,result);
+    QCOMPARE(creatorEntry->SetString(expression.toStdString()),result);
 }
 
-void project_tests::test_polish_entry2(){
+void project_tests::test_polish_entry_error(){
     CalculatorMath* creatorEntry=new CalculatorMath();
-    QCOMPARE(creatorEntry->SetString("2+(2-2+(4*8)"),2);
+    QFETCH(QString,expression);
+    QFETCH(int,result);
+    QCOMPARE(creatorEntry->SetString(expression.toStdString()),result);
+}
+
+void project_tests::test_full_calculate(){
+    CalculatorMath* creatorEntry=new CalculatorMath();
+    QFETCH(QString,input);
+    QFETCH(QString,result);
+    creatorEntry->SetString(input.toStdString());
+    QCOMPARE(creatorEntry->GetResult(),result.toStdString());
 }
 
 QTEST_APPLESS_MAIN(project_tests)
