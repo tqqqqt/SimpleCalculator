@@ -109,7 +109,7 @@ void project_tests::test_polish_entry_error_data(){
     QTest::newRow("row1")<<"-2+2"<<3;
     QTest::newRow("row2")<<"(-2+2"<<2;
     QTest::newRow("row3")<<"2+(-2"<<2;
-    QTest::newRow("row4")<<"2+-2"<<2;
+    QTest::newRow("row4")<<"2+-2"<<4;
     QTest::newRow("row5")<<"2+(3-(4*5)"<<2;
 }
 
