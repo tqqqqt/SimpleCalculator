@@ -13,6 +13,7 @@ private:
     std::string curentString, result;
     std::vector<std::string> polishEntry;
     int CheckPrior(char symbol);
+    bool CheckOper(char symbol);
 
 public:
     CalculatorMath();

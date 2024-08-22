@@ -16,16 +16,24 @@ int CalculatorMath::CheckPrior(char symbol){
     return 0;
 }
 
+bool CalculatorMath::CheckOper(char symbol){
+    return symbol=='+' || symbol=='-' || symbol=='*' || symbol=='/';
+}
+
 int CalculatorMath::SetString(std::string newString){
     curentString=newString;
     polishEntry.clear();
     std::string temp="";
     std::stack<char> operMas;
+    bool lastOper=false;
     for(const char& x:curentString){
         if(x>='0' && x<='9'){
             temp+=x;
+            lastOper=false;
             continue;
         }
+        if(lastOper==false) lastOper=CheckOper(x);
+        else if(lastOper && CheckOper(x)) return 4;
         if(operMas.size() && (x=='-' && operMas.top()=='(' && temp=="")){
             temp+='-';
             continue;
@@ -36,6 +44,7 @@ int CalculatorMath::SetString(std::string newString){
         }
         if(x=='('){
             operMas.push(x);
+            lastOper=false;
             continue;
         }
         else if(x==')'){
@@ -50,8 +59,10 @@ int CalculatorMath::SetString(std::string newString){
                 operMas.pop();
             }
             if(!findOpenBracket) return 1;
+            lastOper=false;
             continue;
         }
+        if(polishEntry.size()==0) return 3;
         int curentPrior=CheckPrior(x);
         while(!operMas.empty() && curentPrior<=CheckPrior(operMas.top())){
             polishEntry.push_back(std::string(1,operMas.top()));
