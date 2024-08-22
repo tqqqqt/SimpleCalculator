@@ -6,4 +6,11 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES +=  tst_project_tests.cpp
+HEADERS += \
+        ../Calculator/source/calculatormath.h \
+        ../Calculator/source/numbermath.h
+
+SOURCES += \
+        tst_project_tests.cpp \
+        ../Calculator/source/calculatormath.cpp \
+        ../Calculator/source/numbermath.cpp
