@@ -199,7 +199,7 @@
        <item row="2" column="3">
         <widget class="QPushButton" name="pushButton_devide">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>/</string>
