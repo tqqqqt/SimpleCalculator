@@ -284,6 +284,14 @@ void MainWindow::ButtonResult(){
     historyArr.push_back(curentText+"="+tempResult);
     curentText=tempResult;
     ui->label->setText(curentText);
+    if(tempResult[0]=='E'){
+        curentText="";
+        flagAfterResult=false;
+        countOpenBracket=0;
+        typeLastSymbol=0;
+        curentTextLength=0;
+        return;
+    }
     flagAfterResult=true;
     curentTextLength=curentText.length();
     typeLastSymbol=1;
