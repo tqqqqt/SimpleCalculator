@@ -118,7 +118,18 @@ std::string CalculatorMath::GetResult(){
             }
             else tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
         }
-        else if(polishEntry[i]=="/") tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
+        else if(polishEntry[i]=="/"){
+            if((polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-') || (polishEntry[i-2][0]!='-' && polishEntry[i-1][0]=='-')){
+                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
+                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
+                tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1]);
+            }
+            else{
+                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
+                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
+                tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
+            }
+        }
         else{
             if((polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-') || (polishEntry[i-2][0]!='-' && polishEntry[i-1][0]=='-')){
                 if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
@@ -131,6 +142,7 @@ std::string CalculatorMath::GetResult(){
                 tempRes=MathMul(polishEntry[i-2],polishEntry[i-1]);
             }
         }
+        if(tempRes[0]=='E') return tempRes;
         polishEntry[i-2]=tempRes;
         polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
         i--;
