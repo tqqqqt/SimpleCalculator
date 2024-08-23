@@ -25,17 +25,19 @@ int CalculatorMath::SetString(std::string newString){
     polishEntry.clear();
     std::string temp="";
     std::stack<char> operMas;
-    bool lastOper=false;
+    bool lastOper=false, lastOpenBrack=false;
     for(const char& x:curentString){
         if(x>='0' && x<='9'){
             temp+=x;
             lastOper=false;
+            lastOpenBrack=false;
             continue;
         }
         if(lastOper==false) lastOper=CheckOper(x);
         else if(lastOper && CheckOper(x)) return 4;
-        if(operMas.size() && (x=='-' && operMas.top()=='(' && temp=="")){
+        if(operMas.size() && (x=='-' && lastOpenBrack && temp=="")){
             temp+='-';
+            lastOpenBrack=false;
             continue;
         }
         if(temp!=""){
@@ -45,9 +47,11 @@ int CalculatorMath::SetString(std::string newString){
         if(x=='('){
             operMas.push(x);
             lastOper=false;
+            lastOpenBrack=true;
             continue;
         }
         else if(x==')'){
+            lastOpenBrack=false;
             bool findOpenBracket=false;
             while(!operMas.empty() && !findOpenBracket){
                 if(operMas.top()=='('){
@@ -62,6 +66,7 @@ int CalculatorMath::SetString(std::string newString){
             lastOper=false;
             continue;
         }
+        lastOpenBrack=false;
         if(polishEntry.size()==0) return 3;
         int curentPrior=CheckPrior(x);
         while(!operMas.empty() && curentPrior<=CheckPrior(operMas.top())){
