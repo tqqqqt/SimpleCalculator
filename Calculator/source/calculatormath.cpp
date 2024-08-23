@@ -25,48 +25,40 @@ int CalculatorMath::SetString(std::string newString){
     polishEntry.clear();
     std::string temp="";
     std::stack<char> operMas;
-    bool lastOper=false, lastOpenBrack=false;
+    int lastSymbol=0;
     for(const char& x:curentString){
         if(x>='0' && x<='9'){
             temp+=x;
-            lastOper=false;
-            lastOpenBrack=false;
+            lastSymbol=1;
             continue;
         }
-        if(lastOper==false) lastOper=CheckOper(x);
-        else if(lastOper && CheckOper(x)) return 4;
-        if(operMas.size() && (x=='-' && lastOpenBrack && temp=="")){
+        if(lastSymbol==5) return 1;
+        if(x=='-' && lastSymbol==3 && temp==""){
             temp+='-';
-            lastOpenBrack=false;
+            lastSymbol=5;
             continue;
         }
         if(temp!=""){
             polishEntry.push_back(temp);
             temp="";
         }
-        if(x=='('){
-            operMas.push(x);
-            lastOper=false;
-            lastOpenBrack=true;
-            continue;
-        }
-        else if(x==')'){
-            lastOpenBrack=false;
-            bool findOpenBracket=false;
-            while(!operMas.empty() && !findOpenBracket){
-                if(operMas.top()=='('){
-                    findOpenBracket=true;
-                    operMas.pop();
-                    break;
-                }
+        if(x=='(' || x==')'){
+            if(x=='('){
+                operMas.push(x);
+                lastSymbol=3;
+                continue;
+            }
+            lastSymbol=4;
+            while(!operMas.empty() && operMas.top()!='('){
                 polishEntry.push_back(std::string(1,operMas.top()));
                 operMas.pop();
             }
-            if(!findOpenBracket) return 1;
-            lastOper=false;
+            if(operMas.size()==0) return 1;
+            operMas.pop();
             continue;
         }
-        lastOpenBrack=false;
+        if(lastSymbol==2) return 4;
+        lastSymbol=2;
         if(polishEntry.size()==0) return 3;
         int curentPrior=CheckPrior(x);
         while(!operMas.empty() && curentPrior<=CheckPrior(operMas.top())){
@@ -91,61 +83,33 @@ std::string CalculatorMath::GetResult(){
             continue;
         }
         std::string tempRes="";
-        if(polishEntry[i]=="+"){
-            if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-'){
-                polishEntry[i-2].erase(0,1);
-                tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
-            }
-            else if(polishEntry[i-1][0]=='-' && polishEntry[i-2][0]!='-'){
-                polishEntry[i-1].erase(0,1);
-                tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
-            }
-            else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]=='-'){
-                polishEntry[i-1].erase(0,1);
-                polishEntry[i-2].erase(0,1);
-                tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
-            }
-            else tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
+        if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-'){
+            polishEntry[i-2].erase(0,1);
+            if(polishEntry[i]=="+") tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
+            else if(polishEntry[i]=="-") tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
+            else if(polishEntry[i]=="*") tempRes='-'+MathMul(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1]);
         }
-        else if(polishEntry[i]=="-"){
-            if(polishEntry[i-2][0]!='-' && polishEntry[i-1][0]=='-'){
-                polishEntry[i-1].erase(0,1);
-                tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
-            }
-            else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-'){
-                polishEntry[i-2].erase(0,1);
-                tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
-            }
-            else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]=='-'){
-                polishEntry[i-2].erase(0,1);
-                polishEntry[i-1].erase(0,1);
-                tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
-            }
-            else tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
+        else if(polishEntry[i-1][0]=='-' && polishEntry[i-2][0]!='-'){
+            polishEntry[i-1].erase(0,1);
+            if(polishEntry[i]=="+") tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
+            else if(polishEntry[i]=="-") tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
+            else if(polishEntry[i]=="*") tempRes='-'+MathMul(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1]);
         }
-        else if(polishEntry[i]=="/"){
-            if((polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-') || (polishEntry[i-2][0]!='-' && polishEntry[i-1][0]=='-')){
-                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
-                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
-                tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1]);
-            }
-            else{
-                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
-                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
-                tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
-            }
+        else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]=='-'){
+            polishEntry[i-2].erase(0,1);
+            polishEntry[i-1].erase(0,1);
+            if(polishEntry[i]=="+") tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
+            else if(polishEntry[i]=="-") tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
+            else if(polishEntry[i]=="*") tempRes=MathMul(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
         }
         else{
-            if((polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-') || (polishEntry[i-2][0]!='-' && polishEntry[i-1][0]=='-')){
-                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
-                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
-                tempRes='-'+MathMul(polishEntry[i-2],polishEntry[i-1]);
-            }
-            else{
-                if(polishEntry[i-2][0]=='-') polishEntry[i-2].erase(0,1);
-                if(polishEntry[i-1][0]=='-') polishEntry[i-1].erase(0,1);
-                tempRes=MathMul(polishEntry[i-2],polishEntry[i-1]);
-            }
+            if(polishEntry[i]=="+") tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
+            else if(polishEntry[i]=="-") tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
+            else if(polishEntry[i]=="*") tempRes=MathMul(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
         }
         if(tempRes[0]=='E') return tempRes;
         polishEntry[i-2]=tempRes;
