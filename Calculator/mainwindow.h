@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "History/historywindow.h"
-#include "source/calculatormath.h"
+#include "./History/historywindow.h"
+#include "./source/calculatormath.h"
 
 namespace Ui {
 class MainWindow;
