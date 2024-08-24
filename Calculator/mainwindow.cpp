@@ -282,7 +282,6 @@ void MainWindow::ButtonResult(){
     if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
     else tempResult=QString::fromStdString(calculatorMathObject->GetResult());
     historyArr.push_back(curentText+"="+tempResult);
-    curentText=tempResult;
     ui->label->setText(curentText);
     if(tempResult[0]=='E'){
         curentText="";
@@ -292,6 +291,7 @@ void MainWindow::ButtonResult(){
         curentTextLength=0;
         return;
     }
+    curentText=tempResult;
     flagAfterResult=true;
     curentTextLength=curentText.length();
     typeLastSymbol=1;
