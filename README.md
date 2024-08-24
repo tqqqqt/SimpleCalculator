@@ -11,7 +11,7 @@ This QT project implements a calculator for computers. The interface style is ba
 # Future plans:
 - [x] Make a basic interface
 - [x] Make addition and subtraction
-- [ ] Make multiplication
-- [ ] Make division
+- [x] Make multiplication
+- [x] Make division
 - [ ] Improve the interface
 - [ ] Add a floating point

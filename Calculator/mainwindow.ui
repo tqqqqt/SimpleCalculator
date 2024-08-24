@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>588</width>
-    <height>498</height>
+    <width>609</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -186,7 +186,7 @@
        <item row="3" column="3">
         <widget class="QPushButton" name="pushButton_mull">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>*</string>
@@ -199,7 +199,7 @@
        <item row="2" column="3">
         <widget class="QPushButton" name="pushButton_devide">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>/</string>
@@ -273,7 +273,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>588</width>
+     <width>609</width>
      <height>26</height>
     </rect>
    </property>

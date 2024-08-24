@@ -5,7 +5,7 @@
 #include <vector>
 #include <stack>
 
-#include "numbermath.h"
+#include "./numbermath.h"
 
 class CalculatorMath
 {
@@ -13,6 +13,7 @@ private:
     std::string curentString, result;
     std::vector<std::string> polishEntry;
     int CheckPrior(char symbol);
+    bool CheckOper(char symbol);
 
 public:
     CalculatorMath();
