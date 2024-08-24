@@ -77,11 +77,8 @@ int CalculatorMath::SetString(std::string newString){
 }
 
 std::string CalculatorMath::GetResult(){
-    for(size_t i=0;i<polishEntry.size();){
-        if(polishEntry[i]!="+" && polishEntry[i]!="-" && polishEntry[i]!="/" && polishEntry[i]!="*"){
-            i++;
-            continue;
-        }
+    for(size_t i=0;i<polishEntry.size();i++){
+        if(polishEntry[i]!="+" && polishEntry[i]!="-" && polishEntry[i]!="/" && polishEntry[i]!="*") continue;
         std::string tempRes="";
         if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]!='-'){
             polishEntry[i-2].erase(0,1);
@@ -114,7 +111,7 @@ std::string CalculatorMath::GetResult(){
         if(tempRes[0]=='E') return tempRes;
         polishEntry[i-2]=tempRes;
         polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
-        i--;
+        i-=2;
     }
     if(polishEntry[0][0]=='-') return '('+polishEntry[0]+')';
     return polishEntry[0];

@@ -14,17 +14,9 @@ int FindMultiplier(std::string num1, std::string num2){
     int result=1;
     for(int i=2;i<10;i++){
         if(MaxNumber(MathMul(num2,std::to_string(i)),num1)>=0) result=i;
+        else break;
     }
     return result;
-    /*int l=1, r=9;
-    while(l<r){
-        int mid=std::floor((l+r)/(double)2);
-        int res=MaxLeft(MathMul(num2,std::to_string(mid)),num1);
-        if(res==0) return mid;
-        else if(res==-1) r=mid-1;
-        else l=mid;
-    }
-    return l;*/
 }
 
 std::string MathSum(std::string num1, std::string num2){
