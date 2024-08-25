@@ -31,6 +31,7 @@ private:
 private slots:
     void PressNumberButton(QChar buttonNum);
     void PressOperButton(QChar buttonOper);
+    void ButtonDot();
     void ButtonClear();
     void ButtonOpenBrackets();
     void ButtonCloseBrackets();

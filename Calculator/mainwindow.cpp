@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_n7,&QPushButton::clicked,[this]{ PressNumberButton('7');});
     this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ PressNumberButton('8');});
     this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ PressNumberButton('9');});
+    this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(ButtonDot()));
     this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ PressOperButton('+');});
     this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ PressOperButton('-');});
     this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ PressOperButton('*');});
@@ -56,6 +57,13 @@ void MainWindow::PressOperButton(QChar buttonOper){
     curentText+=buttonOper;
     typeLastSymbol=5;
     if(flagAfterResult) flagAfterResult=false;
+    ui->label->setText(curentText);
+}
+
+void MainWindow::ButtonDot(){
+    if(typeLastSymbol!=1) return;
+    curentText+=',';
+    typeLastSymbol=6;
     ui->label->setText(curentText);
 }
 
