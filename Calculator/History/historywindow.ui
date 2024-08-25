@@ -26,6 +26,17 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QListView" name="listView">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
          <property name="lineWidth">
           <number>2</number>
          </property>
