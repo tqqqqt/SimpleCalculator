@@ -46,13 +46,56 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="6" column="2" colspan="2">
-        <widget class="QPushButton" name="pushButton_res">
+       <item row="5" column="2">
+        <widget class="QPushButton" name="pushButton_n3">
          <property name="text">
-          <string>=</string>
+          <string>3</string>
          </property>
          <property name="shortcut">
-          <string>Return</string>
+          <string>3</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="pushButton_delLast">
+         <property name="text">
+          <string>&lt;-</string>
+         </property>
+         <property name="shortcut">
+          <string>Backspace</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QPushButton" name="pushButton_mull">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>*</string>
+         </property>
+         <property name="shortcut">
+          <string>*</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="pushButton_n2">
+         <property name="text">
+          <string>2</string>
+         </property>
+         <property name="shortcut">
+          <string>2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="pushButton_close">
+         <property name="text">
+          <string>)</string>
+         </property>
+         <property name="shortcut">
+          <string>)</string>
          </property>
         </widget>
        </item>
@@ -76,6 +119,80 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="3">
+        <widget class="QPushButton" name="pushButton_pluss">
+         <property name="text">
+          <string>+</string>
+         </property>
+         <property name="shortcut">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="4">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="pushButton_n9">
+         <property name="text">
+          <string>9</string>
+         </property>
+         <property name="shortcut">
+          <string>9</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="pushButton_n7">
+         <property name="text">
+          <string>7</string>
+         </property>
+         <property name="shortcut">
+          <string>7</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton_history">
+         <property name="text">
+          <string>History</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="pushButton_n5">
+         <property name="text">
+          <string>5</string>
+         </property>
+         <property name="shortcut">
+          <string>5</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="pushButton_n4">
+         <property name="text">
+          <string>4</string>
+         </property>
+         <property name="shortcut">
+          <string>4</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="pushButton_n6">
+         <property name="text">
+          <string>6</string>
+         </property>
+         <property name="shortcut">
+          <string>6</string>
+         </property>
+        </widget>
+       </item>
        <item row="5" column="0">
         <widget class="QPushButton" name="pushButton_n1">
          <property name="text">
@@ -86,13 +203,20 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="pushButton_close">
+       <item row="3" column="1">
+        <widget class="QPushButton" name="pushButton_n8">
          <property name="text">
-          <string>)</string>
+          <string>8</string>
          </property>
          <property name="shortcut">
-          <string>)</string>
+          <string>8</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pushButton_znak">
+         <property name="text">
+          <string>+/-</string>
          </property>
         </widget>
        </item>
@@ -116,86 +240,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="pushButton_delLast">
-         <property name="text">
-          <string>&lt;-</string>
-         </property>
-         <property name="shortcut">
-          <string>Backspace</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QPushButton" name="pushButton_n3">
-         <property name="text">
-          <string>3</string>
-         </property>
-         <property name="shortcut">
-          <string>3</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QPushButton" name="pushButton_n5">
-         <property name="text">
-          <string>5</string>
-         </property>
-         <property name="shortcut">
-          <string>5</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QPushButton" name="pushButton_n6">
-         <property name="text">
-          <string>6</string>
-         </property>
-         <property name="shortcut">
-          <string>6</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="pushButton_n7">
-         <property name="text">
-          <string>7</string>
-         </property>
-         <property name="shortcut">
-          <string>7</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QPushButton" name="pushButton_n8">
-         <property name="text">
-          <string>8</string>
-         </property>
-         <property name="shortcut">
-          <string>8</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_history">
-         <property name="text">
-          <string>History</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QPushButton" name="pushButton_mull">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>*</string>
-         </property>
-         <property name="shortcut">
-          <string>*</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="3">
         <widget class="QPushButton" name="pushButton_devide">
          <property name="enabled">
@@ -209,57 +253,26 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="QPushButton" name="pushButton_n9">
+       <item row="6" column="3">
+        <widget class="QPushButton" name="pushButton_res">
          <property name="text">
-          <string>9</string>
+          <string>=</string>
          </property>
          <property name="shortcut">
-          <string>9</string>
+          <string>Return</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="pushButton_n4">
+       <item row="6" column="2">
+        <widget class="QPushButton" name="pushButton_dot">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="text">
-          <string>4</string>
+          <string>,</string>
          </property>
          <property name="shortcut">
-          <string>4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QPushButton" name="pushButton_n2">
-         <property name="text">
-          <string>2</string>
-         </property>
-         <property name="shortcut">
-          <string>2</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="QPushButton" name="pushButton_pluss">
-         <property name="text">
-          <string>+</string>
-         </property>
-         <property name="shortcut">
-          <string>+</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QPushButton" name="pushButton_znak">
-         <property name="text">
-          <string>+/-</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="4">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <string>,</string>
          </property>
         </widget>
        </item>
