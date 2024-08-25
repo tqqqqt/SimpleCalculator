@@ -113,6 +113,7 @@ std::string MathDiv(std::string num1, std::string num2){
     size_t index=0;
     for(const char& x:num1){
         curentNum+=x;
+        while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
         if(MaxNumber(curentNum,num2)==1){
             if(index) index++;
             continue;
@@ -124,7 +125,6 @@ std::string MathDiv(std::string num1, std::string num2){
         int carry=FindMultiplier(curentNum,num2);
         tempResult[index++]=carry;
         curentNum=MathNeg(curentNum,MathMul(num2,std::to_string(carry)));
-        while(curentNum[0]=='0') curentNum.erase(0,1);
     }
     curentNum="";
     for(const int& x:tempResult) curentNum+=('0'+x);
