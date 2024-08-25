@@ -8,12 +8,17 @@ HistoryWindow::HistoryWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
-HistoryWindow::HistoryWindow(const QVector<QString>& _history, QWidget* parent):QMainWindow (parent),ui(new Ui::HistoryWindow){
+HistoryWindow::HistoryWindow(QVector<QString>* _history, QWidget* parent):QMainWindow (parent),ui(new Ui::HistoryWindow){
     ui->setupUi(this);
-    ui->listView->setModel(new QStringListModel(QList<QString>::fromVector(_history)));
+    memory=_history;
+    ui->listView->setModel(new QStringListModel(QList<QString>::fromVector(*memory)));
 }
 
 HistoryWindow::~HistoryWindow()
 {
     delete ui;
+}
+
+void HistoryWindow::UpdateHis(){
+    ui->listView->setModel(new QStringListModel(QList<QString>::fromVector(*memory)));
 }

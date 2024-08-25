@@ -17,32 +17,24 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void PressResult();
+
 private:
     Ui::MainWindow *ui;
     QString curentText;
     QVector<QString> historyArr;
     CalculatorMath* calculatorMathObject;
     bool flagAfterResult;
-    int curentTextLength, countOpenBracket, typeLastSymbol;
+    int countOpenBracket, typeLastSymbol;
 
 private slots:
-    void ButtonN0();
-    void ButtonN1();
-    void ButtonN2();
-    void ButtonN3();
-    void ButtonN4();
-    void ButtonN5();
-    void ButtonN6();
-    void ButtonN7();
-    void ButtonN8();
-    void ButtonN9();
+    void PressNumberButton(QChar buttonNum);
+    void PressOperButton(QChar buttonOper);
+    void ButtonDot();
     void ButtonClear();
     void ButtonOpenBrackets();
     void ButtonCloseBrackets();
-    void ButtonDevide();
-    void ButtonMull();
-    void ButtonMinus();
-    void ButtonPlus();
     void ButtonResult();
     void ButtonZnak();
     void ButtonHistory();
