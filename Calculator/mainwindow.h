@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void PressResult();
+
 private:
     Ui::MainWindow *ui;
     QString curentText;

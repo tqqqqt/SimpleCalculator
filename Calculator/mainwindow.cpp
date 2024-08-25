@@ -282,6 +282,7 @@ void MainWindow::ButtonResult(){
     if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
     else tempResult=QString::fromStdString(calculatorMathObject->GetResult());
     historyArr.push_back(curentText+"="+tempResult);
+    emit PressResult();
     ui->label->setText(tempResult);
     if(tempResult[0]=='E'){
         curentText="";
@@ -299,8 +300,9 @@ void MainWindow::ButtonResult(){
 }
 
 void MainWindow::ButtonHistory(){
-    HistoryWindow* historyWindow=new HistoryWindow(historyArr);
+    HistoryWindow* historyWindow=new HistoryWindow(&historyArr);
     historyWindow->show();
+    connect(this,SIGNAL(PressResult()),historyWindow,SLOT(UpdateHis()));
 }
 
 void MainWindow::ButtonDeleteLast(){
