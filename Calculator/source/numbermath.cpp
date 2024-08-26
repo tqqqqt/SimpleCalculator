@@ -109,9 +109,21 @@ std::string MathNeg(std::string num1, std::string num2){
 }
 
 std::string MathMul(std::string num1, std::string num2){
-    if(num1[0]=='0' || num2[0]=='0') return "0";
+    int countNumDot=0, lenNum1=num1.length(), lenNum2=num2.length();
+    size_t dot1P=num1.find(','), dot2P=num2.find(',');
+    if((num1[0]=='0' && dot1P==std::string::npos) || (num2[0]=='0' && dot2P==std::string::npos)) return "0";
+    if(dot1P!=std::string::npos){
+        countNumDot+=lenNum1-1-dot1P;
+        num1.erase(dot1P,1);
+        lenNum1--;
+    }
+    if(dot2P!=std::string::npos){
+        countNumDot+=lenNum2-1-dot2P;
+        num2.erase(dot2P,1);
+        lenNum2--;
+    }
     std::string result="";
-    int lenNum1=num1.length(), lenNum2=num2.length(), carry=0;
+    int carry=0;
     for(int i=lenNum2-1, index=0;i>=0;i--, index++){
         carry=0;
         for(int j=lenNum1-1, curIndex=index;j>=0;j--,curIndex++){
