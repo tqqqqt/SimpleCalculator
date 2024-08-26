@@ -1,11 +1,21 @@
 #include "numbermath.h"
 
 int MaxNumber(std::string num1, std::string num2){
-    if(num1.length()>num2.length()) return -1;
-    if(num1.length()<num2.length()) return 1;
-    for(size_t i=0;i<num1.length();i++){
+    size_t dot1P=num1.find(','), dot2P=num2.find(',');
+    size_t rightPointNum1=dot1P==std::string::npos?num1.length():dot1P, rightPointNum2=dot2P==std::string::npos?num2.length():dot2P;
+    if(rightPointNum1>rightPointNum2) return -1;
+    if(rightPointNum1<rightPointNum2) return 1;
+    for(size_t i=0;i<rightPointNum1;i++){
         if((num1[i]-'0')>(num2[i]-'0')) return -1;
         if((num1[i]-'0')<(num2[i]-'0')) return 1;
+    }
+    //if(dot1P==std::string::npos && dot2P==std::string::npos) return 0;
+    for(size_t i=rightPointNum1+1;i<std::max(num1.length(),num2.length());i++){
+        int tempNum1=0, tempNum2=0;
+        if(i<num1.length()) tempNum1=num1[i]-'0';
+        if(i<num2.length()) tempNum2=num2[i]-'0';
+        if(tempNum1>tempNum2) return -1;
+        if(tempNum1<tempNum2) return 1;
     }
     return 0;
 }
@@ -20,20 +30,26 @@ int FindMultiplier(std::string num1, std::string num2){
 }
 
 std::string MathSum(std::string num1, std::string num2){
-    int carry=0, pointNum1=num1.length()-1, pointNum2=num2.length()-1;
+    size_t lenNum1=num1.length(), lenNum2=num2.length(), dot1P=num1.find(','), dot2P=num2.find(',');
+    int carry=0, pointNum1=dot1P==std::string::npos?lenNum1-1:dot1P-1, pointNum2=dot2P==std::string::npos?lenNum2-1:dot2P-1;
     std::string result="";
-    while(pointNum1>=0 && pointNum2>=0){
-        carry=carry+(num1[pointNum1--]-'0')+(num2[pointNum2--]-'0');
-        result=std::to_string(carry%10)+result;
-        carry=carry/10;
+    if(dot1P!=std::string::npos && dot2P!=std::string::npos){
+        size_t tempPointNum1=lenNum1-1, tempPointNum2=lenNum2-1;
+        while((tempPointNum1-dot1P)>=1 || (tempPointNum2-dot2P)>=1){
+            if((tempPointNum1-dot1P)==(tempPointNum2-dot2P)) carry=carry+(num1[tempPointNum1--]-'0')+(num2[tempPointNum2--]-'0');
+            else if((tempPointNum1-dot1P)>(tempPointNum2-dot2P)) carry=carry+(num1[tempPointNum1--]-'0');
+            else if((tempPointNum1-dot1P)<(tempPointNum2-dot2P)) carry=carry+(num2[tempPointNum2--]-'0');
+            result=std::to_string(carry%10)+result;
+            carry/=10;
+        }
+        result=','+result;
     }
-    while(pointNum1>=0){
-        carry=carry+(num1[pointNum1--]-'0');
-        result=std::to_string(carry%10)+result;
-        carry=carry/10;
-    }
-    while(pointNum2>=0){
-        carry=carry+(num2[pointNum2--]-'0');
+    else if(dot1P!=std::string::npos) result=','+num1.substr(dot1P+1);
+    else if(dot2P!=std::string::npos) result=','+num2.substr(dot2P+1);
+    while(pointNum1>=0 || pointNum2>=0){
+        if(pointNum1>=0 && pointNum2>=0) carry=carry+(num1[pointNum1--]-'0')+(num2[pointNum2--]-'0');
+        else if(pointNum1>=0) carry=carry+(num1[pointNum1--]-'0');
+        else if(pointNum2>=0) carry=carry+(num2[pointNum2--]-'0');
         result=std::to_string(carry%10)+result;
         carry=carry/10;
     }
@@ -42,41 +58,53 @@ std::string MathSum(std::string num1, std::string num2){
 }
 
 std::string MathNeg(std::string num1, std::string num2){
-    int minusFlg=0;
-    if(num1.length()<num2.length()){
-        std::swap(num1,num2);
-        minusFlg=1;
-    }
-    if(num1.length()==num2.length() && MaxNumber(num1,num2)==1){
-        std::swap(num1,num2);
-        minusFlg=1-minusFlg;
-    }
-    int carry=0, pointNum1=num1.length()-1, pointNum2=num2.length()-1;
+    int minusFlg=MaxNumber(num1,num2);
+    if(minusFlg==1) std::swap(num1,num2);
+    else if(minusFlg==0) return "0";
     std::string result="";
-    while(pointNum1>=0 && pointNum2>=0){
-        int tempNum1=num1[pointNum1--]-'0', tempNum2=num2[pointNum2--]-'0';
+    int carry=0, dot1P=num1.find(','), dot2P=num2.find(',');;
+    if((dot1P!=std::string::npos && dot2P!=std::string::npos) || (dot1P==std::string::npos && dot2P!=std::string::npos)){
+        int tempPointNum1=num1.length()-1, tempPointNum2=num2.length()-1;
+        while((tempPointNum1-dot1P)>=1 || (tempPointNum2-dot2P)>=1){
+            int tempNum1=0, tempNum2=0;
+            if((tempPointNum1-dot1P)==(tempPointNum2-dot2P)){
+                tempNum1=num1[tempPointNum1--]-'0';
+                tempNum2=num2[tempPointNum2--]-'0';
+            }
+            else if((tempPointNum1-dot1P)>(tempPointNum2-dot2P)) tempNum1=num1[tempPointNum1--]-'0';
+            else if((tempPointNum1-dot1P)<(tempPointNum2-dot2P)) tempNum2=num2[tempPointNum2--]-'0';
+            if(carry){
+                tempNum1--;
+                carry=0;
+            }
+            if(tempNum1<tempNum2){
+                result=std::to_string((tempNum1+10)-tempNum2)+result;
+                carry=1;
+            }
+            else result=std::to_string(tempNum1-tempNum2)+result;
+        }
+        result=','+result;
+    }
+    else if(dot1P!=std::string::npos) result=','+num1.substr(dot1P+1);
+    int pointNum1=dot1P==std::string::npos?num1.length()-1:dot1P-1, pointNum2=dot2P==std::string::npos?num2.length()-1:dot2P-1;
+    while(pointNum1>=0 || pointNum2>=0){
+        int tempNum1=0, tempNum2=0;
+        if(pointNum1>=0) tempNum1=num1[pointNum1--]-'0';
+        if(pointNum2>=0) tempNum2=num2[pointNum2--]-'0';
         if(carry){
             carry=0;
             tempNum1--;
         }
         if(tempNum1<tempNum2){
-            carry=1;
             result=std::to_string((tempNum1+10)-tempNum2)+result;
+            carry=1;
         }
         else result=std::to_string(tempNum1-tempNum2)+result;
     }
-    while(pointNum1>=0){
-        int tempNum=num1[pointNum1--]-'0';
-        if(carry && tempNum==0) tempNum=9;
-        else if(carry && tempNum>0){
-            carry=0;
-            tempNum--;
-        }
-        result=std::to_string(tempNum)+result;
-    }
     while(result.length() && result[0]=='0') result.erase(0,1);
     if(result=="") return "0";
-    if(minusFlg) return '-'+result;
+    else if(result[0]==',') result='0'+result;
+    if(minusFlg==1) result='-'+result;
     return result;
 }
 
