@@ -144,12 +144,21 @@ std::string MathMul(std::string num1, std::string num2){
 }
 
 std::string MathDiv(std::string num1, std::string num2){
-    if(num1[0]=='0') return "0";
-    if(num2[0]=='0') return "Error div 0";
-    size_t lenNum2=num2.length();
-    if(num1.length()<lenNum2) return "0";
+    if(num2.length()==1 && num2[0]=='0') return "Error div 0";
+    size_t lenNum1=num1.length(), lenNum2=num2.length();
+    size_t dot1P=num1.find(','), dot2P=num2.find(',');
+    if(dot1P!=std::string::npos){
+        for(int i=0;i<(lenNum1-1-dot1P);i++) num2+='0';
+        num1.erase(dot1P,1);
+        if(num1[0]=='0') num1.erase(0,1);
+    }
+    if(dot2P!=std::string::npos){
+        for(int i=0;i<(lenNum2-1-dot2P);i++) num1+='0';
+        num2.erase(dot2P,1);
+        if(num2[0]=='0') num2.erase(0,1);
+    }
     std::string curentNum="";
-    std::vector<int> tempResult;
+    std::vector<char> tempResult;
     size_t index=0;
     for(const char& x:num1){
         curentNum+=x;
@@ -160,14 +169,48 @@ std::string MathDiv(std::string num1, std::string num2){
         }
         if(index==0){
             size_t temp=curentNum.length();
-            tempResult=std::vector<int>((1+(num1.length()-temp)),0);
+            tempResult=std::vector<char>((1+(num1.length()-temp)),'0');
         }
         int carry=FindMultiplier(curentNum,num2);
-        tempResult[index++]=carry;
+        tempResult[index++]='0'+carry;
         curentNum=MathNeg(curentNum,MathMul(num2,std::to_string(carry)));
     }
+    if(index==0) tempResult.push_back('0');
+    while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
+    if(curentNum!=""){
+        tempResult.push_back(',');
+        std::string tempNum="";
+        int countNums=5;
+        while(countNums){
+            curentNum+='0';
+            while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
+            if(curentNum=="") break;
+            if(MaxNumber(curentNum,num2)==1){
+                if(countNums>1) tempResult.push_back('0');
+                else tempNum+=('0');
+                countNums--;
+                continue;
+            }
+            int carry=FindMultiplier(curentNum,num2);
+            if(countNums>1) tempResult.push_back('0'+carry);
+            else tempNum+=('0'+carry);
+            curentNum=MathNeg(curentNum,MathMul(num2,std::to_string(carry)));
+            countNums--;
+        }
+        if(curentNum!=""){
+            if((tempNum[0]-'0')>4){
+                int point=tempResult.size()-1;
+                while(point){
+                    int carry=(tempResult[point]-'0')+1;
+                    tempResult[point--]='0'+(carry%10);
+                    carry/=10;
+                    if(carry==0) break;
+                }
+            }
+        }
+    }
     curentNum="";
-    for(const int& x:tempResult) curentNum+=('0'+x);
-    if(curentNum.length()==0 || (curentNum.length() && curentNum[0]=='0')) return "0";
+    for(const char& x:tempResult) curentNum+=x;
+    if(curentNum.length()==0 || (curentNum.length()>2 && curentNum[0]=='0' && curentNum[1]!=',')) return "0";
     return curentNum;
 }
