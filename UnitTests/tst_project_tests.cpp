@@ -108,8 +108,8 @@ void project_tests::test_mathDiv_data(){
     QTest::newRow("test_2")<<"0"<<"2"<<"0";
     QTest::newRow("test_3")<<"8"<<"2"<<"4";
     QTest::newRow("test_4")<<"8"<<"4"<<"2";
-    QTest::newRow("test_5")<<"24"<<"25"<<"0";
-    QTest::newRow("test_6")<<"144"<<"14"<<"10";
+    QTest::newRow("test_5")<<"24"<<"25"<<"0,96";
+    QTest::newRow("test_6")<<"144"<<"14"<<"10,2857";
     QTest::newRow("test_7")<<"144"<<"12"<<"12";
     QTest::newRow("test_8")<<"9999"<<"9"<<"1111";
     QTest::newRow("test_9")<<"48954"<<"246"<<"199";
