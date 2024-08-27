@@ -139,6 +139,8 @@ void MainWindow::ButtonDeleteLast(){
     if(typeLastSymbol==2) typeLastSymbol=3;
     else if(curentText.length()==0) typeLastSymbol=0;
     else{
+        if(typeLastSymbol==3) countOpenBracket--;
+        else if(typeLastSymbol==4) countOpenBracket++;
         QChar temp=curentText.back();
         if(temp>='0' && temp<='9') typeLastSymbol=1;
         else if(temp=='(') typeLastSymbol=3;
