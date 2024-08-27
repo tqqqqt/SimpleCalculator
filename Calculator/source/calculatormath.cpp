@@ -25,14 +25,23 @@ int CalculatorMath::SetString(std::string newString){
     polishEntry.clear();
     std::string temp="";
     std::stack<char> operMas;
-    int lastSymbol=0;
+    int lastSymbol=0, countDot=1;
     for(const char& x:curentString){
         if(x>='0' && x<='9'){
             temp+=x;
             lastSymbol=1;
             continue;
         }
+        if(x==','){
+            if(x==',' && (countDot==0 || lastSymbol!=1)) return 5;
+            countDot--;
+            lastSymbol=6;
+            temp+=x;
+            continue;
+        }
         if(lastSymbol==5) return 1;
+        if(lastSymbol==6) return 6;
+        countDot=1;
         if(x=='-' && lastSymbol==3 && temp==""){
             temp+='-';
             lastSymbol=5;
