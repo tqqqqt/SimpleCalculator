@@ -65,12 +65,14 @@ std::string MathNeg(std::string num1, std::string num2){
     int carry=0, dot1P=num1.find(','), dot2P=num2.find(',');;
     if((dot1P!=std::string::npos && dot2P!=std::string::npos) || (dot1P==std::string::npos && dot2P!=std::string::npos)){
         int tempPointNum1=num1.length()-1, tempPointNum2=num2.length()-1;
-        while((tempPointNum1-dot1P)>=1 || (tempPointNum2-dot2P)>=1){
+        while((tempPointNum1-dot1P)>=1 && (tempPointNum2-dot2P)>=1){
             int tempNum1=0, tempNum2=0;
             if((tempPointNum1-dot1P)==(tempPointNum2-dot2P)){
                 tempNum1=num1[tempPointNum1--]-'0';
                 tempNum2=num2[tempPointNum2--]-'0';
             }
+            else if(dot1P==std::string::npos) tempNum2=num2[tempPointNum2--]-'0';
+            else if(dot2P==std::string::npos) tempNum1=num1[tempPointNum1--]-'0';
             else if((tempPointNum1-dot1P)>(tempPointNum2-dot2P)) tempNum1=num1[tempPointNum1--]-'0';
             else if((tempPointNum1-dot1P)<(tempPointNum2-dot2P)) tempNum2=num2[tempPointNum2--]-'0';
             if(carry){
@@ -85,7 +87,7 @@ std::string MathNeg(std::string num1, std::string num2){
         }
         result=','+result;
     }
-    else if(dot1P!=std::string::npos) result=','+num1.substr(dot1P+1);
+    else if(dot1P!=std::string::npos && dot2P==std::string::npos) result=','+num1.substr(dot1P+1);
     int pointNum1=dot1P==std::string::npos?num1.length()-1:dot1P-1, pointNum2=dot2P==std::string::npos?num2.length()-1:dot2P-1;
     while(pointNum1>=0 || pointNum2>=0){
         int tempNum1=0, tempNum2=0;
@@ -140,6 +142,7 @@ std::string MathMul(std::string num1, std::string num2){
         if(carry) result+=std::to_string(carry);
     }
     std::reverse(result.begin(),result.end());
+    if(countNumDot) result.insert(result.begin()+(result.length()-countNumDot),',');
     return result;
 }
 
@@ -150,12 +153,14 @@ std::string MathDiv(std::string num1, std::string num2){
     if(dot1P!=std::string::npos){
         for(int i=0;i<(lenNum1-1-dot1P);i++) num2+='0';
         num1.erase(dot1P,1);
-        if(num1[0]=='0') num1.erase(0,1);
+        while(num1.length() && num1[0]=='0') num1.erase(0,1);
+        if(num1=="") return "0";
     }
     if(dot2P!=std::string::npos){
         for(int i=0;i<(lenNum2-1-dot2P);i++) num1+='0';
         num2.erase(dot2P,1);
-        if(num2[0]=='0') num2.erase(0,1);
+        while(num2.length() && num2[0]=='0') num2.erase(0,1);
+        if(num2=="") return "Error div 0";
     }
     std::string curentNum="";
     std::vector<char> tempResult;
@@ -180,7 +185,7 @@ std::string MathDiv(std::string num1, std::string num2){
     if(curentNum!=""){
         tempResult.push_back(',');
         std::string tempNum="";
-        int countNums=5;
+        int countNums=11;
         while(countNums){
             curentNum+='0';
             while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
