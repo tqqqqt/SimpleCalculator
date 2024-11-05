@@ -4,6 +4,7 @@ CalculatorMath::CalculatorMath()
 {
     curentString="";
     result="";
+    accuracy=10;
 }
 
 CalculatorMath::~CalculatorMath(){
@@ -94,14 +95,14 @@ std::string CalculatorMath::GetResult(){
             if(polishEntry[i]=="+") tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
             else if(polishEntry[i]=="-") tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
             else if(polishEntry[i]=="*") tempRes='-'+MathMul(polishEntry[i-2],polishEntry[i-1]);
-            else tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1],accuracy);
         }
         else if(polishEntry[i-1][0]=='-' && polishEntry[i-2][0]!='-'){
             polishEntry[i-1].erase(0,1);
             if(polishEntry[i]=="+") tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
             else if(polishEntry[i]=="-") tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
             else if(polishEntry[i]=="*") tempRes='-'+MathMul(polishEntry[i-2],polishEntry[i-1]);
-            else tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes='-'+MathDiv(polishEntry[i-2],polishEntry[i-1],accuracy);
         }
         else if(polishEntry[i-2][0]=='-' && polishEntry[i-1][0]=='-'){
             polishEntry[i-2].erase(0,1);
@@ -109,13 +110,13 @@ std::string CalculatorMath::GetResult(){
             if(polishEntry[i]=="+") tempRes='-'+MathSum(polishEntry[i-2],polishEntry[i-1]);
             else if(polishEntry[i]=="-") tempRes=MathNeg(polishEntry[i-1],polishEntry[i-2]);
             else if(polishEntry[i]=="*") tempRes=MathMul(polishEntry[i-2],polishEntry[i-1]);
-            else tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1],accuracy);
         }
         else{
             if(polishEntry[i]=="+") tempRes=MathSum(polishEntry[i-2],polishEntry[i-1]);
             else if(polishEntry[i]=="-") tempRes=MathNeg(polishEntry[i-2],polishEntry[i-1]);
             else if(polishEntry[i]=="*") tempRes=MathMul(polishEntry[i-2],polishEntry[i-1]);
-            else tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1]);
+            else tempRes=MathDiv(polishEntry[i-2],polishEntry[i-1],accuracy);
         }
         if(tempRes[0]=='E') return tempRes;
         polishEntry[i-2]=tempRes;
@@ -124,4 +125,8 @@ std::string CalculatorMath::GetResult(){
     }
     if(polishEntry[0][0]=='-') return '('+polishEntry[0]+')';
     return polishEntry[0];
+}
+
+void CalculatorMath::SetAccuracy(int _accuracy){
+    accuracy=_accuracy;
 }
