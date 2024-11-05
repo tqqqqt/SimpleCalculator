@@ -146,7 +146,7 @@ std::string MathMul(std::string num1, std::string num2){
     return result;
 }
 
-std::string MathDiv(std::string num1, std::string num2){
+std::string MathDiv(std::string num1, std::string num2, int _accuracy){
     if(num2.length()==1 && num2[0]=='0') return "Error div 0";
     size_t lenNum1=num1.length(), lenNum2=num2.length();
     size_t dot1P=num1.find(','), dot2P=num2.find(',');
@@ -185,7 +185,7 @@ std::string MathDiv(std::string num1, std::string num2){
     if(curentNum!=""){
         tempResult.push_back(',');
         std::string tempNum="";
-        int countNums=11;
+        int countNums=_accuracy+1;
         while(countNums){
             curentNum+='0';
             while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
