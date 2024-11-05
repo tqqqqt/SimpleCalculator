@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QFile>
 
 #include "./History/historywindow.h"
 #include "./source/calculatormath.h"
