@@ -6,11 +6,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    settings=new QSettings("tqqqqt","calculator");
+
     curentText="";
     flagAfterResult=false;
     countOpenBracket=0;
     typeLastSymbol=0;
+    if(!settings->contains("calc/acuracy")) settings->setValue("calc/acuracy",10);
+    curent_acuracy=settings->value("calc/acuracy",10).toInt();
     calculatorMathObject=new CalculatorMath();
+    calculatorMathObject->SetAccuracy(curent_acuracy);
+
     ui->label->setText(curentText);
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ PressNumberButton('0');});
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ PressNumberButton('1');});
@@ -34,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(ButtonZnak()));
     this->connect(ui->pushButton_history,SIGNAL(clicked()),this,SLOT(ButtonHistory()));
     this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(ButtonDeleteLast()));
+
+    this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(ButtonSettings()));
 }
 
 MainWindow::~MainWindow()
@@ -110,7 +118,10 @@ void MainWindow::ButtonZnak(){
 void MainWindow::ButtonResult(){
     QString tempResult="";
     if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
-    else tempResult=QString::fromStdString(calculatorMathObject->GetResult());
+    else{
+        calculatorMathObject->SetAccuracy(curent_acuracy);
+        tempResult=QString::fromStdString(calculatorMathObject->GetResult());
+    }
     historyArr.push_back(curentText+"="+tempResult);
     emit PressResult();
     ui->label->setText(tempResult);
@@ -131,6 +142,16 @@ void MainWindow::ButtonHistory(){
     HistoryWindow* historyWindow=new HistoryWindow(&historyArr);
     historyWindow->show();
     connect(this,SIGNAL(PressResult()),historyWindow,SLOT(UpdateHis()));
+}
+
+void MainWindow::ButtonSettings(){
+    Settings* settings_window=new Settings();
+    settings_window->show();
+    this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(UpdateSettings()));
+}
+
+void MainWindow::UpdateSettings(){
+    curent_acuracy=settings->value("calc/acuracy",10).toInt();
 }
 
 void MainWindow::ButtonDeleteLast(){

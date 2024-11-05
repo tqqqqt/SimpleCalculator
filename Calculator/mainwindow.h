@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSettings>
+
 #include "./History/historywindow.h"
 #include "./source/calculatormath.h"
+#include "./Settings/settings.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,9 +27,10 @@ private:
     Ui::MainWindow *ui;
     QString curentText;
     QVector<QString> historyArr;
+    QSettings* settings;
     CalculatorMath* calculatorMathObject;
     bool flagAfterResult;
-    int countOpenBracket, typeLastSymbol;
+    int countOpenBracket, typeLastSymbol, curent_acuracy;
 
 private slots:
     void PressNumberButton(QChar buttonNum);
@@ -39,6 +43,8 @@ private slots:
     void ButtonZnak();
     void ButtonHistory();
     void ButtonDeleteLast();
+    void ButtonSettings();
+    void UpdateSettings();
 };
 
 #endif // MAINWINDOW_H

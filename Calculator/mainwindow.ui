@@ -565,11 +565,11 @@
     <property name="title">
      <string>Опции</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="action_settings"/>
    </widget>
    <addaction name="menu"/>
   </widget>
-  <action name="action">
+  <action name="action_settings">
    <property name="text">
     <string>Настройки</string>
    </property>
