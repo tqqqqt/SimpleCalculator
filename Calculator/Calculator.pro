@@ -26,6 +26,7 @@ CONFIG += c++11
 
 SOURCES += \
         History/historywindow.cpp \
+        Settings/settings.cpp \
         main.cpp \
         mainwindow.cpp \
         source/calculatormath.cpp \
@@ -33,12 +34,14 @@ SOURCES += \
 
 HEADERS += \
         History/historywindow.h \
+        Settings/settings.h \
         mainwindow.h \
         source/calculatormath.h \
         source/numbermath.h
 
 FORMS += \
         History/historywindow.ui \
+        Settings/settings.ui \
         mainwindow.ui
 
 # Default rules for deployment.
