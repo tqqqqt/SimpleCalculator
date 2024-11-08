@@ -125,6 +125,7 @@ void MainWindow::ButtonZnak(){
 }
 
 void MainWindow::ButtonResult(){
+    if(curentText.length()==0) return;
     QString tempResult="";
     if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
     else{
