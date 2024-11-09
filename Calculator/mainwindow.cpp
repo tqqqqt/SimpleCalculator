@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QFile>
-#include <QTextStream>
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -20,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     curentText="";
     flagAfterResult=false;
     countOpenBracket=0;
+    countOper=0;
     typeLastSymbol=0;
     if(!settings->contains("calc/acuracy")) settings->setValue("calc/acuracy",10);
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
@@ -27,21 +25,21 @@ MainWindow::MainWindow(QWidget *parent) :
     calculatorMathObject->SetAccuracy(curent_acuracy);
 
     ui->label->setText(curentText);
-    this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ PressNumberButton('0');});
-    this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ PressNumberButton('1');});
-    this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ PressNumberButton('2');});
-    this->connect(ui->pushButton_n3,&QPushButton::clicked,[this]{ PressNumberButton('3');});
-    this->connect(ui->pushButton_n4,&QPushButton::clicked,[this]{ PressNumberButton('4');});
-    this->connect(ui->pushButton_n5,&QPushButton::clicked,[this]{ PressNumberButton('5');});
-    this->connect(ui->pushButton_n6,&QPushButton::clicked,[this]{ PressNumberButton('6');});
-    this->connect(ui->pushButton_n7,&QPushButton::clicked,[this]{ PressNumberButton('7');});
-    this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ PressNumberButton('8');});
-    this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ PressNumberButton('9');});
+    this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ PressNumberButton('0'); });
+    this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ PressNumberButton('1'); });
+    this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ PressNumberButton('2'); });
+    this->connect(ui->pushButton_n3,&QPushButton::clicked,[this]{ PressNumberButton('3'); });
+    this->connect(ui->pushButton_n4,&QPushButton::clicked,[this]{ PressNumberButton('4'); });
+    this->connect(ui->pushButton_n5,&QPushButton::clicked,[this]{ PressNumberButton('5'); });
+    this->connect(ui->pushButton_n6,&QPushButton::clicked,[this]{ PressNumberButton('6'); });
+    this->connect(ui->pushButton_n7,&QPushButton::clicked,[this]{ PressNumberButton('7'); });
+    this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ PressNumberButton('8'); });
+    this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ PressNumberButton('9'); });
     this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(ButtonDot()));
-    this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ PressOperButton('+');});
-    this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ PressOperButton('-');});
-    this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ PressOperButton('*');});
-    this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ PressOperButton('/');});
+    this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ PressOperButton('+'); });
+    this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ PressOperButton('-'); });
+    this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ PressOperButton('*'); });
+    this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ PressOperButton('/'); });
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(ButtonClear()));
     this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(ButtonOpenBrackets()));
     this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(ButtonCloseBrackets()));
@@ -73,6 +71,7 @@ void MainWindow::PressOperButton(QChar buttonOper){
     if(typeLastSymbol!=1 && typeLastSymbol!=4) return;
     curentText+=buttonOper;
     typeLastSymbol=5;
+    countOper++;
     if(flagAfterResult) flagAfterResult=false;
     ui->label->setText(curentText);
 }
@@ -87,6 +86,7 @@ void MainWindow::ButtonDot(){
 void MainWindow::ButtonClear(){
     curentText="";
     countOpenBracket=0;
+    countOper=0;
     typeLastSymbol=0;
     flagAfterResult=false;
     ui->label->setText(curentText);
@@ -125,7 +125,8 @@ void MainWindow::ButtonZnak(){
 }
 
 void MainWindow::ButtonResult(){
-    if(curentText.length()==0) return;
+    if(curentText.length()==0 || typeLastSymbol==6 || typeLastSymbol==5) return;
+    if(countOpenBracket || countOper==0) return;
     QString tempResult="";
     if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
     else{
@@ -146,6 +147,7 @@ void MainWindow::ButtonResult(){
     flagAfterResult=true;
     typeLastSymbol=1;
     countOpenBracket=0;
+    countOper=0;
 }
 
 void MainWindow::ButtonHistory(){
@@ -167,6 +169,7 @@ void MainWindow::UpdateSettings(){
 void MainWindow::ButtonDeleteLast(){
     curentText.remove(curentText.length()-1,1);
     ui->label->setText(curentText);
+    if(typeLastSymbol==5) countOper--;
     if(typeLastSymbol==2) typeLastSymbol=3;
     else if(curentText.length()==0) typeLastSymbol=0;
     else{

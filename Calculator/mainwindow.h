@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSettings>
 #include <QFile>
+#include <QTextStream>
 
 #include "./History/historywindow.h"
 #include "./source/calculatormath.h"
@@ -31,7 +32,7 @@ private:
     QSettings* settings;
     CalculatorMath* calculatorMathObject;
     bool flagAfterResult;
-    int countOpenBracket, typeLastSymbol, curent_acuracy;
+    int countOpenBracket, countOper, typeLastSymbol, curent_acuracy;
 
 private slots:
     void PressNumberButton(QChar buttonNum);
