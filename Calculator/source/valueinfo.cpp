@@ -12,11 +12,16 @@ std::vector<std::string> ValueInfo::getSecond(std::string _main){
     return result;
 }
 
-std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::string _right){
+std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::string _right, std::string _value){
     if(info.find(_main)==info.end()) return "error";
     if(info[_main].find(_left)==info[_main].end()) return "error";
     if(info[_main][_left].find(_right)==info[_main][_left].end()) return "error";
-    return info[_main][_left][_right];
+    std::string mul_value=info[_main][_left][_right];
+    if(mul_value.find('.')!=std::string::npos){
+        mul_value[mul_value.find('.')]=',';
+    }
+    std::string result=MathMul(_value,mul_value);
+    return result;
 }
 
 ValueInfo::ValueInfo()
