@@ -5,6 +5,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QPixmap>
+#include <vector>
+
+#include "./../source/valueinfo.h"
 
 #include "./../Mode/modewindow.h"
 
@@ -22,6 +25,7 @@ public:
 
 private:
     Ui::ValueWindow *ui;
+    ValueInfo* value_info;
     QString left_text, right_text;
     int curent_field;
 
@@ -34,6 +38,7 @@ private slots:
     void updateMode(int);
     void updateResult();
     void buttonChangeField(int);
+    void fillLeftRightBox();
 
 signals:
     void getResult();

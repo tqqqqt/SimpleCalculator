@@ -7,9 +7,21 @@ ValueWindow::ValueWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QPixmap pixmap(":/menu-icon.png");
+    QIcon button_icon(pixmap);
+    ui->pushButton_mode->setIcon(button_icon);
+    ui->pushButton_mode->setIconSize(pixmap.rect().size());
+
     curent_field=0;
+    value_info=new ValueInfo();
     ui->pushButton_down->setEnabled(true);
     ui->pushButton_upp->setEnabled(false);
+
+    std::vector<std::string> main_info=value_info->getMain();
+    for(auto x:main_info){
+        ui->comboBox->addItem(QString::fromStdString(x));
+    }
+    fillLeftRightBox();
 
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ pressNumberButton('1'); });
@@ -27,6 +39,8 @@ ValueWindow::ValueWindow(QWidget *parent) :
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(buttonClear()));
     this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(buttonDeleteLast()));
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
+    //this->connect(ui->comboBox,SIGNAL(curentIndexChanged(int)),this,SLOT(fillLeftRightBox()));
+    this->connect(ui->comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[this](int _index){ fillLeftRightBox(); });
 
     this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
 }
@@ -35,11 +49,6 @@ ValueWindow::~ValueWindow()
 {
     delete ui;
 }
-
-/*void ValueWindow::setWindows(MainWindow* _main, ProgrammistWindow* _prog){
-     main_window=_main;
-     programmist_window=_prog;
-}*/
 
 void ValueWindow::pressNumberButton(QChar button_num){
     if(curent_field==0){
@@ -109,4 +118,14 @@ void ValueWindow::updateMode(int _mode){
 
 void ValueWindow::updateResult(){
 
+}
+
+void ValueWindow::fillLeftRightBox(){
+    ui->comboBox_left->clear();
+    ui->comboBox_right->clear();
+    std::vector<std::string> temp=value_info->getSecond(ui->comboBox->currentText().toStdString());
+    for(auto x:temp){
+        ui->comboBox_left->addItem(QString::fromStdString(x));
+        ui->comboBox_right->addItem(QString::fromStdString(x));
+    }
 }
