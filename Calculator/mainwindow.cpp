@@ -102,7 +102,7 @@ void MainWindow::ButtonOpenBrackets(){
 }
 
 void MainWindow::ButtonCloseBrackets(){
-    if(!countOpenBracket) return;
+    if(!countOpenBracket || typeLastSymbol!=1) return;
     curentText+=')';
     countOpenBracket--;
     typeLastSymbol=4;
@@ -174,6 +174,7 @@ void MainWindow::ButtonDeleteLast(){
         else if(typeLastSymbol==4) countOpenBracket++;
         QChar temp=curentText.back();
         if(temp>='0' && temp<='9') typeLastSymbol=1;
+        else if(temp==',') typeLastSymbol=6;
         else if(temp=='(') typeLastSymbol=3;
         else if(temp==')') typeLastSymbol=4;
         else if(temp=='-' || temp=='+' || temp=='*' || temp=='/') typeLastSymbol=5;
