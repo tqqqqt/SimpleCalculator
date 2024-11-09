@@ -26,6 +26,7 @@ public:
 
 signals:
     void PressResult();
+    void changeWindow(int);
 
 private:
     Ui::MainWindow *ui;
@@ -50,6 +51,7 @@ private slots:
     void ButtonSettings();
     void UpdateSettings();
     void ButtonChangeMode();
+    void UpdateMode(int);
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

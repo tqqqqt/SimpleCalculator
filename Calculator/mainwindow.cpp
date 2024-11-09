@@ -67,6 +67,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/*void MainWindow::setWindows(ValueWindow *_value, ProgrammistWindow *_prog){
+    value_window=_value;
+    programmist_window=_prog;
+}*/
+
 void MainWindow::PressNumberButton(QChar buttonNum){
     if(typeLastSymbol==4) return;
     if(flagAfterResult){
@@ -173,14 +178,20 @@ void MainWindow::ButtonSettings(){
     settings_window->exec();
 }
 
-void MainWindow::ButtonChangeMode(){
-    ModeWindow* mode_window=new ModeWindow(this);
-    mode_window->exec();
-
-}
-
 void MainWindow::UpdateSettings(){
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
+}
+
+void MainWindow::ButtonChangeMode(){
+    ModeWindow* mode_window=new ModeWindow(this);
+    this->connect(mode_window,SIGNAL(changeMode(int)),this,SLOT(UpdateMode(int)));
+    mode_window->exec();
+}
+
+void MainWindow::UpdateMode(int _mode){
+    if(_mode==1) return;
+    emit changeWindow(_mode);
+    this->hide();
 }
 
 void MainWindow::ButtonDeleteLast(){
