@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main_style.css</file>
+        <file>history-icon.png</file>
+        <file>menu-icon.png</file>
     </qresource>
 </RCC>
