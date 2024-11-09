@@ -12,7 +12,7 @@ ValueWindow::ValueWindow(QWidget *parent) :
     ui->pushButton_mode->setIcon(button_icon);
     ui->pushButton_mode->setIconSize(pixmap.rect().size());
 
-    curent_field=0;
+    curent_field=1;
     value_info=new ValueInfo();
     ui->pushButton_down->setEnabled(true);
     ui->pushButton_upp->setEnabled(false);
@@ -41,6 +41,7 @@ ValueWindow::ValueWindow(QWidget *parent) :
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
     //this->connect(ui->comboBox,SIGNAL(curentIndexChanged(int)),this,SLOT(fillLeftRightBox()));
     this->connect(ui->comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[this](int _index){ fillLeftRightBox(); });
+    //add to left and right changeIndex emit result or clear
 
     this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
 }
@@ -51,7 +52,7 @@ ValueWindow::~ValueWindow()
 }
 
 void ValueWindow::pressNumberButton(QChar button_num){
-    if(curent_field==0){
+    if(curent_field==1){
         left_text+=button_num;
         ui->textEdit_left->setText(left_text);
     }
@@ -64,19 +65,19 @@ void ValueWindow::pressNumberButton(QChar button_num){
 
 void ValueWindow::buttonChangeField(int _field){
     if(_field==1){
-        curent_field=0;
+        curent_field=1;
         ui->pushButton_upp->setEnabled(false);
         ui->pushButton_down->setEnabled(true);
     }
     else{
-        curent_field=1;
+        curent_field=2;
         ui->pushButton_upp->setEnabled(true);
         ui->pushButton_down->setEnabled(false);
     }
 }
 
 void ValueWindow::buttonDot(){
-    if(curent_field==0){
+    if(curent_field==1){
         left_text+=',';
         ui->textEdit_left->setText(left_text);
     }
@@ -102,6 +103,7 @@ void ValueWindow::buttonDeleteLast(){
         right_text.remove(right_text.length()-1,1);
         ui->textEdit_right->setText(right_text);
     }
+    emit getResult();
 }
 
 void ValueWindow::buttonChangeMode(){
@@ -117,7 +119,19 @@ void ValueWindow::updateMode(int _mode){
 }
 
 void ValueWindow::updateResult(){
-
+    if(left_text=="" && right_text=="") return;
+    std::string main=ui->comboBox->currentText().toStdString(), left=ui->comboBox_left->currentText().toStdString();
+    std::string right=ui->comboBox_right->currentText().toStdString();
+    std::string value=(curent_field==1)?left_text.toStdString():right_text.toStdString();
+    QString temp=QString::fromStdString(value_info->getMullNum(main,left,right,value));
+    if(curent_field==1){
+        right_text=temp;
+        ui->textEdit_right->setText(temp);
+    }
+    else{
+        left_text=temp;
+        ui->textEdit_left->setText(temp);
+    }
 }
 
 void ValueWindow::fillLeftRightBox(){
