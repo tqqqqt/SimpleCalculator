@@ -9,11 +9,21 @@ MainWindow::MainWindow(QWidget *parent) :
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream file_str(&file);
     QString content=file_str.readAll();
+    file.close();
     this->setStyleSheet(content);
     ui->setupUi(this);
-    file.close();
-    settings=new QSettings("tqqqqt","calculator");
 
+    QPixmap pixmap(":/history-icon.png");
+    QIcon button_icon(pixmap);
+    ui->pushButton_history->setIcon(button_icon);
+    ui->pushButton_history->setIconSize(pixmap.rect().size()/2);
+    pixmap.load(":/menu-icon.png");
+    button_icon.addPixmap(pixmap);
+    ui->pushButton_mode->setIcon(button_icon);
+    ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
+
+
+    settings=new QSettings("tqqqqt","calculator");
     curentText="";
     flagAfterResult=false;
     countOpenBracket=0;
@@ -23,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
     calculatorMathObject=new CalculatorMath();
     calculatorMathObject->SetAccuracy(curent_acuracy);
-
     ui->label->setText(curentText);
+
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ PressNumberButton('0'); });
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ PressNumberButton('1'); });
     this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ PressNumberButton('2'); });
@@ -47,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(ButtonZnak()));
     this->connect(ui->pushButton_history,SIGNAL(clicked()),this,SLOT(ButtonHistory()));
     this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(ButtonDeleteLast()));
+    this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(ButtonChangeMode()));
 
     this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(ButtonSettings()));
 }
@@ -157,9 +168,15 @@ void MainWindow::ButtonHistory(){
 }
 
 void MainWindow::ButtonSettings(){
-    Settings* settings_window=new Settings();
-    settings_window->show();
+    SettingsWindow* settings_window=new SettingsWindow(this);
     this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(UpdateSettings()));
+    settings_window->exec();
+}
+
+void MainWindow::ButtonChangeMode(){
+    ModeWindow* mode_window=new ModeWindow(this);
+    mode_window->exec();
+
 }
 
 void MainWindow::UpdateSettings(){

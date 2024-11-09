@@ -5,10 +5,12 @@
 #include <QSettings>
 #include <QFile>
 #include <QTextStream>
+#include <QPixmap>
 
 #include "./History/historywindow.h"
 #include "./source/calculatormath.h"
-#include "./Settings/settings.h"
+#include "./Settings/settingswindow.h"
+#include "./Mode/modewindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -47,6 +49,7 @@ private slots:
     void ButtonDeleteLast();
     void ButtonSettings();
     void UpdateSettings();
+    void ButtonChangeMode();
 };
 
 #endif // MAINWINDOW_H
