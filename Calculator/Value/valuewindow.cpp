@@ -1,0 +1,112 @@
+#include "valuewindow.h"
+#include "ui_valuewindow.h"
+
+ValueWindow::ValueWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::ValueWindow)
+{
+    ui->setupUi(this);
+
+    curent_field=0;
+    ui->pushButton_down->setEnabled(true);
+    ui->pushButton_upp->setEnabled(false);
+
+    this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
+    this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ pressNumberButton('1'); });
+    this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ pressNumberButton('2'); });
+    this->connect(ui->pushButton_n3,&QPushButton::clicked,[this]{ pressNumberButton('3'); });
+    this->connect(ui->pushButton_n4,&QPushButton::clicked,[this]{ pressNumberButton('4'); });
+    this->connect(ui->pushButton_n5,&QPushButton::clicked,[this]{ pressNumberButton('5'); });
+    this->connect(ui->pushButton_n6,&QPushButton::clicked,[this]{ pressNumberButton('6'); });
+    this->connect(ui->pushButton_n7,&QPushButton::clicked,[this]{ pressNumberButton('7'); });
+    this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ pressNumberButton('8'); });
+    this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ pressNumberButton('9'); });
+    this->connect(ui->pushButton_upp,&QPushButton::clicked,[this]{ buttonChangeField(1); });
+    this->connect(ui->pushButton_down,&QPushButton::clicked,[this]{ buttonChangeField(2); });
+    this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(buttonDot()));
+    this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(buttonClear()));
+    this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(buttonDeleteLast()));
+    this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
+
+    this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
+}
+
+ValueWindow::~ValueWindow()
+{
+    delete ui;
+}
+
+/*void ValueWindow::setWindows(MainWindow* _main, ProgrammistWindow* _prog){
+     main_window=_main;
+     programmist_window=_prog;
+}*/
+
+void ValueWindow::pressNumberButton(QChar button_num){
+    if(curent_field==0){
+        left_text+=button_num;
+        ui->textEdit_left->setText(left_text);
+    }
+    else{
+        right_text+=button_num;
+        ui->textEdit_right->setText(right_text);
+    }
+    emit getResult();
+}
+
+void ValueWindow::buttonChangeField(int _field){
+    if(_field==1){
+        curent_field=0;
+        ui->pushButton_upp->setEnabled(false);
+        ui->pushButton_down->setEnabled(true);
+    }
+    else{
+        curent_field=1;
+        ui->pushButton_upp->setEnabled(true);
+        ui->pushButton_down->setEnabled(false);
+    }
+}
+
+void ValueWindow::buttonDot(){
+    if(curent_field==0){
+        left_text+=',';
+        ui->textEdit_left->setText(left_text);
+    }
+    else{
+        right_text+=',';
+        ui->textEdit_right->setText(right_text);
+    }
+}
+
+void ValueWindow::buttonClear(){
+    left_text="";
+    right_text="";
+    ui->textEdit_left->setText(left_text);
+    ui->textEdit_right->setText(right_text);
+}
+
+void ValueWindow::buttonDeleteLast(){
+    if(curent_field==1){
+        left_text.remove(left_text.length()-1,1);
+        ui->textEdit_left->setText(left_text);
+    }
+    else{
+        right_text.remove(right_text.length()-1,1);
+        ui->textEdit_right->setText(right_text);
+    }
+}
+
+void ValueWindow::buttonChangeMode(){
+    ModeWindow* mode_window=new ModeWindow(this);
+    this->connect(mode_window,SIGNAL(changeMode(int)),this,SLOT(updateMode(int)));
+    mode_window->exec();
+}
+
+void ValueWindow::updateMode(int _mode){
+    if(_mode==2) return;
+    emit changeWindow(_mode);
+    this->hide();
+}
+
+void ValueWindow::updateResult(){
+
+}
