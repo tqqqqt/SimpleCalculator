@@ -33,6 +33,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         source/calculatormath.cpp \
+        source/calculatorobject.cpp \
         source/numbermath.cpp \
         source/valueinfo.cpp
 
@@ -44,6 +45,7 @@ HEADERS += \
         Value/valuewindow.h \
         mainwindow.h \
         source/calculatormath.h \
+        source/calculatorobject.h \
         source/numbermath.h \
         source/valueinfo.h
 
