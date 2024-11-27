@@ -39,9 +39,9 @@ ValueWindow::ValueWindow(QWidget *parent) :
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(buttonClear()));
     this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(buttonDeleteLast()));
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
-    //this->connect(ui->comboBox,SIGNAL(curentIndexChanged(int)),this,SLOT(fillLeftRightBox()));
-    this->connect(ui->comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[this](int _index){ fillLeftRightBox(); });
-    //add to left and right changeIndex emit result or clear
+    this->connect(ui->comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[this](int _index){ buttonClear(); fillLeftRightBox(); });
+    this->connect(ui->comboBox_left,QOverload<int>::of(&QComboBox::currentIndexChanged),[this](int _index){ emit getResult(); });
+    this->connect(ui->comboBox_right,QOverload<int>::of(&QComboBox::currentIndexChanged),[this](int _index){ emit getResult(); });
 
     this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
 }
@@ -119,11 +119,20 @@ void ValueWindow::updateMode(int _mode){
 }
 
 void ValueWindow::updateResult(){
-    if(left_text=="" && right_text=="") return;
+    if(curent_field==1 && left_text==""){
+        right_text="";
+        ui->textEdit_right->setText(right_text);
+        return;
+    }
+    if(curent_field==2 && right_text==""){
+        left_text="";
+        ui->textEdit_left->setText(left_text);
+        return;
+    }
     std::string main=ui->comboBox->currentText().toStdString(), left=ui->comboBox_left->currentText().toStdString();
     std::string right=ui->comboBox_right->currentText().toStdString();
     std::string value=(curent_field==1)?left_text.toStdString():right_text.toStdString();
-    QString temp=QString::fromStdString(value_info->getMullNum(main,left,right,value));
+    QString temp=QString::fromStdString(value_info->getMullNum(main,left,right,value,curent_field));
     if(curent_field==1){
         right_text=temp;
         ui->textEdit_right->setText(temp);

@@ -12,7 +12,7 @@ std::vector<std::string> ValueInfo::getSecond(std::string _main){
     return result;
 }
 
-std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::string _right, std::string _value){
+std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::string _right, std::string _value, int _mode){
     if(info.find(_main)==info.end()) return "error";
     if(info[_main].find(_left)==info[_main].end()) return "error";
     if(info[_main][_left].find(_right)==info[_main][_left].end()) return "error";
@@ -20,8 +20,47 @@ std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::str
     if(mul_value.find('.')!=std::string::npos){
         mul_value[mul_value.find('.')]=',';
     }
-    std::string result=MathMul(_value,mul_value);
+    std::string result="";
+    if(_main!="Температура"){
+        if(_mode==1) result=MathMul(_value,mul_value);
+        else if(_mode==2) result=MathDiv(_value,mul_value,10);
+    }
+    else{
+        if(_mode==1) result=getTemperature(_left,_right,_value);
+        else if(_mode==2) result=getTemperature(_right,_left,_value);
+    }
     return result;
+}
+
+std::string ValueInfo::getTemperature(std::string _from, std::string _to, std::string _value){
+    if(_from=="Градус Цельсия (C)"){
+        if(_to=="Градус Цельсия (C)") return _value;
+        else if(_to=="Градус Фарингейта (F)") return MathSum(MathMul(_value,MathDiv("9","5",10)),"32");
+        else if(_to=="Градус Кельвина (K)") return MathSum(_value,"273,15");
+    }
+    else if(_from=="Градус Фарингейта (F)"){
+        if(_to=="Градус Фарингейта (F)") return _value;
+        else if(_to=="Градус Цельсия (C)"){
+            std::string temp=MathNeg(_value,"32");
+            if(temp[0]=='-') return '-'+MathMul(temp.substr(1),MathDiv("5","9",10));
+            return MathMul(temp,MathDiv("5","9",10));
+        }
+        else if(_to=="Градус Кельвина (K)"){
+            std::string temp=MathNeg(_value,"32");
+            if(temp[0]=='-') return '-'+MathSum(MathMul(temp.substr(1),MathDiv("5","9",10)),"273,15");
+            return MathSum(MathMul(temp.substr(1),MathDiv("5","9",10)),"273,15");
+        }
+    }
+    else if(_from=="Градус Кельвина (K)"){
+        if(_to=="Градус Кельвина (K)") return _value;
+        else if(_to=="Градус Фарингейта (F)"){
+            std::string temp=MathNeg(_value,"273,15");
+            if(temp[0]=='-') return '-'+MathSum(MathMul(temp,MathDiv("9","5",10)),"32");
+            return MathSum(MathMul(temp,MathDiv("9","5",10)),"32");
+        }
+        else if(_to=="Градус Цельсия (C)") return MathNeg(_value,"273,15");
+    }
+    return "error";
 }
 
 ValueInfo::ValueInfo()
@@ -39,24 +78,23 @@ ValueInfo::ValueInfo()
 
     std::vector<std::vector<double>> value{{4046.86,100,10000,0.0001,0.092903,0.00064516,1},
                                           {0.001,0.01,1,1000,0.0254,0.3048,0.9144,1609.34,1852,0.0000254},
-                                    /*no need div*/{1,5/9,(1+273.15),(9/5*1+32),1,(9/5*1+459.76),(1-273.15),(9/5*(1-273.15)+32),1},
+                                          {1,1,1,1,1,1,1,1,1},
                                           {4.54609,3.78541,1,0.001,0.001,1000,0.0163871,28.3168},
                                           {1000,1016.05,907.185,0.453592,0.0283495,1,0.001},
-                                          {1/8,1,1024,1024*1024,1024*1024*1024,(double)(1024*1024*1024*1024)},
-                                          {1,3.6,1000,3600,0.0254,0.0254*3600,0.3048,0.3048*3600,1609.34,1609.34*3600,0.514444},
+                                          {0.125,1,1024,1048576,1073741824,(double)(1099511627776)},
+                                          {1,3.6,1000,3600,0.0254,91,44,0.3048,1097.28,1609.34,5793624,0.514444},
                                           {0.001,1,60,3600,86400,604800}};
-    for(int i=0;i<mains.size();i++){
+    for(size_t i=0;i<mains.size();i++){
         if(i==2) continue;
-        for(int j=0;j<second[i].size();j++){
-            for(int k=0;k<second[i].size();k++){
-                //info.insert(std::make_pair(mains[i],std::make_pair(second[i][j],std::make_pair(second[i][k],std::to_string((long double)(value[i][j]/(long double)value[i][k]))))));
+        for(size_t j=0;j<second[i].size();j++){
+            for(size_t k=0;k<second[i].size();k++){
                 info[mains[i]][second[i][j]][second[i][k]]=std::to_string((long double)(value[i][j]/(long double)value[i][k]));
             }
         }
     }
-    for(int i=0, ii=0;i<second[2].size();i++){
-        for(int j=0;j<second[2].size();j++){
-            info[mains[2]][second[2][i]][second[2][j]]=value[2][ii];
+    for(size_t i=0, ii=0;i<second[2].size();i++){
+        for(size_t j=0;j<second[2].size();j++){
+            info[mains[2]][second[2][i]][second[2][j]]=std::to_string(value[2][ii]);
             ii++;
         }
     }
