@@ -142,11 +142,12 @@ void MainWindow::ButtonCloseBrackets(){
 }
 
 void MainWindow::ButtonZnak(){
-    if(curent_object.getObjectType()==4) return;
+    if(curent_object.getObjectType()==4 || curent_object.getObjectType()==1 || curent_object.getObjectType()==2) return;
     if(curent_object.getObjectType()!=0) objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol("(-");
     countOpenBracket++;
+    if(flagAfterResult) flagAfterResult=false;
     setFullText();
 }
 
