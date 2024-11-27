@@ -22,13 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_mode->setIcon(button_icon);
     ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
 
-
     settings=new QSettings("tqqqqt","calculator");
     curentText="";
     flagAfterResult=false;
     countOpenBracket=0;
     countOper=0;
-    typeLastSymbol=0;
     if(!settings->contains("calc/acuracy")) settings->setValue("calc/acuracy",10);
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
     calculatorMathObject=new CalculatorMath();
@@ -46,10 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ PressNumberButton('8'); });
     this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ PressNumberButton('9'); });
     this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(ButtonDot()));
-    this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ PressOperButton('+'); });
-    this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ PressOperButton('-'); });
-    this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ PressOperButton('*'); });
-    this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ PressOperButton('/'); });
+    this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ PressOperButton("+"); });
+    this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ PressOperButton("-"); });
+    this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ PressOperButton("*"); });
+    this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ PressOperButton("/"); });
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(ButtonClear()));
     this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(ButtonOpenBrackets()));
     this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(ButtonCloseBrackets()));
@@ -67,81 +65,93 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-/*void MainWindow::setWindows(ValueWindow *_value, ProgrammistWindow *_prog){
-    value_window=_value;
-    programmist_window=_prog;
-}*/
-
-void MainWindow::PressNumberButton(QChar buttonNum){
-    if(typeLastSymbol==4) return;
-    if(flagAfterResult){
-        curentText=buttonNum;
-        flagAfterResult=false;
-    }
-    else curentText+=buttonNum;
-    typeLastSymbol=1;
+void MainWindow::setFullText(){
+    curentText="";
+    for(auto element:objects) curentText+=QString::fromStdString(element.toString());
+    curentText+=QString::fromStdString(curent_object.toString());
     ui->label->setText(curentText);
 }
 
-void MainWindow::PressOperButton(QChar buttonOper){
-    if(typeLastSymbol!=1 && typeLastSymbol!=4) return;
-    curentText+=buttonOper;
-    typeLastSymbol=5;
+void MainWindow::PressNumberButton(QChar buttonNum){
+    if(curent_object.getObjectType()>2){
+        objects.push_back(curent_object);
+        curent_object.clear();
+    }
+    if(flagAfterResult){
+        curent_object.clear();
+        flagAfterResult=false;
+    }
+    curent_object.addNum(buttonNum.toLatin1());
+    setFullText();
+}
+
+void MainWindow::PressOperButton(QString buttonOper){
+    if(curent_object.getObjectType()==0 || curent_object.getObjectType()==2 || curent_object.getObjectType()==5) return;
+    if(buttonOper=='-' && curent_object.getObjectType()==3){
+        curent_object.addSymbol("-");
+        if(flagAfterResult) flagAfterResult=false;
+        setFullText();
+        return;
+    }
+    if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4){
+        objects.push_back(curent_object);
+        curent_object.clear();
+    }
+    curent_object.addSymbol(buttonOper.toStdString());
     countOper++;
     if(flagAfterResult) flagAfterResult=false;
-    ui->label->setText(curentText);
+    setFullText();
 }
 
 void MainWindow::ButtonDot(){
-    if(typeLastSymbol!=1) return;
-    curentText+=',';
-    typeLastSymbol=6;
-    ui->label->setText(curentText);
+    if(curent_object.getObjectType()!=1) return;
+    curent_object.addNum(',');
+    if(flagAfterResult) flagAfterResult=false;
+    setFullText();
 }
 
 void MainWindow::ButtonClear(){
     curentText="";
-    countOpenBracket=0;
+    objects.clear();
+    curent_object.clear();
     countOper=0;
-    typeLastSymbol=0;
+    countOpenBracket=0;
     flagAfterResult=false;
-    ui->label->setText(curentText);
+    setFullText();
 }
 
 void MainWindow::ButtonOpenBrackets(){
-    if(typeLastSymbol==4 || flagAfterResult) return;
-    if(typeLastSymbol==1) curentText+="*(";
-    else curentText+='(';
+    if(curent_object.getObjectType()!=5 && curent_object.getObjectType()!=0) return;
+    if(curent_object.getObjectType()!=0){
+        objects.push_back(curent_object);
+        curent_object.clear();
+    }
+    curent_object.addSymbol("(");
     countOpenBracket++;
-    typeLastSymbol=3;
-    ui->label->setText(curentText);
+    setFullText();
 }
 
 void MainWindow::ButtonCloseBrackets(){
-    if(!countOpenBracket || (typeLastSymbol!=1 && typeLastSymbol!=4)) return;
-    curentText+=')';
+    if(countOpenBracket==0) return;
+    if(curent_object.getObjectType()!=1 && curent_object.getObjectType()!=2 && curent_object.getObjectType()!=4) return;
+    objects.push_back(curent_object);
+    curent_object.clear();
+    curent_object.addSymbol(")");
     countOpenBracket--;
-    typeLastSymbol=4;
-    ui->label->setText(curentText);
+    setFullText();
 }
 
 void MainWindow::ButtonZnak(){
-    if(curentText.length()==0 || flagAfterResult){
-        curentText="(-";
-        countOpenBracket++;
-        typeLastSymbol=2;
-        flagAfterResult=false;
-    }
-    else if(typeLastSymbol==3 || typeLastSymbol==5){
-        curentText+="(-";
-        countOpenBracket++;
-        typeLastSymbol=2;
-    }
-    ui->label->setText(curentText);
+    if(curent_object.getObjectType()==4) return;
+    if(curent_object.getObjectType()!=0) objects.push_back(curent_object);
+    curent_object.clear();
+    curent_object.addSymbol("(-");
+    countOpenBracket++;
+    setFullText();
 }
 
 void MainWindow::ButtonResult(){
-    if(curentText.length()==0 || typeLastSymbol==6 || typeLastSymbol==5) return;
+    if(curentText.length()==0) return;
     if(countOpenBracket || countOper==0) return;
     QString tempResult="";
     if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
@@ -150,18 +160,19 @@ void MainWindow::ButtonResult(){
         tempResult=QString::fromStdString(calculatorMathObject->GetResult());
     }
     historyArr.push_back(curentText+"="+tempResult);
+    objects.clear();
     emit PressResult();
     ui->label->setText(tempResult);
     if(tempResult[0]=='E'){
         curentText="";
+        curent_object.clear();
         flagAfterResult=false;
         countOpenBracket=0;
-        typeLastSymbol=0;
         return;
     }
     curentText=tempResult;
+    curent_object.setFullNum(tempResult.toStdString());
     flagAfterResult=true;
-    typeLastSymbol=1;
     countOpenBracket=0;
     countOper=0;
 }
@@ -195,20 +206,33 @@ void MainWindow::UpdateMode(int _mode){
 }
 
 void MainWindow::ButtonDeleteLast(){
-    curentText.remove(curentText.length()-1,1);
-    ui->label->setText(curentText);
-    if(typeLastSymbol==5) countOper--;
-    else if(typeLastSymbol==2) typeLastSymbol=3;
-    else if(typeLastSymbol==3) countOpenBracket--;
-    else if(typeLastSymbol==4) countOpenBracket++;
-    if(curentText.length()==0) typeLastSymbol=0;
-    else{
-        QChar temp=curentText.back();
-        if(temp>='0' && temp<='9') typeLastSymbol=1;
-        else if(temp==',') typeLastSymbol=6;
-        else if(temp=='(') typeLastSymbol=3;
-        else if(temp==')') typeLastSymbol=4;
-        else if(temp=='-' || temp=='+' || temp=='*' || temp=='/') typeLastSymbol=5;
+    if(curent_object.getLength()==0){
+        int size=objects.size()-1;
+        while(size>=0){
+            if(objects[size].getLength()==0){
+                objects.pop_back();
+                continue;
+            }
+            objects[size].deleteLastSymbol();
+            if(objects[size].getLength()==0) objects.pop_back();
+            break;
+        }
+        if(size>=0){
+            curent_object=objects.back();
+            objects.pop_back();
+        }
+        return;
     }
-    if(flagAfterResult) flagAfterResult=false;
+    if(curent_object.getObjectType()==5) countOper--;
+    else if(curent_object.getObjectType()==4) countOpenBracket++;
+    else if(curent_object.getObjectType()==3) countOpenBracket--;
+    curent_object.deleteLastSymbol();
+    if(curent_object.getLength()==0){
+        if(objects.size()==0) curent_object.clear();
+        else{
+            curent_object=objects.back();
+            objects.pop_back();
+        }
+    }
+    setFullText();
 }
