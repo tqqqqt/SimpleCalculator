@@ -118,7 +118,7 @@ void MainWindow::ButtonOpenBrackets(){
 }
 
 void MainWindow::ButtonCloseBrackets(){
-    if(!countOpenBracket || typeLastSymbol!=1) return;
+    if(!countOpenBracket || (typeLastSymbol!=1 && typeLastSymbol!=4)) return;
     curentText+=')';
     countOpenBracket--;
     typeLastSymbol=4;
@@ -198,11 +198,11 @@ void MainWindow::ButtonDeleteLast(){
     curentText.remove(curentText.length()-1,1);
     ui->label->setText(curentText);
     if(typeLastSymbol==5) countOper--;
-    if(typeLastSymbol==2) typeLastSymbol=3;
-    else if(curentText.length()==0) typeLastSymbol=0;
+    else if(typeLastSymbol==2) typeLastSymbol=3;
+    else if(typeLastSymbol==3) countOpenBracket--;
+    else if(typeLastSymbol==4) countOpenBracket++;
+    if(curentText.length()==0) typeLastSymbol=0;
     else{
-        if(typeLastSymbol==3) countOpenBracket--;
-        else if(typeLastSymbol==4) countOpenBracket++;
         QChar temp=curentText.back();
         if(temp>='0' && temp<='9') typeLastSymbol=1;
         else if(temp==',') typeLastSymbol=6;
