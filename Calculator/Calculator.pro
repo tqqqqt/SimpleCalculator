@@ -26,22 +26,33 @@ CONFIG += c++11
 
 SOURCES += \
         History/historywindow.cpp \
-        Settings/settings.cpp \
+        Mode/modewindow.cpp \
+        Programmist/programmistwindow.cpp \
+        Settings/settingswindow.cpp \
+        Value/valuewindow.cpp \
         main.cpp \
         mainwindow.cpp \
         source/calculatormath.cpp \
-        source/numbermath.cpp
+        source/numbermath.cpp \
+        source/valueinfo.cpp
 
 HEADERS += \
         History/historywindow.h \
-        Settings/settings.h \
+        Mode/modewindow.h \
+        Programmist/programmistwindow.h \
+        Settings/settingswindow.h \
+        Value/valuewindow.h \
         mainwindow.h \
         source/calculatormath.h \
-        source/numbermath.h
+        source/numbermath.h \
+        source/valueinfo.h
 
 FORMS += \
         History/historywindow.ui \
-        Settings/settings.ui \
+        Mode/modewindow.ui \
+        Programmist/programmistwindow.ui \
+        Settings/settingswindow.ui \
+        Value/valuewindow.ui \
         mainwindow.ui
 
 # Default rules for deployment.
