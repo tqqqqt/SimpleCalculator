@@ -161,26 +161,24 @@ void MainWindow::ButtonZnak(){
 void MainWindow::ButtonResult(){
     if(curentText.length()==0) return;
     if(countOpenBracket || countOper==0) return;
-    QString tempResult="";
-    if(calculatorMathObject->SetString(curentText.toStdString())) tempResult="Error input.";
-    else{
+    QString save_calculator_text=curentText;
+    try {
+        objects.push_back(curent_object);
+        calculatorMathObject->setVector(objects.toStdVector());
+        objects.clear();
         calculatorMathObject->SetAccuracy(curent_acuracy);
-        tempResult=QString::fromStdString(calculatorMathObject->GetResult());
+        curent_object=calculatorMathObject->GetResult();
+        setFullText();
+        flagAfterResult=true;
     }
-    historyArr.push_back(curentText+"="+tempResult);
-    objects.clear();
-    emit PressResult();
-    ui->label->setText(tempResult);
-    if(tempResult[0]=='E'){
+    catch (std::exception &exp) {
         curentText="";
         curent_object.clear();
+        ui->label->setText(exp.what());
         flagAfterResult=false;
-        countOpenBracket=0;
-        return;
     }
-    curentText=tempResult;
-    curent_object.setFullNum(tempResult.toStdString());
-    flagAfterResult=true;
+    historyArr.push_back(save_calculator_text+'='+ui->label->toPlainText());
+    emit PressResult();
     countOpenBracket=0;
     countOper=0;
 }
