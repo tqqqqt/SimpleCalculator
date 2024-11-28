@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#include <exception>
 
 int MaxNumber(std::string num1, std::string num2);
 int FindMultiplier(std::string num1, std::string num2);
