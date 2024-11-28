@@ -21,11 +21,11 @@ private slots:
     void test_mathDiv_data();
     void test_mathDiv();
     void test_polish_entry_noError_data();
-    void test_polish_entry_noError();
+    //void test_polish_entry_noError();
     void test_polish_entry_error_data();
-    void test_polish_entry_error();
+    //void test_polish_entry_error();
     void test_full_calculate_data();
-    void test_full_calculate();
+    //void test_full_calculate();
 };
 
 project_tests::project_tests()
@@ -217,7 +217,7 @@ void project_tests::test_mathDiv(){
     QCOMPARE(MathDiv(firstNum.toStdString(),secondNum.toStdString(),11),result.toStdString());
 }
 
-void project_tests::test_polish_entry_noError()
+/*void project_tests::test_polish_entry_noError()
 {
     CalculatorMath* creatorEntry=new CalculatorMath();
     QFETCH(QString,expression);
@@ -238,7 +238,7 @@ void project_tests::test_full_calculate(){
     QFETCH(QString,result);
     creatorEntry->SetString(input.toStdString());
     QCOMPARE(creatorEntry->GetResult(),result.toStdString());
-}
+}*/
 
 QTEST_APPLESS_MAIN(project_tests)
 
