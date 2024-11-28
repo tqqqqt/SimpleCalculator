@@ -43,6 +43,9 @@ private:
     bool flagAfterResult;
     int countOpenBracket, countOper, curent_acuracy;
 
+    void loadStyle();
+    void loadIcons();
+
 private slots:
     void setFullText();
     void PressNumberButton(QChar buttonNum);

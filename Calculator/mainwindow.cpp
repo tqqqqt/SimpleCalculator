@@ -5,22 +5,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    QFile file(":/main_style.css");
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream file_str(&file);
-    QString content=file_str.readAll();
-    file.close();
-    this->setStyleSheet(content);
+    loadStyle();
     ui->setupUi(this);
-
-    QPixmap pixmap(":/history-icon.png");
-    QIcon button_icon(pixmap);
-    ui->pushButton_history->setIcon(button_icon);
-    ui->pushButton_history->setIconSize(pixmap.rect().size()/2);
-    pixmap.load(":/menu-icon.png");
-    button_icon.addPixmap(pixmap);
-    ui->pushButton_mode->setIcon(button_icon);
-    ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
+    loadIcons();
 
     settings=new QSettings("tqqqqt","calculator");
     curentText="";
@@ -63,6 +50,26 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::loadStyle(){
+    QFile file(":/main_style.css");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str(&file);
+    QString content=file_str.readAll();
+    file.close();
+    this->setStyleSheet(content);
+}
+
+void MainWindow::loadIcons(){
+    QPixmap pixmap(":/history-icon.png");
+    QIcon button_icon(pixmap);
+    ui->pushButton_history->setIcon(button_icon);
+    ui->pushButton_history->setIconSize(pixmap.rect().size()/2);
+    pixmap.load(":/menu-icon.png");
+    button_icon.addPixmap(pixmap);
+    ui->pushButton_mode->setIcon(button_icon);
+    ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
 }
 
 void MainWindow::setFullText(){
