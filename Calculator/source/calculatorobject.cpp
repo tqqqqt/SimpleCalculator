@@ -25,6 +25,12 @@ void CalculatorObject::addNum(char _num){
     if(object_type>2) return;
     object_type=1;
     if(length==1 && count_null==0 && count_dot==1 && _num=='0') return;
+    if(length==1 && text[0]=='0' && (_num>='1' && _num<='9')){
+        text[0]=_num;
+        length=1;
+        count_null++;
+        return;
+    }
     if(count_dot==0 && _num==',') return;
     text+=_num;
     length++;
