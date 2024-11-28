@@ -6,23 +6,25 @@
 #include <stack>
 
 #include "./numbermath.h"
+#include "./calculatorobject.h"
 
 class CalculatorMath
 {
 private:
-    std::string curentString, result;
-    std::vector<std::string> polishEntry;
+    //std::string curentString, result;
+    std::vector<CalculatorObject> polishEntry;
     int accuracy;
 
-    int CheckPrior(char symbol);
-    bool CheckOper(char symbol);
+    int CheckPrior(std::string);
+    //bool CheckOper(char);
 
 public:
     CalculatorMath();
     ~CalculatorMath();
-    int SetString(std::string newString);
+   // int SetString(std::string newString);
+    void setVector(std::vector<CalculatorObject>);
     void SetAccuracy(int);
-    std::string GetResult();
+    CalculatorObject GetResult();
 };
 
 #endif // CALCULATORMATH_H
