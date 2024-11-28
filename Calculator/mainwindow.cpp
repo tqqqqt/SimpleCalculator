@@ -168,6 +168,12 @@ void MainWindow::ButtonResult(){
         objects.clear();
         calculatorMathObject->SetAccuracy(curent_acuracy);
         curent_object=calculatorMathObject->GetResult();
+        if(curent_object.toString()[0]=='('){
+            curent_object.deleteLastSymbol();
+            objects.push_back(curent_object);
+            curent_object.clear();
+            curent_object.addSymbol(")");
+        }
         setFullText();
         flagAfterResult=true;
     }
@@ -240,5 +246,6 @@ void MainWindow::ButtonDeleteLast(){
             objects.pop_back();
         }
     }
+    if(flagAfterResult) flagAfterResult=false;
     setFullText();
 }
