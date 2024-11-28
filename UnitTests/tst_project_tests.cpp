@@ -214,7 +214,12 @@ void project_tests::test_mathDiv(){
     QFETCH(QString,firstNum);
     QFETCH(QString,secondNum);
     QFETCH(QString,result);
-    QCOMPARE(MathDiv(firstNum.toStdString(),secondNum.toStdString(),11),result.toStdString());
+    try{
+        QCOMPARE(MathDiv(firstNum.toStdString(),secondNum.toStdString(),10),result.toStdString());
+    }
+    catch(std::exception &exp){
+        QCOMPARE(exp.what(),result.toStdString());
+    }
 }
 
 /*void project_tests::test_polish_entry_noError()
