@@ -21,6 +21,11 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
     for(CalculatorObject element:_objects){
         if(element.getObjectType()==1){
             polishEntry.push_back(element);
+            if(element.toString()[0]=='('){
+                CalculatorObject temp;
+                temp.addSymbol("(");
+                oper_mas.push(temp);
+            }
             continue;
         }
         if(element.getObjectType()==3){
