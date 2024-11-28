@@ -79,7 +79,7 @@ void CalculatorObject::setFullNum(std::string _num){
     if(_num.length()==0) return;
     text=_num;
     length=text.length();
-    if(length>=2 && (_num[0]=='(' && _num[1]=='-')) object_type=2;
+    if(length==2 && (_num[0]=='(' && _num[1]=='-')) object_type=2;
     else object_type=1;
     if(_num.find(',')!=std::string::npos) count_dot=0;
 }
@@ -90,4 +90,11 @@ void CalculatorObject::clear(){
     object_type=0;
     count_dot=1;
     count_null=1;
+}
+
+CalculatorObject CalculatorObject::getOnlyNum(){
+    CalculatorObject result=*this;
+    if(result.text[0]=='(') result.text=result.text.substr(1);
+    if(result.text.back()==')') result.text.pop_back();
+    return result;
 }

@@ -24,6 +24,7 @@ public:
 
     void setFullNum(std::string);
     void clear();
+    CalculatorObject getOnlyNum();
 };
 
 #endif // CALCULATOROBJECT_H
