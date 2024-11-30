@@ -6,7 +6,7 @@ CalculatorMath::CalculatorMath()
 }
 
 CalculatorMath::~CalculatorMath(){
-    delete this;
+    //delete this;
 }
 
 int CalculatorMath::CheckPrior(std::string _oper){
