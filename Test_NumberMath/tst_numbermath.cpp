@@ -1,0 +1,183 @@
+#include <QtTest>
+
+#include "../Calculator/source/numbermath.h"
+
+class numbermath : public QObject
+{
+    Q_OBJECT
+
+public:
+    numbermath();
+    ~numbermath();
+
+private slots:
+    void test_mathSum_data();
+    void test_mathSum();
+    void test_mathNeg_data();
+    void test_mathNeg();
+    void test_mathMul_data();
+    void test_mathMul();
+    void test_mathDiv_data();
+    void test_mathDiv();
+};
+
+numbermath::numbermath()
+{
+
+}
+
+numbermath::~numbermath()
+{
+
+}
+
+void numbermath::test_mathSum_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("test_1")<<"0"<<"0"<<"0";
+    QTest::newRow("test_2")<<"1"<<"0"<<"1";
+    QTest::newRow("test_3")<<"0"<<"2"<<"2";
+    QTest::newRow("test_4")<<"2"<<"2"<<"4";
+    QTest::newRow("test_5")<<"91"<<"10"<<"101";
+    QTest::newRow("test_6")<<"16"<<"14"<<"30";
+    QTest::newRow("test_7")<<"61"<<"41"<<"102";
+    QTest::newRow("test_8")<<"109"<<"1"<<"110";
+    QTest::newRow("test_9")<<"123456789987654321"<<"2"<<"123456789987654323";
+    QTest::newRow("test_10")<<"123456789987654321"<<"3"<<"123456789987654324";
+    QTest::newRow("test_11")<<"123456789987654321"<<"4"<<"123456789987654325";
+    QTest::newRow("test_12")<<"99999999"<<"88888888"<<"188888887";
+    QTest::newRow("test_13")<<"123456789"<<"987654321"<<"1111111110";
+    QTest::newRow("test_14")<<"9999999999"<<"100"<<"10000000099";
+    QTest::newRow("test_15")<<"123456789987654321"<<"123456789987654321"<<"246913579975308642";
+    QTest::newRow("test_16")<<"0"<<"0,1"<<"0,1";
+    QTest::newRow("test_17")<<"0,1"<<"0"<<"0,1";
+    QTest::newRow("test_18")<<"4,99"<<"0,01"<<"5,00";
+    QTest::newRow("test_19")<<"123456789,2468"<<"987654321,13579"<<"1111111110,38259";
+    QTest::newRow("test_20")<<"123456789,987654321"<<"987654321,123456789"<<"1111111111,111111110";
+}
+
+void numbermath::test_mathNeg_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("test_1")<<"0"<<"0"<<"0";
+    QTest::newRow("test_2")<<"1"<<"0"<<"1";
+    QTest::newRow("test_3")<<"0"<<"2"<<"-2";
+    QTest::newRow("test_4")<<"2"<<"2"<<"0";
+    QTest::newRow("test_5")<<"16"<<"14"<<"2";
+    QTest::newRow("test_6")<<"40"<<"39"<<"1";
+    QTest::newRow("test_7")<<"61"<<"41"<<"20";
+    QTest::newRow("test_8")<<"102"<<"41"<<"61";
+    QTest::newRow("test_9")<<"123456789987654321"<<"2"<<"123456789987654319";
+    QTest::newRow("test_10")<<"123456789987654321"<<"3"<<"123456789987654318";
+    QTest::newRow("test_11")<<"123456789987654321"<<"4"<<"123456789987654317";
+    QTest::newRow("test_12")<<"99999999"<<"88888888"<<"11111111";
+    QTest::newRow("test_13")<<"123456789"<<"987654321"<<"-864197532";
+    QTest::newRow("test_14")<<"9999999999"<<"100"<<"9999999899";
+    QTest::newRow("test_15")<<"123456789987654321"<<"123456789987654321"<<"0";
+    QTest::newRow("test_16")<<"0"<<"0,2"<<"-0,2";
+    QTest::newRow("test_17")<<"2,2"<<"2,2"<<"0";
+    QTest::newRow("test_18")<<"0,1"<<"0,00020003"<<"0,09979997";
+    QTest::newRow("test_19")<<"2,23"<<"2,001"<<"0,229";
+    QTest::newRow("test_20")<<"2,00001"<<"3,364"<<"-1,36399";
+    QTest::newRow("test_21")<<"123456789,123456789"<<"987654321,987654321"<<"-864197532,864197532";
+    QTest::newRow("test_22")<<"987654321,123456789"<<"123456789,987654321"<<"864197531,135802468";
+}
+
+void numbermath::test_mathMul_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("test_1")<<"0"<<"0"<<"0";
+    QTest::newRow("test_2")<<"1"<<"0"<<"0";
+    QTest::newRow("test_3")<<"0"<<"2"<<"0";
+    QTest::newRow("test_4")<<"2"<<"2"<<"4";
+    QTest::newRow("test_5")<<"8"<<"2"<<"16";
+    QTest::newRow("test_6")<<"16"<<"14"<<"224";
+    QTest::newRow("test_7")<<"61"<<"41"<<"2501";
+    QTest::newRow("test_8")<<"123456789987654321"<<"2"<<"246913579975308642";
+    QTest::newRow("test_9")<<"123456789987654321"<<"3"<<"370370369962962963";
+    QTest::newRow("test_10")<<"123456789987654321"<<"4"<<"493827159950617284";
+    QTest::newRow("test_11")<<"99999999"<<"88888888"<<"8888888711111112";
+    QTest::newRow("test_12")<<"123456789"<<"987654321"<<"121932631112635269";
+    QTest::newRow("test_13")<<"9999999999"<<"100"<<"999999999900";
+    QTest::newRow("test_14")<<"1234567899"<<"1234567899"<<"1524157897241274201";
+    QTest::newRow("test_15")<<"123456789987654321"<<"123456789987654321"<<"15241578994055784200731595789971041";
+    QTest::newRow("test_16")<<"0,2"<<"2"<<"0,4";
+    QTest::newRow("test_17")<<"0,946"<<"0,228"<<"0,215688";
+    QTest::newRow("test_18")<<"23,25"<<"24,26"<<"564,0450";
+    QTest::newRow("test_19")<<"123456789,2468"<<"123456789,13579"<<"15241578797423853,937022972";
+    QTest::newRow("test_20")<<"123456789987654321,123456789"<<"987654321123456789,987654321"<<"121932632103337905905959456328608443,662094193112635269";
+}
+
+void numbermath::test_mathDiv_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("test_1")<<"2"<<"0"<<"Error div 0";
+    QTest::newRow("test_2")<<"0"<<"2"<<"0";
+    QTest::newRow("test_3")<<"8"<<"2"<<"4";
+    QTest::newRow("test_4")<<"8"<<"4"<<"2";
+    QTest::newRow("test_5")<<"24"<<"25"<<"0,96";
+    QTest::newRow("test_6")<<"144"<<"14"<<"10,2857142857";
+    QTest::newRow("test_7")<<"144"<<"12"<<"12";
+    QTest::newRow("test_8")<<"9999"<<"9"<<"1111";
+    QTest::newRow("test_9")<<"48954"<<"246"<<"199";
+    QTest::newRow("test_10")<<"999999999"<<"3"<<"333333333";
+    QTest::newRow("test_11")<<"151658732170"<<"1231546"<<"123145";
+    QTest::newRow("test_12")<<"121932631112635269"<<"123456789"<<"987654321";
+    QTest::newRow("test_13")<<"5252683697925751630154898"<<"42546738"<<"123456789987654321";
+    QTest::newRow("test_14")<<"137174211083676268890260631"<<"1111111111"<<"123456789987654321";
+    QTest::newRow("test_15")<<"15241578994055784200731595789971041"<<"123456789987654321"<<"123456789987654321";
+    QTest::newRow("test_16")<<"0,2"<<"0"<<"Error div 0";
+    QTest::newRow("test_17")<<"0"<<"0,2"<<"0";
+    QTest::newRow("test_18")<<"1"<<"10"<<"0,1";
+    QTest::newRow("test_19")<<"123456789"<<"345"<<"357845,7652173913";
+    QTest::newRow("test_20")<<"1"<<"2345"<<"0,0004264392";
+}
+
+void numbermath::test_mathSum(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathSum(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
+void numbermath::test_mathNeg(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathNeg(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
+void numbermath::test_mathMul(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathMul(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
+void numbermath::test_mathDiv(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    try{
+        QCOMPARE(MathDiv(firstNum.toStdString(),secondNum.toStdString(),10),result.toStdString());
+    }
+    catch(std::exception &exp){
+        QCOMPARE(exp.what(),result.toStdString());
+    }
+}
+
+QTEST_APPLESS_MAIN(numbermath)
+
+#include "tst_numbermath.moc"
