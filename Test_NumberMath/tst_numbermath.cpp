@@ -11,6 +11,10 @@ public:
     ~numbermath();
 
 private slots:
+    void test_maxNum_data();
+    void test_maxNum();
+    void test_findMultiplier_data();
+    void test_findMultiplier();
     void test_mathSum_data();
     void test_mathSum();
     void test_mathNeg_data();
@@ -21,14 +25,57 @@ private slots:
     void test_mathDiv();
 };
 
-numbermath::numbermath()
-{
+numbermath::numbermath(){ }
 
+numbermath::~numbermath(){ }
+
+void numbermath::test_maxNum_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<int>("result");
+
+    QTest::newRow("test_1")<<"0"<<"0"<<0;
+    QTest::newRow("test_2")<<"2"<<"0"<<-1;
+    QTest::newRow("test_3")<<"0"<<"2"<<1;
+    QTest::newRow("test_4")<<"0,01"<<"0,001"<<-1;
+    QTest::newRow("test_5")<<"-2"<<"0"<<1;
+    QTest::newRow("test_6")<<"0"<<"-2"<<-1;
+    QTest::newRow("test_7")<<"-2,41"<<"2,41"<<1;
+    QTest::newRow("test_8")<<"0,0000001"<<"0,0000001"<<0;
+    QTest::newRow("test_9")<<"-2,000001"<<"-2,000001"<<0;
+    QTest::newRow("test_10")<<"0,01"<<"0,010"<<0;
+    QTest::newRow("test_11")<<"5,99"<<"5,98"<<-1;
 }
 
-numbermath::~numbermath()
-{
+void numbermath::test_maxNum(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(int,result);
 
+    QCOMPARE(MaxNumber(firstNum.toStdString(),secondNum.toStdString()),result);
+}
+
+void numbermath::test_findMultiplier_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<int>("result");
+
+    QTest::newRow("test_1")<<"1"<<"1"<<1;
+    QTest::newRow("test_2")<<"4"<<"2"<<2;
+    QTest::newRow("test_3")<<"13"<<"2"<<6;
+    QTest::newRow("test_4")<<"14"<<"13"<<1;
+    QTest::newRow("test_5")<<"81"<<"9"<<9;
+    QTest::newRow("test_6")<<"4"<<"-2"<<-2;
+    QTest::newRow("test_7")<<"-4"<<"2"<<-2;
+    QTest::newRow("test_8")<<"-81"<<"-9"<<9;
+}
+
+void numbermath::test_findMultiplier(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(int,result);
+
+    QCOMPARE(FindMultiplier(firstNum.toStdString(),secondNum.toStdString()),result);
 }
 
 void numbermath::test_mathSum_data(){
@@ -56,6 +103,14 @@ void numbermath::test_mathSum_data(){
     QTest::newRow("test_18")<<"4,99"<<"0,01"<<"5,00";
     QTest::newRow("test_19")<<"123456789,2468"<<"987654321,13579"<<"1111111110,38259";
     QTest::newRow("test_20")<<"123456789,987654321"<<"987654321,123456789"<<"1111111111,111111110";
+}
+
+void numbermath::test_mathSum(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathSum(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
 }
 
 void numbermath::test_mathNeg_data(){
@@ -87,6 +142,14 @@ void numbermath::test_mathNeg_data(){
     QTest::newRow("test_22")<<"987654321,123456789"<<"123456789,987654321"<<"864197531,135802468";
 }
 
+void numbermath::test_mathNeg(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathNeg(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
 void numbermath::test_mathMul_data(){
     QTest::addColumn<QString>("firstNum");
     QTest::addColumn<QString>("secondNum");
@@ -114,6 +177,14 @@ void numbermath::test_mathMul_data(){
     QTest::newRow("test_20")<<"123456789987654321,123456789"<<"987654321123456789,987654321"<<"121932632103337905905959456328608443,662094193112635269";
 }
 
+void numbermath::test_mathMul(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathMul(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
 void numbermath::test_mathDiv_data(){
     QTest::addColumn<QString>("firstNum");
     QTest::addColumn<QString>("secondNum");
@@ -139,30 +210,6 @@ void numbermath::test_mathDiv_data(){
     QTest::newRow("test_18")<<"1"<<"10"<<"0,1";
     QTest::newRow("test_19")<<"123456789"<<"345"<<"357845,7652173913";
     QTest::newRow("test_20")<<"1"<<"2345"<<"0,0004264392";
-}
-
-void numbermath::test_mathSum(){
-    QFETCH(QString,firstNum);
-    QFETCH(QString,secondNum);
-    QFETCH(QString,result);
-
-    QCOMPARE(MathSum(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
-}
-
-void numbermath::test_mathNeg(){
-    QFETCH(QString,firstNum);
-    QFETCH(QString,secondNum);
-    QFETCH(QString,result);
-
-    QCOMPARE(MathNeg(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
-}
-
-void numbermath::test_mathMul(){
-    QFETCH(QString,firstNum);
-    QFETCH(QString,secondNum);
-    QFETCH(QString,result);
-
-    QCOMPARE(MathMul(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
 }
 
 void numbermath::test_mathDiv(){
