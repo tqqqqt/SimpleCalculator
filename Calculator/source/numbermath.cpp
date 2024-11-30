@@ -30,6 +30,9 @@ int FindMultiplier(std::string num1, std::string num2){
 }
 
 std::string MathSum(std::string num1, std::string num2){
+    if(num1[0]=='-' && num2[0]!='-') return MathNeg(num2,num1.substr(1));
+    if(num1[0]=='-' && num2[0]=='-') return '-'+MathSum(num1.substr(1),num2.substr(1));
+    if(num1[0]!='-' && num2[0]=='-') return MathNeg(num1,num2.substr(1));
     size_t lenNum1=num1.length(), lenNum2=num2.length(), dot1P=num1.find(','), dot2P=num2.find(',');
     int carry=0, pointNum1=dot1P==std::string::npos?lenNum1-1:dot1P-1, pointNum2=dot2P==std::string::npos?lenNum2-1:dot2P-1;
     std::string result="";
@@ -58,6 +61,9 @@ std::string MathSum(std::string num1, std::string num2){
 }
 
 std::string MathNeg(std::string num1, std::string num2){
+    if(num1[0]=='-' && num2[0]!='-') return '-'+MathSum(num1.substr(1),num2);
+    if(num1[0]=='-' && num2[0]=='-') return MathNeg(num2.substr(1),num1.substr(1));
+    if(num1[0]!='-' && num2[0]=='-') return MathSum(num1,num2.substr(1));
     int minusFlg=MaxNumber(num1,num2);
     if(minusFlg==1) std::swap(num1,num2);
     else if(minusFlg==0) return "0";
@@ -65,12 +71,14 @@ std::string MathNeg(std::string num1, std::string num2){
     int carry=0, dot1P=num1.find(','), dot2P=num2.find(',');;
     if((dot1P!=std::string::npos && dot2P!=std::string::npos) || (dot1P==std::string::npos && dot2P!=std::string::npos)){
         int tempPointNum1=num1.length()-1, tempPointNum2=num2.length()-1;
-        while((tempPointNum1-dot1P)>=1 || (tempPointNum2-dot2P)>=1){
+        while((tempPointNum1-dot1P)>=1 && (tempPointNum2-dot2P)>=1){
             int tempNum1=0, tempNum2=0;
             if((tempPointNum1-dot1P)==(tempPointNum2-dot2P)){
                 tempNum1=num1[tempPointNum1--]-'0';
                 tempNum2=num2[tempPointNum2--]-'0';
             }
+            else if(dot1P==std::string::npos) tempNum2=num2[tempPointNum2--]-'0';
+            else if(dot2P==std::string::npos) tempNum1=num1[tempPointNum1--]-'0';
             else if((tempPointNum1-dot1P)>(tempPointNum2-dot2P)) tempNum1=num1[tempPointNum1--]-'0';
             else if((tempPointNum1-dot1P)<(tempPointNum2-dot2P)) tempNum2=num2[tempPointNum2--]-'0';
             if(carry){
@@ -85,7 +93,7 @@ std::string MathNeg(std::string num1, std::string num2){
         }
         result=','+result;
     }
-    else if(dot1P!=std::string::npos) result=','+num1.substr(dot1P+1);
+    else if(dot1P!=std::string::npos && dot2P==std::string::npos) result=','+num1.substr(dot1P+1);
     int pointNum1=dot1P==std::string::npos?num1.length()-1:dot1P-1, pointNum2=dot2P==std::string::npos?num2.length()-1:dot2P-1;
     while(pointNum1>=0 || pointNum2>=0){
         int tempNum1=0, tempNum2=0;
@@ -109,6 +117,15 @@ std::string MathNeg(std::string num1, std::string num2){
 }
 
 std::string MathMul(std::string num1, std::string num2){
+    if(num1[0]=='-' && num2[0]!='-'){
+        std::string temp=MathMul(num1.substr(1),num2);
+        return temp=="0"?temp:'-'+temp;
+    }
+    if(num1[0]=='-' && num2[0]=='-') return MathMul(num1.substr(1),num2.substr(1));
+    if(num1[0]!='-' && num2[0]=='-'){
+        std::string temp=MathMul(num1,num2.substr(1));
+        return temp=="0"?temp:'-'+temp;
+    }
     int countNumDot=0, lenNum1=num1.length(), lenNum2=num2.length();
     size_t dot1P=num1.find(','), dot2P=num2.find(',');
     if((num1[0]=='0' && dot1P==std::string::npos) || (num2[0]=='0' && dot2P==std::string::npos)) return "0";
@@ -140,22 +157,41 @@ std::string MathMul(std::string num1, std::string num2){
         if(carry) result+=std::to_string(carry);
     }
     std::reverse(result.begin(),result.end());
+    if(countNumDot) result.insert(result.begin()+(result.length()-countNumDot),',');
     return result;
 }
 
-std::string MathDiv(std::string num1, std::string num2){
-    if(num2.length()==1 && num2[0]=='0') return "Error div 0";
+std::string MathDiv(std::string num1, std::string num2, int _accuracy){
+    if(num2.length()==1 && num2[0]=='0') throw std::invalid_argument("Error div 0");
+    if(num1[0]=='-' && num2[0]!='-'){
+        std::string temp="";
+        try{ temp=MathDiv(num1.substr(1),num2,_accuracy); }
+        catch(std::exception){ throw; }
+        return temp=="0"?temp:'-'+temp;
+    }
+    if(num1[0]=='-' && num2[0]=='-'){
+        try{ return MathDiv(num1.substr(1),num2.substr(1),_accuracy); }
+        catch(std::exception){ throw; }
+    }
+    if(num1[0]!='-' && num2[0]=='-'){
+        std::string temp="";
+        try{ temp=MathDiv(num1,num2.substr(1),_accuracy); }
+        catch(std::exception){ throw; }
+        return temp=="0"?temp:'-'+temp;
+    }
     size_t lenNum1=num1.length(), lenNum2=num2.length();
     size_t dot1P=num1.find(','), dot2P=num2.find(',');
     if(dot1P!=std::string::npos){
         for(int i=0;i<(lenNum1-1-dot1P);i++) num2+='0';
         num1.erase(dot1P,1);
-        if(num1[0]=='0') num1.erase(0,1);
+        while(num1.length() && num1[0]=='0') num1.erase(0,1);
+        if(num1=="") return "0";
     }
     if(dot2P!=std::string::npos){
         for(int i=0;i<(lenNum2-1-dot2P);i++) num1+='0';
         num2.erase(dot2P,1);
-        if(num2[0]=='0') num2.erase(0,1);
+        while(num2.length() && num2[0]=='0') num2.erase(0,1);
+        if(num2=="") throw std::invalid_argument("Error div 0");
     }
     std::string curentNum="";
     std::vector<char> tempResult;
@@ -180,7 +216,7 @@ std::string MathDiv(std::string num1, std::string num2){
     if(curentNum!=""){
         tempResult.push_back(',');
         std::string tempNum="";
-        int countNums=5;
+        int countNums=_accuracy+1;
         while(countNums){
             curentNum+='0';
             while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);

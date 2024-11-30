@@ -26,22 +26,43 @@ CONFIG += c++11
 
 SOURCES += \
         History/historywindow.cpp \
+        Mode/modewindow.cpp \
+        Programmist/programmistwindow.cpp \
+        Settings/settingswindow.cpp \
+        Value/valuewindow.cpp \
         main.cpp \
         mainwindow.cpp \
         source/calculatormath.cpp \
-        source/numbermath.cpp
+        source/calculatorobject.cpp \
+        source/numbermath.cpp \
+        source/valueinfo.cpp
 
 HEADERS += \
         History/historywindow.h \
+        Mode/modewindow.h \
+        Programmist/programmistwindow.h \
+        Settings/settingswindow.h \
+        Value/valuewindow.h \
         mainwindow.h \
         source/calculatormath.h \
-        source/numbermath.h
+        source/calculatorobject.h \
+        source/numbermath.h \
+        source/valueinfo.h
 
 FORMS += \
         History/historywindow.ui \
+        Mode/modewindow.ui \
+        Programmist/programmistwindow.ui \
+        Settings/settingswindow.ui \
+        Value/valuewindow.ui \
         mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
+
+RESOURCES += \
+    resources.qrc
