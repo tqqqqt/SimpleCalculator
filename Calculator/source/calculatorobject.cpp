@@ -22,6 +22,7 @@ int CalculatorObject::getObjectType(){
 }
 
 void CalculatorObject::addNum(char _num){
+    if(!(_num>='0' && _num<='9')) throw std::invalid_argument("input not a num");
     if(object_type>2) return;
     object_type=1;
     if(length==1 && count_null==0 && count_dot==1 && _num=='0') return;
@@ -39,6 +40,7 @@ void CalculatorObject::addNum(char _num){
 }
 
 void CalculatorObject::addSymbol(std::string _symbol){
+    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/") throw std::invalid_argument("input not a oper or bracket");
     if(object_type==3 && _symbol=="-"){
         text="(-";
         length=2;
@@ -73,10 +75,24 @@ void CalculatorObject::deleteLastSymbol(){
     text.pop_back();
     length--;
     if(length==2 && text[0]=='(' && text[1]=='-') object_type=2;
+    if(length==0) clear();
 }
 
 void CalculatorObject::setFullNum(std::string _num){
-    if(_num.length()==0) return;
+    if(_num.length()==0) throw std::invalid_argument("incorect num");
+    if(_num[0]=='(' && _num.length()==1) throw std::invalid_argument("incorect num");
+    if(_num[0]=='(' && ((_num[1]=='-' && _num.length()==2) || _num[1]!='-')) throw std::invalid_argument("incorect num");
+    if(_num[0]=='(' && _num.back()!=')') throw std::invalid_argument("incorect num");
+    if(_num[0]=='-' && _num.length()==1) throw std::invalid_argument("incorect num");
+    int start_point=0, end_point=_num.length();
+    if(_num[0]=='(' && _num[1]=='-'){
+        start_point=2;
+        end_point--;
+    }
+    else if(_num[0]=='-') start_point=1;
+    for(int i=start_point;i<end_point;i++){
+        if(_num[i]==' ' || _num[i]=='(' || _num[i]==')' || _num[i]=='+' || _num[i]=='-' || _num[i]=='*' || _num[i]=='/') throw std::invalid_argument("incorect num");
+    }
     text=_num;
     length=text.length();
     if(length==2 && (_num[0]=='(' && _num[1]=='-')) object_type=2;
@@ -93,6 +109,7 @@ void CalculatorObject::clear(){
 }
 
 CalculatorObject CalculatorObject::getOnlyNum(){
+    if(object_type!=1) throw std::invalid_argument("object is not num");
     CalculatorObject result=*this;
     if(result.text[0]=='(') result.text=result.text.substr(1);
     if(result.text.back()==')') result.text.pop_back();
