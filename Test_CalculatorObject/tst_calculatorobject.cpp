@@ -38,10 +38,10 @@ void calculatorobject::test_toString_data(){
 
     QTest::newRow("test_1")<<"0";
     QTest::newRow("test_2")<<"24";
-    QTest::newRow("test_3")<<"-2";
+    QTest::newRow("test_3")<<"(-2,22)";
     QTest::newRow("test_4")<<"2,00000001";
     QTest::newRow("test_5")<<"(-2)";
-    QTest::newRow("test_6")<<"-123,456";
+    QTest::newRow("test_6")<<"(-123,456)";
 }
 
 void calculatorobject::test_toString(){
@@ -59,7 +59,7 @@ void calculatorobject::test_getLength_data(){
     QTest::newRow("test_1")<<"0"<<1;
     QTest::newRow("test_2")<<"123"<<3;
     QTest::newRow("test_3")<<"0,00000001"<<10;
-    QTest::newRow("test_4")<<"-24"<<3;
+    QTest::newRow("test_4")<<"(-24)"<<5;
     QTest::newRow("test_5")<<"(-2)"<<4;
     QTest::newRow("test_6")<<"(-2,1918)"<<9;
 }
@@ -159,7 +159,7 @@ void calculatorobject::test_addSymbol_data(){
     QTest::newRow("test_15")<<"("<<"(";
     QTest::newRow("test_16")<<")"<<")";
     QTest::newRow("test_17")<<""<<"input not a oper or bracket";
-    QTest::newRow("test_18")<<")"<<"input not a oper or bracket";
+    QTest::newRow("test_18")<<" "<<"input not a oper or bracket";
 }
 
 void calculatorobject::test_addSymbol(){
@@ -194,9 +194,9 @@ void calculatorobject::test_deleteLastSymbol_data(){
     QTest::newRow("test_9")<<"("<<2<<0<<0<<"";
     QTest::newRow("test_10")<<")"<<2<<0<<0<<"";
     QTest::newRow("test_11")<<"1234253"<<3<<1<<6<<"123425";
-    QTest::newRow("test_12")<<"-1,00000001"<<3<<1<<10<<"-1,0000000";
-    QTest::newRow("test_13")<<"(-2"<<3<<2<<2<<"(-";
-    QTest::newRow("test_14")<<"-123"<<3<<1<<3<<"-12";
+    QTest::newRow("test_12")<<"(-1,00000001)"<<3<<1<<12<<"(-1,00000001";
+    QTest::newRow("test_13")<<"(-2)"<<3<<1<<3<<"(-2";
+    QTest::newRow("test_14")<<"(-123)"<<3<<1<<5<<"(-123";
 }
 
 void calculatorobject::test_deleteLastSymbol(){
@@ -221,11 +221,11 @@ void calculatorobject::test_setFullNum_data(){
     QTest::addColumn<QString>("result");
 
     QTest::newRow("test_1")<<"123"<<"123";
-    QTest::newRow("test_2")<<"-3435,01"<<"incorect num";
+    QTest::newRow("test_2")<<"-3435,01"<<"-3435,01";
     QTest::newRow("test_3")<<"1,0000000000001"<<"1,0000000000001";
     QTest::newRow("test_4")<<"(-223)"<<"(-223)";
     QTest::newRow("test_5")<<"2+"<<"incorect num";
-    QTest::newRow("test_6")<<"-234"<<"incorect num";
+    QTest::newRow("test_6")<<"-234"<<"-234";
     QTest::newRow("test_7")<<"/*"<<"incorect num";
     QTest::newRow("test_8")<<""<<"incorect num";
 }
