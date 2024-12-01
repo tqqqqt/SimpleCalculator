@@ -1,6 +1,9 @@
 #include "numbermath.h"
 
 int MaxNumber(std::string num1, std::string num2){
+    if(num1[0]=='-' && num2[0]!='-') return 1;
+    if(num1[0]!='-' && num2[0]=='-') return -1;
+    if(num1[0]=='-' && num2[0]=='-') return -1*MaxNumber(num1.substr(1),num2.substr(1));
     size_t dot1P=num1.find(','), dot2P=num2.find(',');
     size_t rightPointNum1=dot1P==std::string::npos?num1.length():dot1P, rightPointNum2=dot2P==std::string::npos?num2.length():dot2P;
     if(rightPointNum1>rightPointNum2) return -1;
@@ -21,6 +24,9 @@ int MaxNumber(std::string num1, std::string num2){
 }
 
 int FindMultiplier(std::string num1, std::string num2){
+    if(num1[0]=='-' && num2[0]!='-') return -1*FindMultiplier(num1.substr(1),num2);
+    if(num1[0]!='-' && num2[0]=='-') return -1*FindMultiplier(num1,num2.substr(1));
+    if(num1[0]=='-' && num2[0]=='-') return FindMultiplier(num1.substr(1),num2.substr(1));
     int result=1;
     for(int i=2;i<10;i++){
         if(MaxNumber(MathMul(num2,std::to_string(i)),num1)>=0) result=i;
