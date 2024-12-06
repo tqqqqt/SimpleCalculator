@@ -159,7 +159,7 @@ void MainWindow::ButtonZnak(){
 }
 
 void MainWindow::ButtonResult(){
-    if(curentText.length()==0) return;
+    if(curentText.length()==0 || (curent_object.getObjectType()!=1 && curent_object.getObjectType()!=4)) return;
     if(countOpenBracket || countOper==0) return;
     QString save_calculator_text=curentText;
     try {
