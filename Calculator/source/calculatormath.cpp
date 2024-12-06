@@ -5,9 +5,7 @@ CalculatorMath::CalculatorMath()
     accuracy=10;
 }
 
-CalculatorMath::~CalculatorMath(){
-    //delete this;
-}
+CalculatorMath::~CalculatorMath(){ }
 
 int CalculatorMath::CheckPrior(std::string _oper){
     if(_oper=="+" || _oper=="-") return 1;
