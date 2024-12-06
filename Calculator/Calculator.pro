@@ -35,7 +35,8 @@ SOURCES += \
         source/calculatormath.cpp \
         source/calculatorobject.cpp \
         source/numbermath.cpp \
-        source/valueinfo.cpp
+        source/valueinfo.cpp \
+        source/valueobject.cpp
 
 HEADERS += \
         History/historywindow.h \
@@ -47,7 +48,9 @@ HEADERS += \
         source/calculatormath.h \
         source/calculatorobject.h \
         source/numbermath.h \
-        source/valueinfo.h
+        source/programobject.h \
+        source/valueinfo.h \
+        source/valueobject.h
 
 FORMS += \
         History/historywindow.ui \
