@@ -9,6 +9,8 @@ CalculatorObject::CalculatorObject()
     count_null=1;
 }
 
+CalculatorObject::~CalculatorObject(){ }
+
 std::string CalculatorObject::toString(){
     return text;
 }

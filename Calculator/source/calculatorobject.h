@@ -5,7 +5,9 @@
 #include <string>
 #include <exception>
 
-class CalculatorObject
+#include "programobject.h"
+
+class CalculatorObject: public ProgramObject
 {
 private:
     std::string text;
@@ -14,6 +16,7 @@ private:
 
 public:
     CalculatorObject();
+    ~CalculatorObject();
 
     std::string toString();
     size_t getLength();
