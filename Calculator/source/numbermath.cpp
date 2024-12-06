@@ -163,7 +163,10 @@ std::string MathMul(std::string num1, std::string num2){
         if(carry) result+=std::to_string(carry);
     }
     std::reverse(result.begin(),result.end());
-    if(countNumDot) result.insert(result.begin()+(result.length()-countNumDot),',');
+    if(countNumDot){
+        result.insert(result.begin()+(result.length()-countNumDot),',');
+        while(result.length() && result[0]=='0' && result[1]!=',') result=result.substr(1);
+    }
     return result;
 }
 
