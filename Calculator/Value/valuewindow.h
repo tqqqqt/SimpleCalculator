@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "./../source/valueinfo.h"
+#include "./../source/valueobject.h"
 
 #include "./../Mode/modewindow.h"
 
@@ -25,8 +26,9 @@ public:
 
 private:
     Ui::ValueWindow *ui;
+    ValueObject up_object, bottom_object;
     ValueInfo* value_info;
-    QString left_text, right_text;
+    //QString left_text, right_text;
     int curent_field;
 
 private slots:
