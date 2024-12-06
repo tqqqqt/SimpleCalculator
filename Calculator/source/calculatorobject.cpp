@@ -22,7 +22,7 @@ int CalculatorObject::getObjectType(){
 }
 
 void CalculatorObject::addNum(char _num){
-    if(!(_num>='0' && _num<='9')) throw std::invalid_argument("input not a num");
+    if(!(_num>='0' && _num<='9') && _num!=',') throw std::invalid_argument("input not a num");
     if(object_type>2) return;
     object_type=1;
     if(length==1 && count_null==0 && count_dot==1 && _num=='0') return;
