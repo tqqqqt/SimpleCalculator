@@ -48,7 +48,7 @@ void ValueInfo::createMass(){
 void ValueInfo::createData(){
     mains.push_back("Данные");
     seconds.push_back({"Биты (bit)","Байты (B)","Килобайты (KB)","Мегабайты (MB)","Гигабайты (GB)","Терабайты (TB)"});
-    std::vector<double> data={8388608,1048576,1024,1,0.0009765625,0.00000095367431640625};
+    std::vector<double> data={8589934592,1073741824,1048576,1024,1,0.0009765625};
     for(size_t i=0;i<data.size();i++) info[seconds.back()[i]]=data[i];
 }
 
@@ -91,6 +91,7 @@ std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::str
     std::string result="";
     if(_main!=mains[TEMPERATURE_INDEX]){
         std::string mul_value=std::to_string(info[_left]/info[_right]);
+        if(_main==mains[DATA_INDEX] || _main==mains[SPEED_INDEX]) mul_value=std::to_string(info[_right]/info[_left]);
         if(mul_value.find('.')!=std::string::npos) mul_value[mul_value.find('.')]=',';
         result=MathMul(_value,mul_value);
     }

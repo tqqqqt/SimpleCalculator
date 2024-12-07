@@ -23,10 +23,6 @@ private:
     std::vector<std::vector<std::string>> seconds;
     std::unordered_map<std::string,double> info;
 
-    //std::unordered_map</*main*/std::string,std::unordered_map</*left*/std::string,std::unordered_map</*right*/std::string,std::string>>> info;
-    //std::unordered_map</*from*/std::string,std::unordered_map<std::string,std::string>> temperature;
-    //std::unordered_map<std::string,int> rating_info;
-
     std::string getTemperature(std::string, std::string, std::string);
 
     void createArea();
