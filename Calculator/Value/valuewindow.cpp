@@ -36,7 +36,6 @@ ValueWindow::ValueWindow(QWidget *parent) :
     this->connect(ui->pushButton_upp,&QPushButton::clicked,[this]{ buttonChangeField(1); });
     this->connect(ui->pushButton_down,&QPushButton::clicked,[this]{ buttonChangeField(2); });
     this->connect(ui->pushButton_dot,&QPushButton::clicked,[this]{ pressNumberButton(','); });
-    //this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(buttonDot()));
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(buttonClear()));
     this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(buttonDeleteLast()));
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
@@ -54,12 +53,10 @@ ValueWindow::~ValueWindow()
 
 void ValueWindow::pressNumberButton(QChar button_num){
     if(curent_field==1){
-        //left_text+=button_num;
         up_object.addNum(button_num.toLatin1());
         ui->textEdit_left->setText(QString::fromStdString(up_object.toString()));
     }
     else{
-        //right_text+=button_num;
         bottom_object.addNum(button_num.toLatin1());
         ui->textEdit_right->setText(QString::fromStdString(bottom_object.toString()));
     }
@@ -79,20 +76,7 @@ void ValueWindow::buttonChangeField(int _field){
     }
 }
 
-void ValueWindow::buttonDot(){
-    /*if(curent_field==1){
-        left_text+=',';
-        ui->textEdit_left->setText(left_text);
-    }
-    else{
-        right_text+=',';
-        ui->textEdit_right->setText(right_text);
-    }*/
-}
-
 void ValueWindow::buttonClear(){
-    //left_text="";
-    //right_text="";
     up_object.clear();
     bottom_object.clear();
     ui->textEdit_left->setText(QString::fromStdString(up_object.toString()));
@@ -101,12 +85,10 @@ void ValueWindow::buttonClear(){
 
 void ValueWindow::buttonDeleteLast(){
     if(curent_field==1){
-        //left_text.remove(left_text.length()-1,1);
         up_object.deleteLastSymbol();
         ui->textEdit_left->setText(QString::fromStdString(up_object.toString()));
     }
     else{
-        //right_text.remove(right_text.length()-1,1);
         bottom_object.deleteLastSymbol();
         ui->textEdit_right->setText(QString::fromStdString(bottom_object.toString()));
     }
@@ -139,12 +121,14 @@ void ValueWindow::updateResult(){
     std::string main=ui->comboBox->currentText().toStdString(), left=ui->comboBox_left->currentText().toStdString();
     std::string right=ui->comboBox_right->currentText().toStdString();
     std::string value=(curent_field==1)?up_object.toString():bottom_object.toString();
-    QString temp=QString::fromStdString(value_info->getMullNum(main,left,right,value,curent_field));
+    QString temp="";
     if(curent_field==1){
+        temp=QString::fromStdString(value_info->getMullNum(main,left,right,value));
         bottom_object.setFullNum(temp.toStdString());
         ui->textEdit_right->setText(temp);
     }
     else{
+        temp=QString::fromStdString(value_info->getMullNum(main,right,left,value));
         up_object.setFullNum(temp.toStdString());
         ui->textEdit_left->setText(temp);
     }
