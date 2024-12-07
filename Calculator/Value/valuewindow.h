@@ -28,12 +28,10 @@ private:
     Ui::ValueWindow *ui;
     ValueObject up_object, bottom_object;
     ValueInfo* value_info;
-    //QString left_text, right_text;
     int curent_field;
 
 private slots:
     void pressNumberButton(QChar button_num);
-    void buttonDot();
     void buttonClear();
     void buttonDeleteLast();
     void buttonChangeMode();
