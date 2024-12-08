@@ -5,21 +5,9 @@ ValueWindow::ValueWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ValueWindow)
 {
-    QFile file(":/main_style.css");
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream file_str(&file);
-    QString content=file_str.readAll();
-    file.close();
-    this->setStyleSheet(content);
-
+    loadStyle();
     ui->setupUi(this);
-
-    QPixmap pixmap(":/menu-icon.png");
-    QIcon button_icon(pixmap);
-    ui->pushButton_mode->setIcon(button_icon);
-    ui->pushButton_mode->setIconSize(pixmap.rect().size());
-
-
+    loadIcons();
 
     curent_field=0;
     value_info=new ValueInfo();
@@ -61,6 +49,35 @@ ValueWindow::~ValueWindow()
     delete ui;
 }
 
+void ValueWindow::loadStyle(){
+    QFile file(":/Value/value_style.css");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str(&file);
+    QString content=file_str.readAll();
+    file.close();
+
+    QFile file2(":/Value/value_disable_button.css");
+    file2.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str2(&file2);
+    disable_button_style=file_str2.readAll();
+    file.close();
+
+    QFile file3(":/Value/value_enable_button.css");
+    file3.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str3(&file3);
+    enable_button_style=file_str3.readAll();
+    file.close();
+
+    this->setStyleSheet(content);
+}
+
+void ValueWindow::loadIcons(){
+    QPixmap pixmap(":/menu-icon.png");
+    QIcon button_icon(pixmap);
+    ui->pushButton_mode->setIcon(button_icon);
+    ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
+}
+
 void ValueWindow::pressNumberButton(QChar button_num){
     if(curent_field==1){
         up_object.addNum(button_num.toLatin1());
@@ -80,14 +97,18 @@ void ValueWindow::buttonChangeField(int _field){
         ui->textEdit_left->setFontWeight(QFont::Bold);
         ui->textEdit_right->setFontWeight(QFont::Normal);
         ui->pushButton_upp->setEnabled(false);
+        ui->pushButton_upp->setStyleSheet(disable_button_style);
         ui->pushButton_down->setEnabled(true);
+        ui->pushButton_down->setStyleSheet(enable_button_style);
     }
     else{
         curent_field=2;
         ui->textEdit_right->setFontWeight(QFont::Bold);
         ui->textEdit_left->setFontWeight(QFont::Normal);
         ui->pushButton_upp->setEnabled(true);
+        ui->pushButton_upp->setStyleSheet(enable_button_style);
         ui->pushButton_down->setEnabled(false);
+        ui->pushButton_down->setStyleSheet(disable_button_style);
     }
     emit refreshText();
 }

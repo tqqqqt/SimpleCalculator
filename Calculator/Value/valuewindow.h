@@ -29,6 +29,10 @@ private:
     ValueObject up_object, bottom_object;
     ValueInfo* value_info;
     int curent_field;
+    QString disable_button_style, enable_button_style;
+
+    void loadStyle();
+    void loadIcons();
 
 private slots:
     void pressNumberButton(QChar button_num);
