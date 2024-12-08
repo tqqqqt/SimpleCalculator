@@ -3,5 +3,8 @@
         <file>main_style.css</file>
         <file>history-icon.png</file>
         <file>menu-icon.png</file>
+        <file>Value/value_enable_button.css</file>
+        <file>Value/value_disable_button.css</file>
+        <file>Value/value_style.css</file>
     </qresource>
 </RCC>
