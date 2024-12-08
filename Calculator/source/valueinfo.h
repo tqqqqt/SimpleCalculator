@@ -21,7 +21,7 @@ class ValueInfo
 private:
     std::vector<std::string> mains;
     std::vector<std::vector<std::string>> seconds;
-    std::unordered_map<std::string,double> info;
+    std::unordered_map<std::string,std::string> info;
 
     std::string getTemperature(std::string, std::string, std::string);
 
