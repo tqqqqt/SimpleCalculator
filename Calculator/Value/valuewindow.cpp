@@ -5,6 +5,13 @@ ValueWindow::ValueWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ValueWindow)
 {
+    QFile file(":/main_style.css");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str(&file);
+    QString content=file_str.readAll();
+    file.close();
+    this->setStyleSheet(content);
+
     ui->setupUi(this);
 
     QPixmap pixmap(":/menu-icon.png");
@@ -12,15 +19,15 @@ ValueWindow::ValueWindow(QWidget *parent) :
     ui->pushButton_mode->setIcon(button_icon);
     ui->pushButton_mode->setIconSize(pixmap.rect().size());
 
-    curent_field=1;
+
+
+    curent_field=0;
     value_info=new ValueInfo();
     ui->pushButton_down->setEnabled(true);
     ui->pushButton_upp->setEnabled(false);
 
     std::vector<std::string> main_info=value_info->getMain();
-    for(auto x:main_info){
-        ui->comboBox->addItem(QString::fromStdString(x));
-    }
+    for(auto x:main_info) ui->comboBox->addItem(QString::fromStdString(x));
     fillLeftRightBox();
 
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -44,6 +51,9 @@ ValueWindow::ValueWindow(QWidget *parent) :
     this->connect(ui->comboBox_right,QOverload<int>::of(&QComboBox::currentIndexChanged),[this]{ emit getResult(); });
 
     this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
+    this->connect(this,SIGNAL(refreshText()),this,SLOT(updateText()));
+
+    buttonChangeField(1);
 }
 
 ValueWindow::~ValueWindow()
@@ -64,21 +74,32 @@ void ValueWindow::pressNumberButton(QChar button_num){
 }
 
 void ValueWindow::buttonChangeField(int _field){
+    if(_field==curent_field) return;
     if(_field==1){
         curent_field=1;
+        ui->textEdit_left->setFontWeight(QFont::Bold);
+        ui->textEdit_right->setFontWeight(QFont::Normal);
         ui->pushButton_upp->setEnabled(false);
         ui->pushButton_down->setEnabled(true);
     }
     else{
         curent_field=2;
+        ui->textEdit_right->setFontWeight(QFont::Bold);
+        ui->textEdit_left->setFontWeight(QFont::Normal);
         ui->pushButton_upp->setEnabled(true);
         ui->pushButton_down->setEnabled(false);
     }
+    emit refreshText();
 }
 
 void ValueWindow::buttonClear(){
     up_object.clear();
     bottom_object.clear();
+    ui->textEdit_left->setText(QString::fromStdString(up_object.toString()));
+    ui->textEdit_right->setText(QString::fromStdString(bottom_object.toString()));
+}
+
+void ValueWindow::updateText(){
     ui->textEdit_left->setText(QString::fromStdString(up_object.toString()));
     ui->textEdit_right->setText(QString::fromStdString(bottom_object.toString()));
 }

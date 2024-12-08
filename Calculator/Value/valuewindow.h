@@ -37,10 +37,12 @@ private slots:
     void buttonChangeMode();
     void updateMode(int);
     void updateResult();
+    void updateText();
     void buttonChangeField(int);
     void fillLeftRightBox();
 
 signals:
+    void refreshText();
     void getResult();
     void changeWindow(int);
 };
