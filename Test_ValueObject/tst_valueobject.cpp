@@ -22,7 +22,6 @@ private slots:
     void test_setFullNum_data();
     void test_setFullNum();
     void test_clear();
-
 };
 
 valueobject::valueobject(){ }

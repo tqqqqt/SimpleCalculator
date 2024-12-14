@@ -228,6 +228,7 @@ void calculatorobject::test_setFullNum_data(){
     QTest::newRow("test_6")<<"-234"<<"-234";
     QTest::newRow("test_7")<<"/*"<<"incorect num";
     QTest::newRow("test_8")<<""<<"incorect num";
+    QTest::newRow("test_9")<<"2,2,2"<<"incorect num";
 }
 
 void calculatorobject::test_setFullNum(){
