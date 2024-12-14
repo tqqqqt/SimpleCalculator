@@ -20,6 +20,7 @@ size_t ValueObject::getLength(){
 
 void ValueObject::addNum(char _num){
     if(!(_num>='0' && _num<='9') && _num!=',') throw std::invalid_argument("input not a num");
+    if(length==0 && _num==',') return;
     if(length==1 && count_null==0 && count_dot==1 && _num=='0') return;
     if(length==1 && text[0]=='0' && (_num>='1' && _num<='9')){
         text[0]=_num;
