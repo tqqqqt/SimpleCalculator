@@ -119,8 +119,8 @@ std::string ValueInfo::getTemperature(std::string _from, std::string _to, std::s
     else if(_from=="Градус Кельвина (K)"){
         if(_to=="Градус Кельвина (K)") return _value;
         else if(_to=="Градус Фарингейта (F)"){
-            std::string temp=MathNeg(_value,"273,15");
-            return MathSum(MathMul(temp,MathDiv("9","5",10)),"32");
+            std::string temp=MathDiv(MathMul(_value,"9"),"5",10);
+            return MathNeg(temp,"459,67");
         }
         else if(_to=="Градус Цельсия (C)") return MathNeg(_value,"273,15");
     }
