@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     QSettings settings("tqqqqt","calculator");
     if(!settings.contains("calc/mode")) settings.setValue("calc/mode",1);
-    int curent_mode=1;//=settings.value("calc/mode",1).toInt();
+    int curent_mode=settings.value("calc/mode",1).toInt();
 
     WindowChanger window_changer;
     MainWindow calculator_window;
@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&calculator_window,&MainWindow::changeWindow,&window_changer,&WindowChanger::curentWindow);
     QObject::connect(&value_window,&ValueWindow::changeWindow,&window_changer,&WindowChanger::curentWindow);
+    QObject::connect(&programmist_window,&ProgrammistWindow::changeWindow,&window_changer,&WindowChanger::curentWindow);
 
     window_changer.curentWindow(curent_mode);
 
