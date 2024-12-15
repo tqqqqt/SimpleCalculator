@@ -7,21 +7,21 @@
 
 class WindowChanger: public QObject{
 private:
-    MainWindow* w;
-    ValueWindow* v;
-    ProgrammistWindow* p;
+    MainWindow* calculator_window;
+    ValueWindow* value_window;
+    ProgrammistWindow* programmist_window;
 
 public:
-    void setWindows(MainWindow* _w, ValueWindow* _v, ProgrammistWindow* _p){
-        w=_w;
-        v=_v;
-        p=_p;
+    void setWindows(MainWindow* _calculator_window, ValueWindow* _value_window, ProgrammistWindow* _programmist_window){
+        calculator_window=_calculator_window;
+        value_window=_value_window;
+        programmist_window=_programmist_window;
     }
 
     void curentWindow(int curent_mode){
-        if(curent_mode==1) w->show();
-        else if(curent_mode==2) v->show();
-        else if(curent_mode==3) p->show();
+        if(curent_mode==1) calculator_window->show();
+        else if(curent_mode==2) value_window->show();
+        else if(curent_mode==3) programmist_window->show();
     }
 };
 
@@ -33,16 +33,16 @@ int main(int argc, char *argv[])
     if(!settings.contains("calc/mode")) settings.setValue("calc/mode",1);
     int curent_mode=1;//=settings.value("calc/mode",1).toInt();
 
-    WindowChanger changer;
-    MainWindow w;
-    ValueWindow v;
-    ProgrammistWindow p;
-    changer.setWindows(&w,&v,&p);
+    WindowChanger window_changer;
+    MainWindow calculator_window;
+    ValueWindow value_window;
+    ProgrammistWindow programmist_window;
+    window_changer.setWindows(&calculator_window,&value_window,&programmist_window);
 
-    QObject::connect(&w,&MainWindow::changeWindow,&changer,&WindowChanger::curentWindow);
-    QObject::connect(&v,&ValueWindow::changeWindow,&changer,&WindowChanger::curentWindow);
+    QObject::connect(&calculator_window,&MainWindow::changeWindow,&window_changer,&WindowChanger::curentWindow);
+    QObject::connect(&value_window,&ValueWindow::changeWindow,&window_changer,&WindowChanger::curentWindow);
 
-    changer.curentWindow(curent_mode);
+    window_changer.curentWindow(curent_mode);
 
     return a.exec();
 }
