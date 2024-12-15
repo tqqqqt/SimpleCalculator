@@ -49,8 +49,10 @@ void ValueObject::setFullNum(std::string _num){
     if(_num[0]=='-' && _num.length()==1) throw std::invalid_argument("incorect num");
     int start_point=0, end_point=static_cast<int>(_num.length());
     if(_num[0]=='-') start_point=1;
-    for(int i=start_point;i<end_point;i++){
-        if(_num[i]==' ' || _num[i]=='(' || _num[i]==')' || _num[i]=='+' || _num[i]=='-' || _num[i]=='*' || _num[i]=='/') throw std::invalid_argument("incorect num");
+    for(int i=start_point, find_dot=0;i<end_point;i++){
+        if(!(_num[i]>='0' && _num[i]<='9') && _num[i]!=',') throw std::invalid_argument("incorect num");
+        if(_num[i]==',') find_dot++;
+        if(find_dot>1) throw std::invalid_argument("incorect num");
     }
     text=_num;
     length=text.length();
