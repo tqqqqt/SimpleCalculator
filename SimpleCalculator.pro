@@ -2,4 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     Calculator \
-    UnitTests
+    Test_CalculatorMath \
+    Test_CalculatorObject \
+    Test_NumberMath \
+    Test_ValueInfo \
+    Test_ValueObject
