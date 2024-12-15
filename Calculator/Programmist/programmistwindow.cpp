@@ -35,6 +35,7 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     this->connect(ui->pushButton_dec,&QPushButton::clicked,[this]{ buttonChangeSystem(10); });
     this->connect(ui->pushButton_oct,&QPushButton::clicked,[this]{ buttonChangeSystem(8); });
     this->connect(ui->pushButton_bin,&QPushButton::clicked,[this]{ buttonChangeSystem(2); });
+    this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
 }
 
 ProgrammistWindow::~ProgrammistWindow()
