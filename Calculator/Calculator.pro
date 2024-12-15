@@ -35,6 +35,7 @@ SOURCES += \
         source/calculatormath.cpp \
         source/calculatorobject.cpp \
         source/numbermath.cpp \
+        source/programmistobject.cpp \
         source/valueinfo.cpp \
         source/valueobject.cpp
 
@@ -48,6 +49,7 @@ HEADERS += \
         source/calculatormath.h \
         source/calculatorobject.h \
         source/numbermath.h \
+        source/programmistobject.h \
         source/programobject.h \
         source/valueinfo.h \
         source/valueobject.h
