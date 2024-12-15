@@ -1,17 +1,20 @@
 #include <QtTest>
 
-#include "../Calculator/source/calculatormath.h"
 #include "../Calculator/source/numbermath.h"
 
-class project_tests : public QObject
+class numbermath : public QObject
 {
     Q_OBJECT
 
 public:
-    project_tests();
-    ~project_tests();
+    numbermath();
+    ~numbermath();
 
 private slots:
+    void test_maxNum_data();
+    void test_maxNum();
+    void test_findMultiplier_data();
+    void test_findMultiplier();
     void test_mathSum_data();
     void test_mathSum();
     void test_mathNeg_data();
@@ -20,27 +23,66 @@ private slots:
     void test_mathMul();
     void test_mathDiv_data();
     void test_mathDiv();
-    void test_polish_entry_noError_data();
-    void test_polish_entry_noError();
-    void test_polish_entry_error_data();
-    void test_polish_entry_error();
-    void test_full_calculate_data();
-    void test_full_calculate();
 };
 
-project_tests::project_tests()
-{
+numbermath::numbermath(){ }
+
+numbermath::~numbermath(){ }
+
+void numbermath::test_maxNum_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<int>("result");
+
+    QTest::newRow("test_1")<<"0"<<"0"<<0;
+    QTest::newRow("test_2")<<"2"<<"0"<<-1;
+    QTest::newRow("test_3")<<"0"<<"2"<<1;
+    QTest::newRow("test_4")<<"0,01"<<"0,001"<<-1;
+    QTest::newRow("test_5")<<"-2"<<"0"<<1;
+    QTest::newRow("test_6")<<"0"<<"-2"<<-1;
+    QTest::newRow("test_7")<<"-2,41"<<"2,41"<<1;
+    QTest::newRow("test_8")<<"0,0000001"<<"0,0000001"<<0;
+    QTest::newRow("test_9")<<"-2,000001"<<"-2,000001"<<0;
+    QTest::newRow("test_10")<<"0,01"<<"0,010"<<0;
+    QTest::newRow("test_11")<<"5,99"<<"5,98"<<-1;
 }
 
-project_tests::~project_tests()
-{
+void numbermath::test_maxNum(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(int,result);
 
+    QCOMPARE(MaxNumber(firstNum.toStdString(),secondNum.toStdString()),result);
 }
 
-void project_tests::test_mathSum_data(){
+void numbermath::test_findMultiplier_data(){
+    QTest::addColumn<QString>("firstNum");
+    QTest::addColumn<QString>("secondNum");
+    QTest::addColumn<int>("result");
+
+    QTest::newRow("test_1")<<"1"<<"1"<<1;
+    QTest::newRow("test_2")<<"4"<<"2"<<2;
+    QTest::newRow("test_3")<<"13"<<"2"<<6;
+    QTest::newRow("test_4")<<"14"<<"13"<<1;
+    QTest::newRow("test_5")<<"81"<<"9"<<9;
+    QTest::newRow("test_6")<<"4"<<"-2"<<-2;
+    QTest::newRow("test_7")<<"-4"<<"2"<<-2;
+    QTest::newRow("test_8")<<"-81"<<"-9"<<9;
+}
+
+void numbermath::test_findMultiplier(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(int,result);
+
+    QCOMPARE(FindMultiplier(firstNum.toStdString(),secondNum.toStdString()),result);
+}
+
+void numbermath::test_mathSum_data(){
     QTest::addColumn<QString>("firstNum");
     QTest::addColumn<QString>("secondNum");
     QTest::addColumn<QString>("result");
+
     QTest::newRow("test_1")<<"0"<<"0"<<"0";
     QTest::newRow("test_2")<<"1"<<"0"<<"1";
     QTest::newRow("test_3")<<"0"<<"2"<<"2";
@@ -63,10 +105,19 @@ void project_tests::test_mathSum_data(){
     QTest::newRow("test_20")<<"123456789,987654321"<<"987654321,123456789"<<"1111111111,111111110";
 }
 
-void project_tests::test_mathNeg_data(){
+void numbermath::test_mathSum(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathSum(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
+void numbermath::test_mathNeg_data(){
     QTest::addColumn<QString>("firstNum");
     QTest::addColumn<QString>("secondNum");
     QTest::addColumn<QString>("result");
+
     QTest::newRow("test_1")<<"0"<<"0"<<"0";
     QTest::newRow("test_2")<<"1"<<"0"<<"1";
     QTest::newRow("test_3")<<"0"<<"2"<<"-2";
@@ -91,10 +142,19 @@ void project_tests::test_mathNeg_data(){
     QTest::newRow("test_22")<<"987654321,123456789"<<"123456789,987654321"<<"864197531,135802468";
 }
 
-void project_tests::test_mathMul_data(){
+void numbermath::test_mathNeg(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathNeg(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
+void numbermath::test_mathMul_data(){
     QTest::addColumn<QString>("firstNum");
     QTest::addColumn<QString>("secondNum");
     QTest::addColumn<QString>("result");
+
     QTest::newRow("test_1")<<"0"<<"0"<<"0";
     QTest::newRow("test_2")<<"1"<<"0"<<"0";
     QTest::newRow("test_3")<<"0"<<"2"<<"0";
@@ -117,10 +177,19 @@ void project_tests::test_mathMul_data(){
     QTest::newRow("test_20")<<"123456789987654321,123456789"<<"987654321123456789,987654321"<<"121932632103337905905959456328608443,662094193112635269";
 }
 
-void project_tests::test_mathDiv_data(){
+void numbermath::test_mathMul(){
+    QFETCH(QString,firstNum);
+    QFETCH(QString,secondNum);
+    QFETCH(QString,result);
+
+    QCOMPARE(MathMul(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+}
+
+void numbermath::test_mathDiv_data(){
     QTest::addColumn<QString>("firstNum");
     QTest::addColumn<QString>("secondNum");
     QTest::addColumn<QString>("result");
+
     QTest::newRow("test_1")<<"2"<<"0"<<"Error div 0";
     QTest::newRow("test_2")<<"0"<<"2"<<"0";
     QTest::newRow("test_3")<<"8"<<"2"<<"4";
@@ -143,103 +212,19 @@ void project_tests::test_mathDiv_data(){
     QTest::newRow("test_20")<<"1"<<"2345"<<"0,0004264392";
 }
 
-void project_tests::test_polish_entry_noError_data(){
-    QTest::addColumn<QString>("expression");
-    QTest::addColumn<int>("result");
-    QTest::newRow("test_1")<<"2+2"<<0;
-    QTest::newRow("test_2")<<"0+0"<<0;
-    QTest::newRow("test_3")<<"2+(2-2)"<<0;
-    QTest::newRow("test_4")<<"2+(2-(4*8))"<<0;
-    QTest::newRow("test_5")<<"2+(3*(4*(5*(6*(7*(8+9))))))"<<0;
-    QTest::newRow("test_6")<<"2,23+2,22"<<0;
-    QTest::newRow("test_7")<<"2+(2,22-2,1)"<<0;
-    QTest::newRow("test_8")<<"2/1+4"<<0;
-    QTest::newRow("test_9")<<"(6,66*1)+(2,28*8,82)"<<0;
-    QTest::newRow("test_10")<<"14-12+(7*0,01)"<<0;
-}
-
-void project_tests::test_polish_entry_error_data(){
-    QTest::addColumn<QString>("expression");
-    QTest::addColumn<int>("result");
-    QTest::newRow("test_1")<<"-2+2"<<3;
-    QTest::newRow("test_2")<<"(-2+2"<<2;
-    QTest::newRow("test_3")<<"2+(-2"<<2;
-    QTest::newRow("test_4")<<"2+-2"<<4;
-    QTest::newRow("test_5")<<"2+(3-(4*5)"<<2;
-    QTest::newRow("test_6")<<"2,2,2+2"<<5;
-    QTest::newRow("test_7")<<"(-,2)+2"<<5;
-    QTest::newRow("test_8")<<"(,2-2)"<<5;
-}
-
-void project_tests::test_full_calculate_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("result");
-    QTest::newRow("test_1")<<"2+2"<<"4";
-    QTest::newRow("test_2")<<"2-2"<<"0";
-    QTest::newRow("test_3")<<"2-4"<<"(-2)";
-    QTest::newRow("test_4")<<"2+2*2"<<"6";
-    QTest::newRow("test_5")<<"2+(2-2+(4*8))"<<"34";
-    QTest::newRow("test_6")<<"2*(3*(4*(5*(6*(7*(8+9))))))"<<"85680";
-    QTest::newRow("test_7")<<"(413*826)+(795*234)"<<"527168";
-    QTest::newRow("test_8")<<"2*(4*(3+2)+(5+4)*6)"<<"148";
-    QTest::newRow("test_9")<<"((12*12)/12)+((13*13)/13)"<<"25";
-    QTest::newRow("test_10")<<"((((16*14)/2)/2)/2)/2"<<"14";
-    QTest::newRow("test_11")<<"((((30*49)-70)/(4+(14*14)))*10)/((46+4)/(10/2))"<<"7";
-    QTest::newRow("test_12")<<"((2,48+374)-94876)*((451/28)*20)"<<"(-30442345,371347571840)";
-    QTest::newRow("test_13")<<"(0,2+0,2*0,2+0,2*0,2+0,2*0,2+0,2*0,2)*36/89"<<"0,1456179775";
-}
-
-void project_tests::test_mathSum(){
+void numbermath::test_mathDiv(){
     QFETCH(QString,firstNum);
     QFETCH(QString,secondNum);
     QFETCH(QString,result);
-    QCOMPARE(MathSum(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
+
+    try{
+        QCOMPARE(MathDiv(firstNum.toStdString(),secondNum.toStdString(),10),result.toStdString());
+    }
+    catch(std::exception &exp){
+        QCOMPARE(exp.what(),result.toStdString());
+    }
 }
 
-void project_tests::test_mathNeg(){
-    QFETCH(QString,firstNum);
-    QFETCH(QString,secondNum);
-    QFETCH(QString,result);
-    QCOMPARE(MathNeg(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
-}
+QTEST_APPLESS_MAIN(numbermath)
 
-void project_tests::test_mathMul(){
-    QFETCH(QString,firstNum);
-    QFETCH(QString,secondNum);
-    QFETCH(QString,result);
-    QCOMPARE(MathMul(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
-}
-
-void project_tests::test_mathDiv(){
-    QFETCH(QString,firstNum);
-    QFETCH(QString,secondNum);
-    QFETCH(QString,result);
-    QCOMPARE(MathDiv(firstNum.toStdString(),secondNum.toStdString()),result.toStdString());
-}
-
-void project_tests::test_polish_entry_noError()
-{
-    CalculatorMath* creatorEntry=new CalculatorMath();
-    QFETCH(QString,expression);
-    QFETCH(int,result);
-    QCOMPARE(creatorEntry->SetString(expression.toStdString()),result);
-}
-
-void project_tests::test_polish_entry_error(){
-    CalculatorMath* creatorEntry=new CalculatorMath();
-    QFETCH(QString,expression);
-    QFETCH(int,result);
-    QCOMPARE(creatorEntry->SetString(expression.toStdString()),result);
-}
-
-void project_tests::test_full_calculate(){
-    CalculatorMath* creatorEntry=new CalculatorMath();
-    QFETCH(QString,input);
-    QFETCH(QString,result);
-    creatorEntry->SetString(input.toStdString());
-    QCOMPARE(creatorEntry->GetResult(),result.toStdString());
-}
-
-QTEST_APPLESS_MAIN(project_tests)
-
-#include "tst_project_tests.moc"
+#include "tst_numbermath.moc"

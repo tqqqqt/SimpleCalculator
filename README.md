@@ -6,7 +6,7 @@ The layout of the buttons was based on the interface of the calculator on Androi
 The calculator also has a saved input history, which is dynamically updated as you use the calculator.
 
 # Technical specifications:
-**QT version** - 5.12.3 \
+**QT version** - 5.12.4 \
 **QT Creator version** - 4.9.1? \
 **System** - Windows 10 x86_64
 
@@ -17,3 +17,7 @@ The calculator also has a saved input history, which is dynamically updated as y
 - [x] Make division
 - [x] Improve the interface
 - [x] Add a floating point
+
+# Future big plans:
+- [x] Value mode
+- [ ] Programmist mode
