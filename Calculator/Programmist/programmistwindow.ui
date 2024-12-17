@@ -85,7 +85,16 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTextEdit" name="textEdit_input"/>
+        <widget class="QTextEdit" name="textEdit_input">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QFrame" name="frame_4">
@@ -121,7 +130,16 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_hex"/>
+           <widget class="QLineEdit" name="lineEdit_hex">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_2">
@@ -132,6 +150,18 @@
             </property>
             <property name="text">
              <string>DEC</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_dec">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -147,14 +177,17 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_dec"/>
-          </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_oct"/>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_bin"/>
+           <widget class="QLineEdit" name="lineEdit_oct">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_4">
@@ -165,6 +198,18 @@
             </property>
             <property name="text">
              <string>BIN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_bin">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
