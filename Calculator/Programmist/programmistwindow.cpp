@@ -9,6 +9,8 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     ui->setupUi(this);
     loadIcons();
 
+    object=new ProgrammistObject();
+
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ pressNumberButton('1'); });
     this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ pressNumberButton('2'); });
@@ -36,6 +38,8 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     this->connect(ui->pushButton_oct,&QPushButton::clicked,[this]{ buttonChangeSystem(8); });
     this->connect(ui->pushButton_bin,&QPushButton::clicked,[this]{ buttonChangeSystem(2); });
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
+
+    this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
 }
 
 ProgrammistWindow::~ProgrammistWindow()
@@ -54,8 +58,23 @@ void ProgrammistWindow::loadIcons(){
     ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
 }
 
-void ProgrammistWindow::pressNumberButton(QChar){
+void ProgrammistWindow::updateResult(){
+    ui->textEdit_input->setText(QString::fromStdString(object->toString()));
+    ui->lineEdit_bin->setText(QString::fromStdString(object->toString2()));
+    ui->lineEdit_oct->setText(QString::fromStdString(object->toString8()));
+    ui->lineEdit_dec->setText(QString::fromStdString(object->toString10()));
+    ui->lineEdit_hex->setText(QString::fromStdString(object->toString16()));
+}
 
+void ProgrammistWindow::pressNumberButton(QChar _num){
+    try {
+        object->addNum(_num.toLatin1());
+        emit getResult();
+    }
+    catch (std::exception &exp) {
+        object->clear();
+        ui->textEdit_input->setText(exp.what());
+    }
 }
 
 void ProgrammistWindow::pressMoveButton(int){
@@ -63,11 +82,16 @@ void ProgrammistWindow::pressMoveButton(int){
 }
 
 void ProgrammistWindow::buttonClear(){
-
+    ui->textEdit_input->clear();
+    ui->lineEdit_hex->clear();
+    ui->lineEdit_dec->clear();
+    ui->lineEdit_oct->clear();
+    ui->lineEdit_bin->clear();
+    object->clear();
 }
 
 void ProgrammistWindow::buttonDeleteLast(){
-
+    if(object->getLength()==0) return;
 }
 
 void ProgrammistWindow::buttonChangeMode(){
@@ -82,6 +106,7 @@ void ProgrammistWindow::updateMode(int _mode){
     this->hide();
 }
 
-void ProgrammistWindow::buttonChangeSystem(int){
-
+void ProgrammistWindow::buttonChangeSystem(int _system){
+    object->changeSystem(_system);
+    ui->textEdit_input->setText(QString::fromStdString(object->toString()));
 }

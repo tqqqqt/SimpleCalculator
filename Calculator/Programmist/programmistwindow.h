@@ -8,7 +8,7 @@
 
 #include <vector>
 
-//source
+#include "./../source/programmistobject.h"
 
 #include "./../Mode/modewindow.h"
 
@@ -26,6 +26,7 @@ public:
 
 private:
     Ui::ProgrammistWindow *ui;
+    ProgrammistObject *object;
     int curent_system;
     QString disable_button_style, enable_button_style;
 
@@ -40,6 +41,7 @@ private slots:
     void updateMode(int);
     void buttonChangeMode();
     void buttonChangeSystem(int);
+    void updateResult();
 
 signals:
     void getResult();
