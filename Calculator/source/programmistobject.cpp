@@ -66,7 +66,7 @@ void ProgrammistObject::addNum(char _num){
         text_2+=_num;
         convertTo10(2);
         convertTo(8);
-        convertTo(2);
+        convertTo(16);
         break;
     case 8:
         if(!(_num>='0' && _num<='7')) throw std::invalid_argument("incorect num to 8 system");
