@@ -10,6 +10,7 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     loadIcons();
 
     object=new ProgrammistObject();
+    buttonChangeSystem(10);
 
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ pressNumberButton('1'); });
@@ -92,6 +93,8 @@ void ProgrammistWindow::buttonClear(){
 
 void ProgrammistWindow::buttonDeleteLast(){
     if(object->getLength()==0) return;
+    object->deleteLastSymbol();
+    emit getResult();
 }
 
 void ProgrammistWindow::buttonChangeMode(){
@@ -109,4 +112,51 @@ void ProgrammistWindow::updateMode(int _mode){
 void ProgrammistWindow::buttonChangeSystem(int _system){
     object->changeSystem(_system);
     ui->textEdit_input->setText(QString::fromStdString(object->toString()));
+    switch(_system){
+    case 2:
+        setButtonsEnable(false,false);
+        ui->pushButton_n0->setEnabled(true);
+        ui->pushButton_n1->setEnabled(true);
+        ui->pushButton_bin->setEnabled(false);
+        break;
+    case 8:
+        setButtonsEnable(false,true);
+        ui->pushButton_n9->setEnabled(false);
+        ui->pushButton_n8->setEnabled(false);
+        ui->pushButton_oct->setEnabled(false);
+        break;
+    case 10:
+        setButtonsEnable(false,true);
+        ui->pushButton_dec->setEnabled(false);
+        break;
+    case 16:
+        setButtonsEnable(true,true);
+        ui->pushButton_hex->setEnabled(false);
+        break;
+    }
+}
+
+void ProgrammistWindow::setButtonsEnable(bool _flag_symbol, bool _flag_num){
+    ui->pushButton_A->setEnabled(_flag_symbol);
+    ui->pushButton_B->setEnabled(_flag_symbol);
+    ui->pushButton_C->setEnabled(_flag_symbol);
+    ui->pushButton_D->setEnabled(_flag_symbol);
+    ui->pushButton_E->setEnabled(_flag_symbol);
+    ui->pushButton_F->setEnabled(_flag_symbol);
+
+    ui->pushButton_n0->setEnabled(_flag_num);
+    ui->pushButton_n1->setEnabled(_flag_num);
+    ui->pushButton_n2->setEnabled(_flag_num);
+    ui->pushButton_n3->setEnabled(_flag_num);
+    ui->pushButton_n4->setEnabled(_flag_num);
+    ui->pushButton_n5->setEnabled(_flag_num);
+    ui->pushButton_n6->setEnabled(_flag_num);
+    ui->pushButton_n7->setEnabled(_flag_num);
+    ui->pushButton_n8->setEnabled(_flag_num);
+    ui->pushButton_n9->setEnabled(_flag_num);
+
+    ui->pushButton_hex->setEnabled(true);
+    ui->pushButton_dec->setEnabled(true);
+    ui->pushButton_oct->setEnabled(true);
+    ui->pushButton_bin->setEnabled(true);
 }

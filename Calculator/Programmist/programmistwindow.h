@@ -32,6 +32,7 @@ private:
 
     void loadStyle();
     void loadIcons();
+    void setButtonsEnable(bool, bool);
 
 private slots:
     void pressNumberButton(QChar);
