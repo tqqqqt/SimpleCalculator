@@ -259,3 +259,14 @@ std::string MathDiv(std::string num1, std::string num2, int _accuracy){
     if(curentNum.length()==0 || (curentNum.length()>2 && curentNum[0]=='0' && curentNum[1]!=',')) return "0";
     return curentNum;
 }
+
+std::string MathPow(std::string num, std::string pow){
+    if(pow=="0") return "1";
+    if(pow=="1") return num;
+    std::string result=num;
+    while(MaxNumber("1",pow)!=0){
+        result=MathMul(result,num);
+        pow=MathNeg(pow,"1");
+    }
+    return result;
+}
