@@ -19,6 +19,7 @@ private:
     void convertTo10(int);
     void convertTo(int);
     std::string numToSymbol(std::string);
+    void updateLength();
 
 public:
     ProgrammistObject();
