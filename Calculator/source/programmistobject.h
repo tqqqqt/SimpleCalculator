@@ -16,11 +16,12 @@ private:
     size_t length_2, length_8, length_10, length_16;
     int curent_system, count_dot, count_null, accuracy;
 
-    void convertTo10(int);
-    void convertTo(int);
+    std::string convertTo10(std::string,int);
+    std::string convert10To(int);
     std::string numToSymbol(std::string);
     std::string convertDotTo10(std::string,std::string);
-    std::string convertDotTo(std::string,std::string);
+    std::string convert10DotTo(std::string,std::string);
+    void updateTextsLength();
 
 public:
     ProgrammistObject();
