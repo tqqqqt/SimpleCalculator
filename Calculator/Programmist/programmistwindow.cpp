@@ -78,8 +78,11 @@ void ProgrammistWindow::pressNumberButton(QChar _num){
     }
 }
 
-void ProgrammistWindow::pressMoveButton(int){
-
+void ProgrammistWindow::pressMoveButton(int _direction){
+    if(object->getLength()==0) return;
+    if(_direction==-1) object->moveLeft();
+    else object->moveRight();
+    emit getResult();
 }
 
 void ProgrammistWindow::buttonClear(){
