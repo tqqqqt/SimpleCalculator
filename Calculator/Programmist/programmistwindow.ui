@@ -343,18 +343,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_hex">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>HEX</string>
-         </property>
-        </widget>
-       </item>
        <item row="6" column="2">
         <widget class="QPushButton" name="pushButton_n3">
          <property name="font">
@@ -496,18 +484,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_oct">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>OCT</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="3">
         <widget class="QPushButton" name="pushButton_delLast">
          <property name="font">
@@ -526,18 +502,6 @@
          </property>
          <property name="autoRepeatInterval">
           <number>50</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="pushButton_bin">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>BIN</string>
          </property>
         </widget>
        </item>
@@ -586,7 +550,7 @@
        <item row="7" column="2">
         <widget class="QPushButton" name="pushButton_dot">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="font">
           <font>
@@ -604,18 +568,6 @@
          </property>
          <property name="autoRepeatInterval">
           <number>50</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_dec">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>DEC</string>
          </property>
         </widget>
        </item>
@@ -736,6 +688,54 @@
          </property>
          <property name="autoRepeatInterval">
           <number>50</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButton_dec">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>DEC</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton_oct">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>OCT</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton_bin">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>BIN</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="pushButton_hex">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>HEX</string>
          </property>
         </widget>
        </item>
