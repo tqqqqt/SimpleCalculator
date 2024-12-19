@@ -64,6 +64,7 @@ void ProgrammistObject::addNum(char _num){
     case 2:
         if(_num!='0' && _num!='1') throw std::invalid_argument("incorect num to 2 system");
         text_2+=_num;
+        length_2++;
         convertTo10(2);
         convertTo(8);
         convertTo(16);
@@ -71,6 +72,7 @@ void ProgrammistObject::addNum(char _num){
     case 8:
         if(!(_num>='0' && _num<='7')) throw std::invalid_argument("incorect num to 8 system");
         text_8+=_num;
+        length_8++;
         convertTo10(8);
         convertTo(2);
         convertTo(16);
@@ -78,6 +80,7 @@ void ProgrammistObject::addNum(char _num){
     case 10:
         if(!(_num>='0' && _num<='9')) throw std::invalid_argument("incorect num to 10 system");
         text_10+=_num;
+        length_10++;
         convertTo(2);
         convertTo(8);
         convertTo(16);
@@ -85,12 +88,12 @@ void ProgrammistObject::addNum(char _num){
     case 16:
         if(!(_num>='0' && _num<='9') && !(_num>='A' && _num<='F')) throw std::invalid_argument("incorect num to 16 system");
         text_16+=_num;
+        length_16++;
         convertTo10(16);
         convertTo(2);
         convertTo(8);
         break;
     }
-    updateLength();
 }
 
 void ProgrammistObject::convertTo10(int _system){
@@ -107,6 +110,7 @@ void ProgrammistObject::convertTo10(int _system){
         pow_num=MathSum(pow_num,"1");
     }
     text_10=result;
+    length_10=text_10.length();
 }
 
 void ProgrammistObject::convertTo(int _system){
@@ -126,9 +130,20 @@ void ProgrammistObject::convertTo(int _system){
         num=mul_num;
     }
     result=num+result;
-    if(_system==2) text_2=result;
-    else if(_system==8) text_8=result;
-    else text_16=result;
+    switch(_system){
+    case 2:
+        text_2=result;
+        length_2=text_2.length();
+        break;
+    case 8:
+        text_8=result;
+        length_8=text_8.length();
+        break;
+    case 16:
+        text_16=result;
+        length_16=text_16.length();
+        break;
+    }
 }
 
 std::string ProgrammistObject::numToSymbol(std::string _num){
@@ -175,19 +190,38 @@ void ProgrammistObject::deleteLastSymbol(){
         convertTo(8);
         break;
     }
-    updateLength();
-}
-
-void ProgrammistObject::updateLength(){
-    length_2=text_2.length();
-    length_8=text_8.length();
-    length_10=text_10.length();
-    length_16=text_16.length();
 }
 
 void ProgrammistObject::changeSystem(int _system){
     if(_system!=2 && _system!=8 && _system!=10 && _system!=16) throw std::invalid_argument("incorect system");
     curent_system=_system;
+}
+
+void ProgrammistObject::moveLeft(){
+    if(text_2.length()==0) return;
+    text_2=text_2+'0';
+    length_2++;
+    convertTo10(2);
+    convertTo(8);
+    convertTo(16);
+}
+
+void ProgrammistObject::moveRight(){
+    if(text_2.length()==0) return;
+    text_2.pop_back();
+    length_2--;
+    if(length_2!=0){
+        convertTo10(2);
+        convertTo(8);
+        convertTo(16);
+        return;
+    }
+    text_8="";
+    length_8=0;
+    text_10="";
+    length_10=0;
+    text_16="";
+    length_16=0;
 }
 
 void ProgrammistObject::clear(){

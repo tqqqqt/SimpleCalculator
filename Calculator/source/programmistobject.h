@@ -19,7 +19,6 @@ private:
     void convertTo10(int);
     void convertTo(int);
     std::string numToSymbol(std::string);
-    void updateLength();
 
 public:
     ProgrammistObject();
@@ -36,6 +35,8 @@ public:
     void deleteLastSymbol();
     void changeSystem(int);
     void clear();
+    void moveLeft();
+    void moveRight();
 };
 
 #endif // PROGRAMMISTOBJECT_H
