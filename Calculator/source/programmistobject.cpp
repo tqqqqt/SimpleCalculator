@@ -288,3 +288,11 @@ void ProgrammistObject::clear(){
     length_10=0;
     length_16=0;
 }
+
+void ProgrammistObject::setAccuracy(int _accuracy){
+    accuracy=_accuracy;
+}
+
+void ProgrammistObject::setCount(int _count){
+    count_nums=_count;
+}

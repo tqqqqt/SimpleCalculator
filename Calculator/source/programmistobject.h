@@ -14,7 +14,7 @@ class ProgrammistObject : public ProgramObject
 private:
     std::string text_2, text_8, text_10, text_16;
     size_t length_2, length_8, length_10, length_16;
-    int curent_system, count_dot, count_null, accuracy;
+    int curent_system, count_dot, count_nums, accuracy;
 
     std::string convertTo10(std::string,int);
     std::string convert10To(int);
@@ -40,6 +40,9 @@ public:
     void clear();
     void moveLeft();
     void moveRight();
+
+    void setAccuracy(int);
+    void setCount(int);
 };
 
 #endif // PROGRAMMISTOBJECT_H
