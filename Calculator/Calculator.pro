@@ -28,6 +28,7 @@ SOURCES += \
         History/historywindow.cpp \
         Mode/modewindow.cpp \
         Programmist/programmistwindow.cpp \
+        Settings/programmistsettingswindow.cpp \
         Settings/settingswindow.cpp \
         Value/valuewindow.cpp \
         main.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
         History/historywindow.h \
         Mode/modewindow.h \
         Programmist/programmistwindow.h \
+        Settings/programmistsettingswindow.h \
         Settings/settingswindow.h \
         Value/valuewindow.h \
         mainwindow.h \
@@ -58,6 +60,7 @@ FORMS += \
         History/historywindow.ui \
         Mode/modewindow.ui \
         Programmist/programmistwindow.ui \
+        Settings/programmistsettingswindow.ui \
         Settings/settingswindow.ui \
         Value/valuewindow.ui \
         mainwindow.ui
