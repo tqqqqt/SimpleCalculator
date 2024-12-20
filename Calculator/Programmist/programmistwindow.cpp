@@ -11,6 +11,11 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
 
     object=new ProgrammistObject();
     buttonChangeSystem(10);
+    settings=new QSettings("tqqqqt","calculator");
+    if(!settings->contains("progr/acuracy")) settings->setValue("progr/acuracy",10);
+    if(!settings->contains("progr/count")) settings->setValue("progr/count",5);
+    object->setAccuracy(settings->value("progr/acuracy",10).toInt());
+    object->setCount(settings->value("progr/count",5).toInt());
 
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ pressNumberButton('1'); });
@@ -41,6 +46,7 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
 
     this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
+    this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(openSettings()));
 }
 
 ProgrammistWindow::~ProgrammistWindow()
@@ -131,6 +137,7 @@ void ProgrammistWindow::buttonChangeSystem(int _system){
     case 10:
         setButtonsEnable(false,true);
         ui->pushButton_dec->setEnabled(false);
+        ui->pushButton_znak->setEnabled(true);
         break;
     case 16:
         setButtonsEnable(true,true);
@@ -158,8 +165,21 @@ void ProgrammistWindow::setButtonsEnable(bool _flag_symbol, bool _flag_num){
     ui->pushButton_n8->setEnabled(_flag_num);
     ui->pushButton_n9->setEnabled(_flag_num);
 
+    ui->pushButton_znak->setEnabled(false);
+
     ui->pushButton_hex->setEnabled(true);
     ui->pushButton_dec->setEnabled(true);
     ui->pushButton_oct->setEnabled(true);
     ui->pushButton_bin->setEnabled(true);
+}
+
+void ProgrammistWindow::openSettings(){
+    ProgrammistSettingsWindow *settings_window=new ProgrammistSettingsWindow();
+    this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(updateSettings()));
+    settings_window->exec();
+}
+
+void ProgrammistWindow::updateSettings(){
+    object->setAccuracy(settings->value("progr/acuracy",10).toInt());
+    object->setCount(settings->value("progr/count",5).toInt());
 }

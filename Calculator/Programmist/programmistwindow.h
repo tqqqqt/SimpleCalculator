@@ -5,12 +5,14 @@
 #include <QFile>
 #include <QTextStream>
 #include <QPixmap>
+#include <QSettings>
 
 #include <vector>
 
 #include "./../source/programmistobject.h"
 
 #include "./../Mode/modewindow.h"
+#include "./../Settings/programmistsettingswindow.h"
 
 namespace Ui {
 class ProgrammistWindow;
@@ -27,6 +29,7 @@ public:
 private:
     Ui::ProgrammistWindow *ui;
     ProgrammistObject *object;
+    QSettings *settings;
     int curent_system;
     QString disable_button_style, enable_button_style;
 
@@ -43,6 +46,8 @@ private slots:
     void buttonChangeMode();
     void buttonChangeSystem(int);
     void updateResult();
+    void openSettings();
+    void updateSettings();
 
 signals:
     void getResult();
