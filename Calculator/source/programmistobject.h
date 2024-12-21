@@ -14,13 +14,11 @@ class ProgrammistObject : public ProgramObject
 private:
     std::string text_2, text_8, text_10, text_16;
     size_t length_2, length_8, length_10, length_16;
-    int curent_system, count_dot, count_nums, accuracy;
+    int curent_system, count_nums;
 
     std::string convertTo10(std::string,int);
     std::string convert10To(int);
     std::string numToSymbol(std::string);
-    std::string convertDotTo10(std::string,std::string);
-    std::string convert10DotTo(std::string,std::string);
     void updateTextsLength();
 
 public:
@@ -41,7 +39,6 @@ public:
     void moveLeft();
     void moveRight();
 
-    void setAccuracy(int);
     void setCount(int);
 };
 

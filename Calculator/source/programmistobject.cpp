@@ -11,9 +11,7 @@ ProgrammistObject::ProgrammistObject()
     length_10=0;
     length_16=0;
 
-    count_dot=1;
     curent_system=10;
-    accuracy=11;
 }
 
 ProgrammistObject::~ProgrammistObject(){ }
@@ -63,10 +61,9 @@ size_t ProgrammistObject::getLength(){
 }
 
 void ProgrammistObject::addNum(char _num){
-    if(_num==',' && (length_2==0 || count_dot==0)) return;
     switch(curent_system){
     case 2:
-        if(_num!='0' && _num!='1' && _num!=',') throw std::invalid_argument("incorect num to 2 system");
+        if(_num!='0' && _num!='1') throw std::invalid_argument("incorect num to 2 system");
         if(length_2==1 && text_2[0]=='0' && _num!=',') text_2[0]=_num;
         else text_2+=_num;
         text_10=convertTo10(text_2,2);
@@ -74,42 +71,36 @@ void ProgrammistObject::addNum(char _num){
         text_16=convert10To(16);
         break;
     case 8:
-        if(!(_num>='0' && _num<='7') && _num!=',') throw std::invalid_argument("incorect num to 8 system");
-        if(length_8==1 && text_8[0]=='0' && _num!=',') text_8[0]=_num;
+        if(!(_num>='0' && _num<='7')) throw std::invalid_argument("incorect num to 8 system");
+        if(length_8==1 && text_8[0]=='0') text_8[0]=_num;
         else text_8+=_num;
         text_10=convertTo10(text_8,8);
         text_2=convert10To(2);
         text_16=convert10To(16);
         break;
     case 10:
-        if(!(_num>='0' && _num<='9') && _num!=',') throw std::invalid_argument("incorect num to 10 system");
-        if(length_10==1 && text_10[0]=='0' && _num!=',') text_10[0]=_num;
+        if(!(_num>='0' && _num<='9') && _num!='-') throw std::invalid_argument("incorect num to 10 system");
+        if(length_10==1 && text_10[0]=='0') text_10[0]=_num;
         else text_10+=_num;
         text_2=convert10To(2);
         text_8=convert10To(8);
         text_16=convert10To(16);
         break;
     case 16:
-        if(!(_num>='0' && _num<='9') && !(_num>='A' && _num<='F') && _num!=',') throw std::invalid_argument("incorect num to 16 system");
-        if(length_16==1 && text_16[0]=='0' && _num!=',') text_16[0]=_num;
+        if(!(_num>='0' && _num<='9') && !(_num>='A' && _num<='F')) throw std::invalid_argument("incorect num to 16 system");
+        if(length_16==1 && text_16[0]=='0') text_16[0]=_num;
         else text_16+=_num;
         text_10=convertTo10(text_16,16);
         text_2=convert10To(2);
         text_8=convert10To(8);
         break;
     }
-    if(_num==',') count_dot--;
     updateTextsLength();
 }
 
 std::string ProgrammistObject::convertTo10(std::string _num, int _system){
     if(_system!=2 && _system!=8 && _system!=16) throw std::invalid_argument("incorect system");
-    std::string result="0", num=_num, dot_num="", temp="", system=std::to_string(_system), pow_num="0";
-    size_t dot_position=num.find(',');
-    if(dot_position!=std::string::npos){
-        num=text_2.substr(0,dot_position);
-        dot_num=text_2.substr(dot_position);
-    }
+    std::string result="0", num=_num, temp="", system=std::to_string(_system), pow_num="0";
     std::vector<std::string> nums_16={"10","11","12","13","14","15"};
     for(int i=num.length()-1;i>=0;i--){
         if(num[i]>='A') temp=nums_16[num[i]-'A'];
@@ -117,22 +108,12 @@ std::string ProgrammistObject::convertTo10(std::string _num, int _system){
         result=MathSum(result,MathMul(temp,MathPow(system,pow_num)));
         pow_num=MathSum(pow_num,"1");
     }
-    if(dot_num.length()>1){
-        std::string dot_result=convertDotTo10(system,dot_num);
-        result=result+','+dot_result;
-    }
     return result;
 }
 
 std::string ProgrammistObject::convert10To(int _system){
     if(_system!=2 && _system!=8 && _system!=16) throw std::invalid_argument("incorect system");
-    size_t dot_position=text_10.find(',');
-    std::string result="", num="", dot_num="", system=std::to_string(_system), mul_num="", neg_num="", temp="";
-    if(dot_position!=std::string::npos){
-        num=text_10.substr(0,dot_position);
-        dot_num=text_10.substr(dot_position);
-    }
-    else num=text_10;
+    std::string result="", num=text_10, system=std::to_string(_system), mul_num="", neg_num="", temp="";
     while(MaxNumber(num,system)!=1){
         mul_num="";
         neg_num="";
@@ -148,46 +129,6 @@ std::string ProgrammistObject::convert10To(int _system){
     }
     if(_system==16 && MaxNumber(num,"10")<=0) num=numToSymbol(num);
     result=num+result;
-    if(dot_num.length()>1){
-        std::string dot_result=convert10DotTo(system,dot_num);
-        result=result+','+dot_result;
-    }
-    return result;
-}
-
-std::string ProgrammistObject::convertDotTo10(std::string _system, std::string _num){
-    std::string result="", temp="", pow_num="1", temp_str="";
-    size_t size=_num.length();
-    std::vector<std::string> symbol_nums={"10","11","12","13","14","15"};
-    for(size_t i=1;i<size;i++){
-        temp=MathDiv("1",MathPow(_system,pow_num),10);
-        if(_num[i]>='A' && _num[i]<='F') temp_str=symbol_nums[_num[i]-'A'];
-        else temp_str=_num[i];
-        result=MathSum(result,MathMul(temp_str,temp));
-        pow_num=MathSum(pow_num,"1");
-    }
-    if(result.length()<3) return "0";
-    return result.substr(2);
-}
-
-std::string ProgrammistObject::convert10DotTo(std::string _system, std::string _num){
-    std::string result="", temp="";
-    _num='0'+_num;
-    int count_symbol=0;
-    size_t i=0, size=0;
-    while(count_symbol<accuracy){
-        temp="";
-        _num=MathMul(_num,_system);
-        size=_num.length();
-        for(i=0;i<size;i++){
-            if(_num[i]==',') break;
-            temp+=_num[i];
-        }
-        _num=MathNeg(_num,temp);
-        if(MaxNumber(temp,"10")<=0) temp=numToSymbol(temp);
-        result+=temp;
-        count_symbol++;
-    }
     return result;
 }
 
@@ -204,7 +145,6 @@ void ProgrammistObject::deleteLastSymbol(){
     switch (curent_system) {
     case 2:
         if(length_2==0) return;
-        if(text_2.back()==',') count_dot++;
         text_2.pop_back();
         text_10=convertTo10(text_2,2);
         text_8=convert10To(8);
@@ -212,7 +152,6 @@ void ProgrammistObject::deleteLastSymbol(){
         break;
     case 8:
         if(length_8==0) return;
-        if(text_8.back()==',') count_dot++;
         text_8.pop_back();
         text_10=convertTo10(text_8,8);
         text_2=convert10To(2);
@@ -220,7 +159,6 @@ void ProgrammistObject::deleteLastSymbol(){
         break;
     case 10:
         if(length_10==0) return;
-        if(text_10.back()==',') count_dot++;
         text_10.pop_back();
         text_2=convert10To(2);
         text_8=convert10To(8);
@@ -228,7 +166,6 @@ void ProgrammistObject::deleteLastSymbol(){
         break;
     case 16:
         if(length_16==0) return;
-        if(text_16.back()==',') count_dot++;
         text_16.pop_back();
         text_10=convertTo10(text_16,16);
         text_2=convert10To(2);
@@ -287,10 +224,6 @@ void ProgrammistObject::clear(){
     length_8=0;
     length_10=0;
     length_16=0;
-}
-
-void ProgrammistObject::setAccuracy(int _accuracy){
-    accuracy=_accuracy;
 }
 
 void ProgrammistObject::setCount(int _count){

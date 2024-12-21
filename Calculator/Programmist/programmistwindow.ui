@@ -388,7 +388,7 @@
        <item row="7" column="0">
         <widget class="QPushButton" name="pushButton_znak">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="font">
           <font>
@@ -550,7 +550,7 @@
        <item row="7" column="2">
         <widget class="QPushButton" name="pushButton_dot">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="font">
           <font>

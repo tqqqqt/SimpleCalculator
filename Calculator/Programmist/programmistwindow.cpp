@@ -12,9 +12,9 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     object=new ProgrammistObject();
     buttonChangeSystem(10);
     settings=new QSettings("tqqqqt","calculator");
-    if(!settings->contains("progr/acuracy")) settings->setValue("progr/acuracy",10);
+    //if(!settings->contains("progr/acuracy")) settings->setValue("progr/acuracy",10);
     if(!settings->contains("progr/count")) settings->setValue("progr/count",5);
-    object->setAccuracy(settings->value("progr/acuracy",10).toInt());
+    //object->setAccuracy(settings->value("progr/acuracy",10).toInt());
     object->setCount(settings->value("progr/count",5).toInt());
 
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -33,7 +33,6 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     this->connect(ui->pushButton_D,&QPushButton::clicked,[this]{ pressNumberButton('D'); });
     this->connect(ui->pushButton_E,&QPushButton::clicked,[this]{ pressNumberButton('E'); });
     this->connect(ui->pushButton_F,&QPushButton::clicked,[this]{ pressNumberButton('F'); });
-    this->connect(ui->pushButton_dot,&QPushButton::clicked,[this]{ pressNumberButton(','); });
     this->connect(ui->pushButton_znak,&QPushButton::clicked,[this]{ pressNumberButton('-'); });
     this->connect(ui->pushButton_move_left,&QPushButton::clicked,[this]{ pressMoveButton(-1); });
     this->connect(ui->pushButton_move_right,&QPushButton::clicked,[this]{ pressMoveButton(1); });
@@ -137,7 +136,6 @@ void ProgrammistWindow::buttonChangeSystem(int _system){
     case 10:
         setButtonsEnable(false,true);
         ui->pushButton_dec->setEnabled(false);
-        ui->pushButton_znak->setEnabled(true);
         break;
     case 16:
         setButtonsEnable(true,true);
@@ -165,8 +163,6 @@ void ProgrammistWindow::setButtonsEnable(bool _flag_symbol, bool _flag_num){
     ui->pushButton_n8->setEnabled(_flag_num);
     ui->pushButton_n9->setEnabled(_flag_num);
 
-    ui->pushButton_znak->setEnabled(false);
-
     ui->pushButton_hex->setEnabled(true);
     ui->pushButton_dec->setEnabled(true);
     ui->pushButton_oct->setEnabled(true);
@@ -180,6 +176,6 @@ void ProgrammistWindow::openSettings(){
 }
 
 void ProgrammistWindow::updateSettings(){
-    object->setAccuracy(settings->value("progr/acuracy",10).toInt());
+    //object->setAccuracy(settings->value("progr/acuracy",10).toInt());
     object->setCount(settings->value("progr/count",5).toInt());
 }
