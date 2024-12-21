@@ -8,7 +8,6 @@ ProgrammistSettingsWindow::ProgrammistSettingsWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QSettings settings("tqqqqt","calculator");
-    ui->spinBox_acu->setValue(settings.value("progr/acuracy",10).toInt());
     ui->spinBox_count->setValue(settings.value("progr/count",5).toInt());
 
     this->connect(ui->pushButton_accept,SIGNAL(clicked()),this,SLOT(buttonAccept()));
@@ -22,7 +21,6 @@ ProgrammistSettingsWindow::~ProgrammistSettingsWindow()
 
 void ProgrammistSettingsWindow::buttonAccept(){
     QSettings settings("tqqqqt","calculator");
-    settings.setValue("progr/acuracy",ui->spinBox_acu->value());
     settings.setValue("progr/count",ui->spinBox_count->value());
     emit acceptSettings();
     this->close();

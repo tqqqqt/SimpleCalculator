@@ -12,9 +12,7 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     object=new ProgrammistObject();
     buttonChangeSystem(10);
     settings=new QSettings("tqqqqt","calculator");
-    //if(!settings->contains("progr/acuracy")) settings->setValue("progr/acuracy",10);
     if(!settings->contains("progr/count")) settings->setValue("progr/count",5);
-    //object->setAccuracy(settings->value("progr/acuracy",10).toInt());
     object->setCount(settings->value("progr/count",5).toInt());
 
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -176,6 +174,5 @@ void ProgrammistWindow::openSettings(){
 }
 
 void ProgrammistWindow::updateSettings(){
-    //object->setAccuracy(settings->value("progr/acuracy",10).toInt());
     object->setCount(settings->value("progr/count",5).toInt());
 }
