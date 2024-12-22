@@ -107,9 +107,10 @@ void ProgrammistObject::addSymbolTo10(char _num){
 
 bool ProgrammistObject::updateTextOn10(){
     text_2=convert10To(2);
-    if(text_2.length()>=count_nums) return false;
+    if(text_2.length()>count_nums) return false;
     if(text_10[0]=='-'){
         text_2=convert2ToMinus(text_2);
+        if(text_2.length()!=count_nums || text_2[0]!='1') return false;
         std::string save_10=text_10;
         text_10=convertTo10(text_2,2);
         text_8=convert10To(8);
@@ -118,6 +119,7 @@ bool ProgrammistObject::updateTextOn10(){
         updateTextsLength();
         return true;
     }
+    if(text_2.length()==count_nums && text_2[0]=='1') return false;
     text_8=convert10To(8);
     text_16=convert10To(16);
     updateTextsLength();
@@ -223,7 +225,7 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
         _num='1'+_num;
         size++;
     }
-    while(_num[0]=='0') _num=_num.substr(1);
+    //while(_num[0]=='0') _num=_num.substr(1);
     return _num;
 }
 
@@ -273,6 +275,7 @@ void ProgrammistObject::deleteLastSymbol(){
     case 10:
         if(length_10==0) return;
         text_10.pop_back();
+        if(text_10.length()==1 && text_10[0]=='-') text_10.pop_back();
         updateTextOn10();
         break;
     case 16:
