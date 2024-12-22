@@ -43,6 +43,7 @@ public:
     size_t getLength();
 
     void addNum(char);
+    void addMinus();
     void deleteLastSymbol();
     void changeSystem(int);
     void clear();

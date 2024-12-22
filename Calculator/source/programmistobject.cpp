@@ -101,6 +101,7 @@ bool ProgrammistObject::updateTextOn8(){
 
 void ProgrammistObject::addSymbolTo10(char _num){
     if(!(_num>='0' && _num<='9') && _num!='-') throw std::invalid_argument("incorect num to 10 system");
+    if(length_10==0 && _num=='-') return;
     if(length_10==1 && text_10[0]=='0' && _num!='-') text_10[0]=_num;
     else if(length_10==1 && text_10[0]=='0' && _num=='-') return;
     else if(length_10>0 && text_10[0]!='0' && text_10[0]!='-' && _num=='-') text_10='-'+text_10;
@@ -146,32 +147,43 @@ bool ProgrammistObject::updateTextOn16(){
     return true;
 }
 
+void ProgrammistObject::addMinus(){
+    if(length_2==0) return;
+    text_2=convert2ToMinus(text_2);
+    updateTextOn2();
+}
+
 void ProgrammistObject::addNum(char _num){
+    bool update_result=false;
     switch(curent_system){
     case 2:
         addSymbolTo2(_num);
-        if(updateTextOn2()==false){
+        update_result=updateTextOn2();
+        if(update_result==false){
             text_2.pop_back();
             updateTextOn2();
         }
         break;
     case 8:
         addSymbolTo8(_num);
-        if(updateTextOn8()==false){
+        update_result=updateTextOn8();
+        if(update_result==false){
             text_8.pop_back();
             updateTextOn8();
         }
         break;
     case 10:
         addSymbolTo10(_num);
-        if(updateTextOn10()==false){
+        update_result=updateTextOn10();
+        if(update_result==false){
             text_10.pop_back();
             updateTextOn10();
         }
         break;
     case 16:
         addSymbolTo16(_num);
-        if(updateTextOn16()==false){
+        update_result=updateTextOn16();
+        if(update_result==false){
             text_16.pop_back();
             updateTextOn16();
         }
@@ -214,6 +226,7 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
         _num='1'+_num;
         size++;
     }
+    while(_num[0]=='0') _num=_num.substr(1);
     return _num;
 }
 
@@ -253,33 +266,24 @@ void ProgrammistObject::deleteLastSymbol(){
     case 2:
         if(length_2==0) return;
         text_2.pop_back();
-        text_10=convertTo10(text_2,2);
-        text_8=convert10To(8);
-        text_16=convert10To(16);
+        updateTextOn2();
         break;
     case 8:
         if(length_8==0) return;
         text_8.pop_back();
-        text_10=convertTo10(text_8,8);
-        text_2=convert10To(2);
-        text_16=convert10To(16);
+        updateTextOn8();
         break;
     case 10:
         if(length_10==0) return;
         text_10.pop_back();
-        text_2=convert10To(2);
-        text_8=convert10To(8);
-        text_16=convert10To(16);
+        updateTextOn10();
         break;
     case 16:
         if(length_16==0) return;
         text_16.pop_back();
-        text_10=convertTo10(text_16,16);
-        text_2=convert10To(2);
-        text_8=convert10To(8);
+        updateTextOn16();
         break;
     }
-    updateTextsLength();
 }
 
 void ProgrammistObject::changeSystem(int _system){
@@ -288,23 +292,18 @@ void ProgrammistObject::changeSystem(int _system){
 }
 
 void ProgrammistObject::moveLeft(){
-    if(text_2.length()==0) return;
+    if(length_2==0) return;
+    if(length_2==count_nums) return;
     text_2+='0';
-    text_10=convertTo10(text_2,2);
-    text_8=convert10To(8);
-    text_16=convert10To(16);
-    updateTextsLength();
+    updateTextOn2();
 }
 
 void ProgrammistObject::moveRight(){
-    if(text_2.length()==0) return;
+    if(length_2==0) return;
     text_2.pop_back();
     length_2--;
     if(length_2!=0){
-        text_10=convertTo10(text_2,2);
-        text_8=convert10To(8);
-        text_16=convert10To(16);
-        updateTextsLength();
+        updateTextOn2();
         return;
     }
     text_8="";
