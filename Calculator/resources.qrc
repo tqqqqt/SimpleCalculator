@@ -6,5 +6,9 @@
         <file>Value/value_enable_button.css</file>
         <file>Value/value_disable_button.css</file>
         <file>Value/value_style.css</file>
+        <file>Programmist/programmist_disable_button.css</file>
+        <file>Programmist/programmist_enable_button.css</file>
+        <file>Programmist/programmist_curent_system.css</file>
+        <file>Programmist/programmist_style.css</file>
     </qresource>
 </RCC>
