@@ -39,6 +39,7 @@ private:
 
 private slots:
     void pressNumberButton(QChar);
+    void pressMinusButton();
     void pressMoveButton(int);
     void buttonClear();
     void buttonDeleteLast();

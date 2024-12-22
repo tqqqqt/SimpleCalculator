@@ -31,7 +31,8 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     this->connect(ui->pushButton_D,&QPushButton::clicked,[this]{ pressNumberButton('D'); });
     this->connect(ui->pushButton_E,&QPushButton::clicked,[this]{ pressNumberButton('E'); });
     this->connect(ui->pushButton_F,&QPushButton::clicked,[this]{ pressNumberButton('F'); });
-    this->connect(ui->pushButton_znak,&QPushButton::clicked,[this]{ pressNumberButton('-'); });
+    this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(pressMinusButton()));
+
     this->connect(ui->pushButton_move_left,&QPushButton::clicked,[this]{ pressMoveButton(-1); });
     this->connect(ui->pushButton_move_right,&QPushButton::clicked,[this]{ pressMoveButton(1); });
     this->connect(ui->pushButton_clear,&QPushButton::clicked,[this]{ buttonClear(); });
@@ -79,6 +80,11 @@ void ProgrammistWindow::pressNumberButton(QChar _num){
         object->clear();
         ui->textEdit_input->setText(exp.what());
     }
+}
+
+void ProgrammistWindow::pressMinusButton(){
+    object->addMinus();
+    emit getResult();
 }
 
 void ProgrammistWindow::pressMoveButton(int _direction){
