@@ -13,8 +13,8 @@ class ProgrammistObject : public ProgramObject
 {
 private:
     std::string text_2, text_8, text_10, text_16;
-    size_t length_2, length_8, length_10, length_16;
-    int curent_system, count_nums;
+    size_t length_2, length_8, length_10, length_16, count_nums;
+    int curent_system;
 
     void addSymbolTo2(char);
     bool updateTextOn2();

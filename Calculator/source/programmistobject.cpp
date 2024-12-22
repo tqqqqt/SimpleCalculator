@@ -63,7 +63,7 @@ size_t ProgrammistObject::getLength(){
 
 void ProgrammistObject::addSymbolTo2(char _num){
     if(_num!='0' && _num!='1') throw std::invalid_argument("incorect num to 2 system");
-    if(length_2==1 && text_2[0]=='0' && _num!='-') text_2[0]=_num;
+    if(length_2==1 && text_2[0]=='0') text_2[0]=_num;
     else text_2+=_num;
 }
 
@@ -100,18 +100,14 @@ bool ProgrammistObject::updateTextOn8(){
 }
 
 void ProgrammistObject::addSymbolTo10(char _num){
-    if(!(_num>='0' && _num<='9') && _num!='-') throw std::invalid_argument("incorect num to 10 system");
-    if(length_10==0 && _num=='-') return;
-    if(length_10==1 && text_10[0]=='0' && _num!='-') text_10[0]=_num;
-    else if(length_10==1 && text_10[0]=='0' && _num=='-') return;
-    else if(length_10>0 && text_10[0]!='0' && text_10[0]!='-' && _num=='-') text_10='-'+text_10;
-    else if(length_10>0 && text_10[0]=='-' && _num=='-') text_10=text_10.substr(1);
+    if(!(_num>='0' && _num<='9')) throw std::invalid_argument("incorect num to 10 system");
+    if(length_10==1 && text_10[0]=='0') text_10[0]=_num;
     else text_10+=_num;
 }
 
 bool ProgrammistObject::updateTextOn10(){
     text_2=convert10To(2);
-    if(text_2.length()>count_nums) return false;
+    if(text_2.length()>=count_nums) return false;
     if(text_10[0]=='-'){
         text_2=convert2ToMinus(text_2);
         std::string save_10=text_10;
@@ -149,6 +145,7 @@ bool ProgrammistObject::updateTextOn16(){
 
 void ProgrammistObject::addMinus(){
     if(length_2==0) return;
+    if(length_2==1 && text_2[0]=='0') return;
     text_2=convert2ToMinus(text_2);
     updateTextOn2();
 }
@@ -333,5 +330,5 @@ void ProgrammistObject::clear(){
 }
 
 void ProgrammistObject::setCount(int _count){
-    count_nums=4*_count;
+    count_nums=4*static_cast<size_t>(_count);
 }
