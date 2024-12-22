@@ -149,6 +149,7 @@ void ProgrammistObject::addMinus(){
     if(length_2==0) return;
     if(length_2==1 && text_2[0]=='0') return;
     text_2=convert2ToMinus(text_2);
+    while(text_2.length()>1 && text_2[0]=='0') text_2=text_2.substr(1);
     updateTextOn2();
 }
 
@@ -225,7 +226,6 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
         _num='1'+_num;
         size++;
     }
-    //while(_num[0]=='0') _num=_num.substr(1);
     return _num;
 }
 
