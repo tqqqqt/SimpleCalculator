@@ -16,8 +16,18 @@ private:
     size_t length_2, length_8, length_10, length_16;
     int curent_system, count_nums;
 
+    void addSymbolTo2(char);
+    bool updateTextOn2();
+    void addSymbolTo8(char);
+    bool updateTextOn8();
+    void addSymbolTo10(char);
+    bool updateTextOn10();
+    void addSymbolTo16(char);
+    bool updateTextOn16();
+
     std::string convertTo10(std::string,int);
     std::string convert10To(int);
+    std::string convert2ToMinus(std::string);
     std::string numToSymbol(std::string);
     void updateTextsLength();
 
