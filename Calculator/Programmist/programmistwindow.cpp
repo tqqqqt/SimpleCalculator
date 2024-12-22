@@ -7,6 +7,7 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
 {
     loadStyle();
     ui->setupUi(this);
+    ui->pushButton_dot->setStyleSheet(disable_button_style);
     loadIcons();
 
     object=new ProgrammistObject();
@@ -53,7 +54,31 @@ ProgrammistWindow::~ProgrammistWindow()
 }
 
 void ProgrammistWindow::loadStyle(){
+    QFile file(":/Programmist/programmist_style.css");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str(&file);
+    QString content=file_str.readAll();
+    file.close();
 
+    QFile file2(":/Programmist/programmist_disable_button.css");
+    file2.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str2(&file2);
+    disable_button_style=file_str2.readAll();
+    file2.close();
+
+    QFile file3(":/Programmist/programmist_enable_button.css");
+    file3.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str3(&file3);
+    enable_button_style=file_str3.readAll();
+    file3.close();
+
+    QFile file4(":/Programmist/programmist_curent_system.css");
+    file4.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str4(&file4);
+    curent_system_button_style=file_str4.readAll();
+    file4.close();
+
+    this->setStyleSheet(content);
 }
 
 void ProgrammistWindow::loadIcons(){
@@ -126,51 +151,93 @@ void ProgrammistWindow::buttonChangeSystem(int _system){
     ui->textEdit_input->setText(QString::fromStdString(object->toString()));
     switch(_system){
     case 2:
-        setButtonsEnable(false,false);
+        setSymbolButtonsEnable(false,disable_button_style);
+        setNumsButtonsEnable(false,disable_button_style);
+        setSystemButtonsEnable();
         ui->pushButton_n0->setEnabled(true);
+        ui->pushButton_n0->setStyleSheet(enable_button_style);
         ui->pushButton_n1->setEnabled(true);
+        ui->pushButton_n1->setStyleSheet(enable_button_style);
         ui->pushButton_bin->setEnabled(false);
+        ui->pushButton_bin->setStyleSheet(curent_system_button_style);
         break;
     case 8:
-        setButtonsEnable(false,true);
+        setSymbolButtonsEnable(false,disable_button_style);
+        setNumsButtonsEnable(true,enable_button_style);
+        setSystemButtonsEnable();
         ui->pushButton_n9->setEnabled(false);
+        ui->pushButton_n9->setStyleSheet(disable_button_style);
         ui->pushButton_n8->setEnabled(false);
+        ui->pushButton_n8->setStyleSheet(disable_button_style);
         ui->pushButton_oct->setEnabled(false);
+        ui->pushButton_oct->setStyleSheet(curent_system_button_style);
         break;
     case 10:
-        setButtonsEnable(false,true);
+        setSymbolButtonsEnable(false,disable_button_style);
+        setNumsButtonsEnable(true,enable_button_style);
+        setSystemButtonsEnable();
         ui->pushButton_dec->setEnabled(false);
+        ui->pushButton_dec->setStyleSheet(curent_system_button_style);
         break;
     case 16:
-        setButtonsEnable(true,true);
+        setSymbolButtonsEnable(true,enable_button_style);
+        setNumsButtonsEnable(true,enable_button_style);
+        setSystemButtonsEnable();
         ui->pushButton_hex->setEnabled(false);
+        ui->pushButton_hex->setStyleSheet(curent_system_button_style);
         break;
     }
 }
 
-void ProgrammistWindow::setButtonsEnable(bool _flag_symbol, bool _flag_num){
-    ui->pushButton_A->setEnabled(_flag_symbol);
-    ui->pushButton_B->setEnabled(_flag_symbol);
-    ui->pushButton_C->setEnabled(_flag_symbol);
-    ui->pushButton_D->setEnabled(_flag_symbol);
-    ui->pushButton_E->setEnabled(_flag_symbol);
-    ui->pushButton_F->setEnabled(_flag_symbol);
+void ProgrammistWindow::setSymbolButtonsEnable(bool _flag, QString _style){
+    ui->pushButton_A->setEnabled(_flag);
+    ui->pushButton_B->setEnabled(_flag);
+    ui->pushButton_C->setEnabled(_flag);
+    ui->pushButton_D->setEnabled(_flag);
+    ui->pushButton_E->setEnabled(_flag);
+    ui->pushButton_F->setEnabled(_flag);
 
-    ui->pushButton_n0->setEnabled(_flag_num);
-    ui->pushButton_n1->setEnabled(_flag_num);
-    ui->pushButton_n2->setEnabled(_flag_num);
-    ui->pushButton_n3->setEnabled(_flag_num);
-    ui->pushButton_n4->setEnabled(_flag_num);
-    ui->pushButton_n5->setEnabled(_flag_num);
-    ui->pushButton_n6->setEnabled(_flag_num);
-    ui->pushButton_n7->setEnabled(_flag_num);
-    ui->pushButton_n8->setEnabled(_flag_num);
-    ui->pushButton_n9->setEnabled(_flag_num);
+    ui->pushButton_A->setStyleSheet(_style);
+    ui->pushButton_B->setStyleSheet(_style);
+    ui->pushButton_C->setStyleSheet(_style);
+    ui->pushButton_D->setStyleSheet(_style);
+    ui->pushButton_E->setStyleSheet(_style);
+    ui->pushButton_F->setStyleSheet(_style);
+}
 
+void ProgrammistWindow::setNumsButtonsEnable(bool _flag, QString _style){
+    ui->pushButton_n0->setEnabled(_flag);
+    ui->pushButton_n1->setEnabled(_flag);
+    ui->pushButton_n2->setEnabled(_flag);
+    ui->pushButton_n3->setEnabled(_flag);
+    ui->pushButton_n4->setEnabled(_flag);
+    ui->pushButton_n5->setEnabled(_flag);
+    ui->pushButton_n6->setEnabled(_flag);
+    ui->pushButton_n7->setEnabled(_flag);
+    ui->pushButton_n8->setEnabled(_flag);
+    ui->pushButton_n9->setEnabled(_flag);
+
+    ui->pushButton_n0->setStyleSheet(_style);
+    ui->pushButton_n1->setStyleSheet(_style);
+    ui->pushButton_n2->setStyleSheet(_style);
+    ui->pushButton_n3->setStyleSheet(_style);
+    ui->pushButton_n4->setStyleSheet(_style);
+    ui->pushButton_n5->setStyleSheet(_style);
+    ui->pushButton_n6->setStyleSheet(_style);
+    ui->pushButton_n7->setStyleSheet(_style);
+    ui->pushButton_n8->setStyleSheet(_style);
+    ui->pushButton_n9->setStyleSheet(_style);
+}
+
+void ProgrammistWindow::setSystemButtonsEnable(){
     ui->pushButton_hex->setEnabled(true);
     ui->pushButton_dec->setEnabled(true);
     ui->pushButton_oct->setEnabled(true);
     ui->pushButton_bin->setEnabled(true);
+    ui->pushButton_hex->setStyleSheet(enable_button_style);
+    ui->pushButton_dec->setStyleSheet(enable_button_style);
+    ui->pushButton_oct->setStyleSheet(enable_button_style);
+    ui->pushButton_bin->setStyleSheet(enable_button_style);
 }
 
 void ProgrammistWindow::openSettings(){

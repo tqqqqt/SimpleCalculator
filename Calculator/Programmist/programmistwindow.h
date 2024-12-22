@@ -31,11 +31,13 @@ private:
     ProgrammistObject *object;
     QSettings *settings;
     int curent_system;
-    QString disable_button_style, enable_button_style;
+    QString disable_button_style, enable_button_style, curent_system_button_style;
 
     void loadStyle();
     void loadIcons();
-    void setButtonsEnable(bool, bool);
+    void setSymbolButtonsEnable(bool,QString);
+    void setNumsButtonsEnable(bool,QString);
+    void setSystemButtonsEnable();
 
 private slots:
     void pressNumberButton(QChar);
