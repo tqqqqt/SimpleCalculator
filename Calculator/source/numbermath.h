@@ -12,7 +12,9 @@ int FindMultiplier(std::string num1, std::string num2);
 
 std::string MathSum(std::string num1, std::string num2);
 std::string MathNeg(std::string num1, std::string num2);
-std::string MathDiv(std::string num1, std::string num2, int);
+std::string MathDiv(std::string num1, std::string num2, int accuracy);
 std::string MathMul(std::string num1, std::string num2);
+
+std::string MathPow(std::string num, std::string pow);
 
 #endif // NUMBERMATH_H

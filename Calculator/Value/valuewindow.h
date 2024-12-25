@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QPixmap>
+
 #include <vector>
 
 #include "./../source/valueinfo.h"
@@ -35,7 +36,7 @@ private:
     void loadIcons();
 
 private slots:
-    void pressNumberButton(QChar button_num);
+    void pressNumberButton(QChar);
     void buttonClear();
     void buttonDeleteLast();
     void buttonChangeMode();

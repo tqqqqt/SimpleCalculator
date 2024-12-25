@@ -60,13 +60,13 @@ void ValueWindow::loadStyle(){
     file2.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream file_str2(&file2);
     disable_button_style=file_str2.readAll();
-    file.close();
+    file2.close();
 
     QFile file3(":/Value/value_enable_button.css");
     file3.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream file_str3(&file3);
     enable_button_style=file_str3.readAll();
-    file.close();
+    file3.close();
 
     this->setStyleSheet(content);
 }

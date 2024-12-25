@@ -28,6 +28,7 @@ SOURCES += \
         History/historywindow.cpp \
         Mode/modewindow.cpp \
         Programmist/programmistwindow.cpp \
+        Settings/programmistsettingswindow.cpp \
         Settings/settingswindow.cpp \
         Value/valuewindow.cpp \
         main.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
         source/calculatormath.cpp \
         source/calculatorobject.cpp \
         source/numbermath.cpp \
+        source/programmistobject.cpp \
         source/valueinfo.cpp \
         source/valueobject.cpp
 
@@ -42,12 +44,14 @@ HEADERS += \
         History/historywindow.h \
         Mode/modewindow.h \
         Programmist/programmistwindow.h \
+        Settings/programmistsettingswindow.h \
         Settings/settingswindow.h \
         Value/valuewindow.h \
         mainwindow.h \
         source/calculatormath.h \
         source/calculatorobject.h \
         source/numbermath.h \
+        source/programmistobject.h \
         source/programobject.h \
         source/valueinfo.h \
         source/valueobject.h
@@ -56,6 +60,7 @@ FORMS += \
         History/historywindow.ui \
         Mode/modewindow.ui \
         Programmist/programmistwindow.ui \
+        Settings/programmistsettingswindow.ui \
         Settings/settingswindow.ui \
         Value/valuewindow.ui \
         mainwindow.ui

@@ -13,7 +13,6 @@ public:
 
     virtual void addNum(char)=0;
     virtual void deleteLastSymbol()=0;
-    virtual void setFullNum(std::string)=0;
     virtual void clear()=0;
 };
 
