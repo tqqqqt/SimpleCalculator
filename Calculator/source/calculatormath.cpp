@@ -99,6 +99,10 @@ CalculatorObject CalculatorMath::GetResult(){
     return polishEntry[0];
 }
 
-void CalculatorMath::SetAccuracy(int _accuracy){
+void CalculatorMath::SetDivAccuracy(int _accuracy){
     div_accuracy=_accuracy;
+}
+
+void CalculatorMath::setFunctionAccuracy(int _accuracy){
+    function_accuracy=_accuracy;
 }

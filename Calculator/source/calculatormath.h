@@ -21,7 +21,8 @@ public:
     ~CalculatorMath();
 
     void setVector(std::vector<CalculatorObject>);
-    void SetAccuracy(int);
+    void SetDivAccuracy(int);
+    void setFunctionAccuracy(int);
     CalculatorObject GetResult();
 };
 
