@@ -52,9 +52,10 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(ButtonOpenBrackets()));
     this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(ButtonCloseBrackets()));
 
-    //history and mode buttons
+    //history, mode and fucntions buttons
     this->connect(ui->pushButton_history,SIGNAL(clicked()),this,SLOT(ButtonHistory()));
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(ButtonChangeMode()));
+    this->connect(ui->pushButton_functions,SIGNAL(clicked()),this,SLOT(pressFunctionsButton()));
 
     //signals
     this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(ButtonSettings()));
@@ -125,7 +126,22 @@ void MainWindow::PressOperButton(QString buttonOper){
 }
 
 void MainWindow::pressFunctionsButton(){
+    FunctionsWindow *functions_window=new FunctionsWindow();
+    this->connect(functions_window,SIGNAL(pressFunction(QString)),this,SLOT(addedFunction(QString)));
+    this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(closeWindow()));
+    functions_window->show();
+}
 
+void MainWindow::addedFunction(QString _function){
+    if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4 || flagAfterResult==true) return;
+    if(curent_object.getObjectType()==5 || curent_object.getObjectType()==3 || curent_object.getObjectType()==7){
+        objects.push_back(curent_object);
+        curent_object.clear();
+    }
+    curent_object.addFunction(_function.toStdString());
+    countOper+=1;
+    countOpenBracket+=1;
+    setFullText();
 }
 
 void MainWindow::ButtonDot(){
@@ -231,6 +247,7 @@ void MainWindow::ButtonChangeMode(){
 
 void MainWindow::UpdateMode(int _mode){
     if(_mode==1) return;
+    emit closeWindow();
     emit changeWindow(_mode);
     this->hide();
 }

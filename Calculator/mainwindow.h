@@ -11,9 +11,12 @@
 #include <string>
 
 #include "./source/calculatorobject.h"
-#include "./History/historywindow.h"
 #include "./source/calculatormath.h"
+
+#include "./History/historywindow.h"
 #include "./Settings/settingswindow.h"
+#include "./Functions/functionswindow.h"
+
 #include "./Mode/modewindow.h"
 
 namespace Ui {
@@ -30,6 +33,7 @@ public:
 
 signals:
     void PressResult();
+    void closeWindow();
     void changeWindow(int);
 
 private:
@@ -51,6 +55,7 @@ private slots:
     void PressNumberButton(QChar buttonNum);
     void PressOperButton(QString buttonOper);
     void pressFunctionsButton();
+    void addedFunction(QString);
     void ButtonDot();
     void ButtonClear();
     void ButtonOpenBrackets();
