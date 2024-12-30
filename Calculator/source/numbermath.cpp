@@ -106,8 +106,8 @@ std::string MathNeg(std::string num1, std::string num2){
         if(pointNum1>=0) tempNum1=num1[pointNum1--]-'0';
         if(pointNum2>=0) tempNum2=num2[pointNum2--]-'0';
         if(carry){
-            carry=0;
             tempNum1--;
+            if(tempNum1!=-1) carry=0;
         }
         if(tempNum1<tempNum2){
             result=std::to_string((tempNum1+10)-tempNum2)+result;
