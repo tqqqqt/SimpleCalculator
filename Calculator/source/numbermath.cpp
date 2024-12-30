@@ -260,13 +260,28 @@ std::string MathDiv(std::string num1, std::string num2, int _accuracy){
     return curentNum;
 }
 
-std::string MathPow(std::string num, std::string pow){
+std::string MathPow(std::string num, std::string pow, int accuracy){
     if(pow=="0") return "1";
     if(pow=="1") return num;
+    if(pow.find(',')!=std::string::npos) throw std::invalid_argument("incorect pow num");
+    if(pow[0]=='-') return MathDiv("1",MathPow(num,pow.substr(1)),accuracy);
     std::string result=num;
     while(MaxNumber("1",pow)!=0){
         result=MathMul(result,num);
         pow=MathNeg(pow,"1");
+    }
+    return result;
+}
+
+std::string MathSin(std::string degree, int div_acuracy, int function_acuracy){
+    std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
+    std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
+    for(int i=0;i<function_acuracy;i++){
+        result=MathSum(result,MathDiv(MathMul(one_num,pow_num),factorial_res,div_acuracy));
+        one_num=MathMul(one_num,"-1");
+        pow_num=MathMul(MathMul(pow_num,radian),radian);
+        factorial_res=MathMul(MathMul(factorial_res,factorial_num),MathSum(factorial_num,"1"));
+        factorial_num=MathSum(factorial_num,"2");
     }
     return result;
 }
