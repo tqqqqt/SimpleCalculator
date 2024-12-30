@@ -14,10 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
     flagAfterResult=false;
     countOpenBracket=0;
     countOper=0;
-    if(!settings->contains("calc/acuracy")) settings->setValue("calc/acuracy",10);
+    if(settings->contains("calc/acuracy")==false) settings->setValue("calc/acuracy",10);
+    if(settings->contains("calc/func_acuracy")==false) settings->setValue("calc/func_acuracy",10);
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
+    function_acuracy=settings->value("calc/func_acuracy",10).toInt();
     calculatorMathObject=new CalculatorMath();
-    calculatorMathObject->SetAccuracy(curent_acuracy);
+    calculatorMathObject->SetDivAccuracy(curent_acuracy);
+    calculatorMathObject->setFunctionAccuracy(function_acuracy);
     ui->label->setText(curentText);
 
     //nums buttons
@@ -200,7 +203,6 @@ void MainWindow::ButtonResult(){
         objects.push_back(curent_object);
         calculatorMathObject->setVector(objects.toStdVector());
         objects.clear();
-        calculatorMathObject->SetAccuracy(curent_acuracy);
         curent_object=calculatorMathObject->GetResult();
         if(curent_object.toString()[0]=='('){
             curent_object.deleteLastSymbol();
@@ -237,6 +239,10 @@ void MainWindow::ButtonSettings(){
 
 void MainWindow::UpdateSettings(){
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
+    function_acuracy=settings->value("calc/func_acuracy",10).toInt();
+
+    calculatorMathObject->SetDivAccuracy(curent_acuracy);
+    calculatorMathObject->setFunctionAccuracy(function_acuracy);
 }
 
 void MainWindow::ButtonChangeMode(){

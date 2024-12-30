@@ -45,7 +45,8 @@ private:
     QSettings* settings;
     CalculatorMath* calculatorMathObject;
     bool flagAfterResult;
-    int countOpenBracket, countOper, curent_acuracy;
+    int countOpenBracket, countOper;
+    int curent_acuracy, function_acuracy;
 
     void loadStyle();
     void loadIcons();
