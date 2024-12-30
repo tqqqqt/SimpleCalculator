@@ -50,6 +50,7 @@ private slots:
     void setFullText();
     void PressNumberButton(QChar buttonNum);
     void PressOperButton(QString buttonOper);
+    void pressFunctionsButton();
     void ButtonDot();
     void ButtonClear();
     void ButtonOpenBrackets();

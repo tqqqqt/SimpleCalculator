@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     calculatorMathObject->SetAccuracy(curent_acuracy);
     ui->label->setText(curentText);
 
+    //nums buttons
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ PressNumberButton('0'); });
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ PressNumberButton('1'); });
     this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ PressNumberButton('2'); });
@@ -30,20 +31,32 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_n7,&QPushButton::clicked,[this]{ PressNumberButton('7'); });
     this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ PressNumberButton('8'); });
     this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ PressNumberButton('9'); });
+
+    //dot and znak buttons
     this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(ButtonDot()));
+    this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(ButtonZnak()));
+
+    //operator buttons and result
     this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ PressOperButton("+"); });
     this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ PressOperButton("-"); });
     this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ PressOperButton("*"); });
     this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ PressOperButton("/"); });
+    this->connect(ui->pushButton_pow,&QPushButton::clicked,[this]{ PressOperButton("^("); });
+    this->connect(ui->pushButton_res,SIGNAL(clicked()),this,SLOT(ButtonResult()));
+
+    //button clear and delete last
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(ButtonClear()));
+    this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(ButtonDeleteLast()));
+
+    //bracket buttons
     this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(ButtonOpenBrackets()));
     this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(ButtonCloseBrackets()));
-    this->connect(ui->pushButton_res,SIGNAL(clicked()),this,SLOT(ButtonResult()));
-    this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(ButtonZnak()));
+
+    //history and mode buttons
     this->connect(ui->pushButton_history,SIGNAL(clicked()),this,SLOT(ButtonHistory()));
-    this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(ButtonDeleteLast()));
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(ButtonChangeMode()));
 
+    //signals
     this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(ButtonSettings()));
 }
 
@@ -106,8 +119,13 @@ void MainWindow::PressOperButton(QString buttonOper){
     }
     curent_object.addSymbol(buttonOper.toStdString());
     countOper++;
+    if(buttonOper=="^(") countOpenBracket++;
     if(flagAfterResult) flagAfterResult=false;
     setFullText();
+}
+
+void MainWindow::pressFunctionsButton(){
+
 }
 
 void MainWindow::ButtonDot(){
