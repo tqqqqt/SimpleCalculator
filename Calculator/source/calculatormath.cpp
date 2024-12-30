@@ -16,8 +16,10 @@ int CalculatorMath::CheckPrior(std::string _oper){
 void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
     polishEntry.clear();
     std::stack<CalculatorObject> oper_mas;
+    int object_type=-1;
     for(CalculatorObject element:_objects){
-        if(element.getObjectType()==1){
+        object_type=element.getObjectType();
+        if(object_type==1){
             polishEntry.push_back(element);
             if(element.toString()[0]=='('){
                 CalculatorObject temp;
@@ -26,16 +28,27 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
             }
             continue;
         }
-        if(element.getObjectType()==3){
+        if(object_type==6){
+            CalculatorObject temp;
+            temp.addSymbol("(");
+            oper_mas.push(element);
+            oper_mas.push(temp);
+            continue;
+        }
+        if(object_type==3){
             oper_mas.push(element);
             continue;
         }
-        if(element.getObjectType()==4){
+        if(object_type==4){
             while(oper_mas.size() && oper_mas.top().getObjectType()!=3){
                 polishEntry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
             oper_mas.pop();
+            if(oper_mas.size() && oper_mas.top().getObjectType()==6){
+                polishEntry.push_back(oper_mas.top());
+                oper_mas.pop();
+            }
             continue;
         }
         int curent_prior=CheckPrior(element.toString());
@@ -62,6 +75,7 @@ CalculatorObject CalculatorMath::GetResult(){
             else if(polishEntry[i].toString()=="+") polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else if(polishEntry[i].toString()=="*") polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else if(polishEntry[i].toString()=="/") polishEntry[i-2].setFullNum(MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),accuracy));
+            else if(polishEntry[i].toString()=="^(") polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
         } catch (std::exception) {
             throw;
         }
