@@ -11,19 +11,18 @@
 class CalculatorMath
 {
 private:
-    //std::string curentString, result;
     std::vector<CalculatorObject> polishEntry;
-    int accuracy;
+    int div_accuracy, function_accuracy;
 
     int CheckPrior(std::string);
-    //bool CheckOper(char);
 
 public:
     CalculatorMath();
     ~CalculatorMath();
-   // int SetString(std::string newString);
+
     void setVector(std::vector<CalculatorObject>);
-    void SetAccuracy(int);
+    void SetDivAccuracy(int);
+    void setFunctionAccuracy(int);
     CalculatorObject GetResult();
 };
 

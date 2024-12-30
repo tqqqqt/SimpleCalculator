@@ -42,7 +42,7 @@ void CalculatorObject::addNum(char _num){
 }
 
 void CalculatorObject::addSymbol(std::string _symbol){
-    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/") throw std::invalid_argument("input not a oper or bracket");
+    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/" && _symbol!="^(") throw std::invalid_argument("input not a oper or bracket");
     if(object_type==3 && _symbol=="-"){
         text="(-";
         length=2;
@@ -54,7 +54,16 @@ void CalculatorObject::addSymbol(std::string _symbol){
     else if(_symbol=="(") object_type=3;
     else if(_symbol==")") object_type=4;
     else if(_symbol=="+" || _symbol=="-" || _symbol=="*" || _symbol=="/") object_type=5;
+    else if(_symbol=="^(") object_type=6;
     text=_symbol;
+    length=text.length();
+}
+
+void CalculatorObject::addFunction(std::string _function){
+    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(") throw std::invalid_argument("input not a function");
+    if(object_type!=0) return;
+    object_type=7;
+    text=_function;
     length=text.length();
 }
 

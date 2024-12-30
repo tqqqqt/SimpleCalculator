@@ -24,6 +24,7 @@ public:
 
     void addNum(char);
     void addSymbol(std::string);
+    void addFunction(std::string);
     void deleteLastSymbol();
 
     void setFullNum(std::string);

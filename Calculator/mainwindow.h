@@ -11,9 +11,12 @@
 #include <string>
 
 #include "./source/calculatorobject.h"
-#include "./History/historywindow.h"
 #include "./source/calculatormath.h"
+
+#include "./History/historywindow.h"
 #include "./Settings/settingswindow.h"
+#include "./Functions/functionswindow.h"
+
 #include "./Mode/modewindow.h"
 
 namespace Ui {
@@ -30,6 +33,7 @@ public:
 
 signals:
     void PressResult();
+    void closeWindow();
     void changeWindow(int);
 
 private:
@@ -41,7 +45,8 @@ private:
     QSettings* settings;
     CalculatorMath* calculatorMathObject;
     bool flagAfterResult;
-    int countOpenBracket, countOper, curent_acuracy;
+    int countOpenBracket, countOper;
+    int curent_acuracy, function_acuracy;
 
     void loadStyle();
     void loadIcons();
@@ -50,6 +55,8 @@ private slots:
     void setFullText();
     void PressNumberButton(QChar buttonNum);
     void PressOperButton(QString buttonOper);
+    void pressFunctionsButton();
+    void addedFunction(QString);
     void ButtonDot();
     void ButtonClear();
     void ButtonOpenBrackets();
