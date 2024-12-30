@@ -62,7 +62,7 @@ void CalculatorObject::addSymbol(std::string _symbol){
 void CalculatorObject::addFunction(std::string _function){
     if(_function!="Sin(") throw std::invalid_argument("input not a function");
     if(object_type!=0) return;
-    if(_function=="Sin(") object_type=7;
+    object_type=7;
     text=_function;
     length=text.length();
 }
