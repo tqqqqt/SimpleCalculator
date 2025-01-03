@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QPixmap>
+#include <QCloseEvent>
 
 #include <iostream>
 #include <string>
@@ -16,7 +17,6 @@
 #include "./History/historywindow.h"
 #include "./Settings/settingswindow.h"
 #include "./Functions/functionswindow.h"
-
 #include "./Mode/modewindow.h"
 
 namespace Ui {
@@ -44,10 +44,12 @@ private:
     QVector<QString> historyArr;
     QSettings* settings;
     CalculatorMath* calculatorMathObject;
-    bool flagAfterResult;
+    bool flagAfterResult, function_window_show, history_window_show;
     int countOpenBracket, countOper;
     int curent_acuracy, function_acuracy;
 
+private:
+    void closeEvent(QCloseEvent*);
     void loadStyle();
     void loadIcons();
 

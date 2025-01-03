@@ -10,15 +10,18 @@ MainWindow::MainWindow(QWidget *parent) :
     loadIcons();
 
     settings=new QSettings("tqqqqt","calculator");
+    calculatorMathObject=new CalculatorMath();
     curentText="";
     flagAfterResult=false;
     countOpenBracket=0;
     countOper=0;
+    function_window_show=false;
+    history_window_show=false;
+
     if(settings->contains("calc/acuracy")==false) settings->setValue("calc/acuracy",10);
     if(settings->contains("calc/func_acuracy")==false) settings->setValue("calc/func_acuracy",10);
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
     function_acuracy=settings->value("calc/func_acuracy",10).toInt();
-    calculatorMathObject=new CalculatorMath();
     calculatorMathObject->SetDivAccuracy(curent_acuracy);
     calculatorMathObject->setFunctionAccuracy(function_acuracy);
     ui->label->setText(curentText);
@@ -35,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ PressNumberButton('8'); });
     this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ PressNumberButton('9'); });
 
-    //dot and znak buttons
+    //dot and minus buttons
     this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(ButtonDot()));
     this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(ButtonZnak()));
 
@@ -60,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(ButtonChangeMode()));
     this->connect(ui->pushButton_functions,SIGNAL(clicked()),this,SLOT(pressFunctionsButton()));
 
-    //signals
+    //options
     this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(ButtonSettings()));
 }
 
@@ -69,6 +72,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// Close all windows before close calculator window
+void MainWindow::closeEvent(QCloseEvent *event){
+    emit closeWindow();
+    event->accept();
+}
+
+// Load css style from main_style.css file
 void MainWindow::loadStyle(){
     QFile file(":/main_style.css");
     file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -78,17 +88,20 @@ void MainWindow::loadStyle(){
     this->setStyleSheet(content);
 }
 
+// Load icons for buttons
 void MainWindow::loadIcons(){
     QPixmap pixmap(":/history-icon.png");
     QIcon button_icon(pixmap);
     ui->pushButton_history->setIcon(button_icon);
     ui->pushButton_history->setIconSize(pixmap.rect().size()/2);
+
     pixmap.load(":/menu-icon.png");
     button_icon.addPixmap(pixmap);
     ui->pushButton_mode->setIcon(button_icon);
     ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
 }
 
+// Collect text from all objects and display it on the screen
 void MainWindow::setFullText(){
     curentText="";
     for(auto element:objects) curentText+=QString::fromStdString(element.toString());
@@ -96,6 +109,7 @@ void MainWindow::setFullText(){
     ui->label->setText(curentText);
 }
 
+// Added num in the object
 void MainWindow::PressNumberButton(QChar buttonNum){
     if(curent_object.getObjectType()>2){
         objects.push_back(curent_object);
@@ -109,6 +123,7 @@ void MainWindow::PressNumberButton(QChar buttonNum){
     setFullText();
 }
 
+// Added operator in the object
 void MainWindow::PressOperButton(QString buttonOper){
     if(curent_object.getObjectType()==0 || curent_object.getObjectType()==2 || curent_object.getObjectType()==5) return;
     if(buttonOper=='-' && curent_object.getObjectType()==3){
@@ -128,13 +143,17 @@ void MainWindow::PressOperButton(QString buttonOper){
     setFullText();
 }
 
+// Open function window
 void MainWindow::pressFunctionsButton(){
+    if(function_window_show==true) return;
     FunctionsWindow *functions_window=new FunctionsWindow();
     this->connect(functions_window,SIGNAL(pressFunction(QString)),this,SLOT(addedFunction(QString)));
     this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(closeWindow()));
     functions_window->show();
+    function_window_show=true;
 }
 
+// Added function in the object
 void MainWindow::addedFunction(QString _function){
     if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4 || flagAfterResult==true) return;
     if(curent_object.getObjectType()==5 || curent_object.getObjectType()==3 || curent_object.getObjectType()==7){
@@ -147,6 +166,7 @@ void MainWindow::addedFunction(QString _function){
     setFullText();
 }
 
+// Added dot in the object
 void MainWindow::ButtonDot(){
     if(curent_object.getObjectType()!=1) return;
     curent_object.addNum(',');
@@ -154,6 +174,7 @@ void MainWindow::ButtonDot(){
     setFullText();
 }
 
+// Clear all states
 void MainWindow::ButtonClear(){
     curentText="";
     objects.clear();
@@ -164,6 +185,7 @@ void MainWindow::ButtonClear(){
     setFullText();
 }
 
+// Added open brackets in the object
 void MainWindow::ButtonOpenBrackets(){
     if(curent_object.getObjectType()!=5 && curent_object.getObjectType()!=0) return;
     if(curent_object.getObjectType()!=0){
@@ -175,6 +197,7 @@ void MainWindow::ButtonOpenBrackets(){
     setFullText();
 }
 
+// Added close brackets in the object
 void MainWindow::ButtonCloseBrackets(){
     if(countOpenBracket==0) return;
     if(curent_object.getObjectType()!=1 && curent_object.getObjectType()!=2 && curent_object.getObjectType()!=4) return;
@@ -185,6 +208,7 @@ void MainWindow::ButtonCloseBrackets(){
     setFullText();
 }
 
+// Added minus oper after num to negative num
 void MainWindow::ButtonZnak(){
     if(curent_object.getObjectType()==4 || curent_object.getObjectType()==1 || curent_object.getObjectType()==2) return;
     if(curent_object.getObjectType()!=0) objects.push_back(curent_object);
@@ -195,6 +219,7 @@ void MainWindow::ButtonZnak(){
     setFullText();
 }
 
+// Calculate result and display on the screen
 void MainWindow::ButtonResult(){
     if(curentText.length()==0 || (curent_object.getObjectType()!=1 && curent_object.getObjectType()!=4)) return;
     if(countOpenBracket || countOper==0) return;
@@ -225,18 +250,24 @@ void MainWindow::ButtonResult(){
     countOper=0;
 }
 
+// Open history window
 void MainWindow::ButtonHistory(){
+    if(history_window_show==true) return;
     HistoryWindow* historyWindow=new HistoryWindow(&historyArr);
-    historyWindow->show();
     connect(this,SIGNAL(PressResult()),historyWindow,SLOT(UpdateHis()));
+    connect(this,SIGNAL(closeWindow()),historyWindow,SLOT(closeWindow()));
+    historyWindow->show();
+    history_window_show=true;
 }
 
+// Open options window
 void MainWindow::ButtonSettings(){
     SettingsWindow* settings_window=new SettingsWindow(this);
     this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(UpdateSettings()));
     settings_window->exec();
 }
 
+// Update settings after pressed accept in settings window
 void MainWindow::UpdateSettings(){
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
     function_acuracy=settings->value("calc/func_acuracy",10).toInt();
@@ -245,19 +276,26 @@ void MainWindow::UpdateSettings(){
     calculatorMathObject->setFunctionAccuracy(function_acuracy);
 }
 
+// Open mode window
 void MainWindow::ButtonChangeMode(){
     ModeWindow* mode_window=new ModeWindow(this);
     this->connect(mode_window,SIGNAL(changeMode(int)),this,SLOT(UpdateMode(int)));
     mode_window->exec();
 }
 
+// Change window after change calculator mode
 void MainWindow::UpdateMode(int _mode){
     if(_mode==1) return;
+
+    function_window_show=false;
+    history_window_show=false;
+
     emit closeWindow();
     emit changeWindow(_mode);
     this->hide();
 }
 
+// Delete last symbol in object
 void MainWindow::ButtonDeleteLast(){
     if(curent_object.getLength()==0){
         int size=objects.size()-1;
