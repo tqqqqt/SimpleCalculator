@@ -22,4 +22,6 @@ std::string MathCos(std::string degree, int div_acuracy, int function_acuracy);
 std::string MathTng(std::string degree, int div_acuracy, int function_acuracy);
 std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy);
 
+std::string MathFactorial(std::string num);
+
 #endif // NUMBERMATH_H

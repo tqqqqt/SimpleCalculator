@@ -310,3 +310,17 @@ std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy){
     std::string result=MathDiv(result_cos,result_sin,div_acuracy);
     return result;
 }
+
+std::string MathFactorial(std::string num){
+    if(num.find(',')!=std::string::npos) throw std::invalid_argument("incorect factorial num");
+    if(MaxNumber(num,"1")>=0) return "1";
+    std::string result="1", curent_num="2";
+    int check_end=0;
+    while(true){
+        check_end=MaxNumber(num,curent_num);
+        if(check_end==1) break;
+        result=MathMul(result,curent_num);
+        curent_num=MathSum(curent_num,"1");
+    }
+    return result;
+}
