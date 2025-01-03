@@ -148,7 +148,8 @@ void MainWindow::pressFunctionsButton(){
     if(function_window_show==true) return;
     FunctionsWindow *functions_window=new FunctionsWindow();
     this->connect(functions_window,SIGNAL(pressFunction(QString)),this,SLOT(addedFunction(QString)));
-    this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(closeWindow()));
+    this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(needCloseWindow()));
+    this->connect(functions_window,SIGNAL(updateWindowState()),this,SLOT(updateFunctionWindowState()));
     functions_window->show();
     function_window_show=true;
 }
@@ -255,7 +256,8 @@ void MainWindow::ButtonHistory(){
     if(history_window_show==true) return;
     HistoryWindow* historyWindow=new HistoryWindow(&historyArr);
     connect(this,SIGNAL(PressResult()),historyWindow,SLOT(UpdateHis()));
-    connect(this,SIGNAL(closeWindow()),historyWindow,SLOT(closeWindow()));
+    connect(this,SIGNAL(closeWindow()),historyWindow,SLOT(needCloseWindow()));
+    connect(historyWindow,SIGNAL(updateWindowState()),this,SLOT(updateHistoryWindowState()));
     historyWindow->show();
     history_window_show=true;
 }
@@ -327,4 +329,12 @@ void MainWindow::ButtonDeleteLast(){
     }
     if(flagAfterResult) flagAfterResult=false;
     setFullText();
+}
+
+void MainWindow::updateFunctionWindowState(){
+    function_window_show=false;
+}
+
+void MainWindow::updateHistoryWindowState(){
+    history_window_show=false;
 }

@@ -71,6 +71,8 @@ private slots:
     void UpdateSettings();
     void ButtonChangeMode();
     void UpdateMode(int);
+    void updateFunctionWindowState();
+    void updateHistoryWindowState();
 };
 
 #endif  // MAINWINDOW_H
