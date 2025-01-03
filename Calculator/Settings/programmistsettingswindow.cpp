@@ -19,13 +19,16 @@ ProgrammistSettingsWindow::~ProgrammistSettingsWindow()
     delete ui;
 }
 
+// Save new settings and emit signal to calculator
 void ProgrammistSettingsWindow::buttonAccept(){
     QSettings settings("tqqqqt","calculator");
     settings.setValue("progr/count",ui->spinBox_count->value());
+
     emit acceptSettings();
     this->close();
 }
 
+// Regect change settings and close window
 void ProgrammistSettingsWindow::buttonClose(){
     this->close();
 }

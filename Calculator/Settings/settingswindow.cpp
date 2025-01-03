@@ -19,14 +19,17 @@ SettingsWindow::~SettingsWindow()
     delete ui;
 }
 
+// Save in settings new value and emit signal to calculator
 void SettingsWindow::buttonAccept(){
     QSettings settings("tqqqqt","calculator");
     settings.setValue("calc/acuracy",ui->spinBox_div_acuracy->value());
     settings.setValue("calc/func_acuracy",ui->spinBox_function_acuracy->value());
+
     emit acceptSettings();
     this->close();
 }
 
+// Regect change settings
 void SettingsWindow::buttonClose(){
     this->close();
 }
