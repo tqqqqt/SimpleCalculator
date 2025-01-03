@@ -18,10 +18,12 @@ FunctionsWindow::~FunctionsWindow()
     delete ui;
 }
 
+// Send to calculator what function selected
 void FunctionsWindow::pressButtons(QString _function){
     emit pressFunction(_function);
 }
 
+// Close window when calculator window mode change
 void FunctionsWindow::closeWindow(){
     this->close();
 }

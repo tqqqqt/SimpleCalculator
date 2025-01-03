@@ -24,6 +24,7 @@ private:
 
 public slots:
     void UpdateHis();
+    void closeWindow();
 };
 
 #endif // HISTORYWINDOW_H
