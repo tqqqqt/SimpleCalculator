@@ -24,6 +24,12 @@ void FunctionsWindow::pressButtons(QString _function){
 }
 
 // Close window when calculator window mode change
-void FunctionsWindow::closeWindow(){
+void FunctionsWindow::needCloseWindow(){
     this->close();
+}
+
+// Send signal to calculator to change state and close window
+void FunctionsWindow::closeEvent(QCloseEvent *event){
+    emit updateWindowState();
+    event->accept();
 }

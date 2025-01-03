@@ -2,6 +2,7 @@
 #define FUNCTIONSWINDOW_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 
 namespace Ui {
 class FunctionsWindow;
@@ -18,12 +19,16 @@ public:
 private:
     Ui::FunctionsWindow *ui;
 
+private:
+    void closeEvent(QCloseEvent*);
+
 private slots:
     void pressButtons(QString);
-    void closeWindow();
+    void needCloseWindow();
 
 signals:
     void pressFunction(QString);
+    void updateWindowState();
 };
 
 #endif // FUNCTIONSWINDOW_H

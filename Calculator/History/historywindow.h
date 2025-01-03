@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStringListModel>
 #include <QVector>
+#include <QCloseEvent>
 
 namespace Ui {
 class HistoryWindow;
@@ -22,9 +23,15 @@ private:
     Ui::HistoryWindow *ui;
     QVector<QString>* memory;
 
+private:
+    void closeEvent(QCloseEvent*);
+
 public slots:
     void UpdateHis();
-    void closeWindow();
+    void needCloseWindow();
+
+signals:
+    void updateWindowState();
 };
 
 #endif // HISTORYWINDOW_H

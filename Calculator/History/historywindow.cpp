@@ -30,6 +30,12 @@ void HistoryWindow::UpdateHis(){
 }
 
 // Close window when calculcator window mode change
-void HistoryWindow::closeWindow(){
+void HistoryWindow::needCloseWindow(){
     this->close();
+}
+
+// Send signal to calculator for change state and close window
+void HistoryWindow::closeEvent(QCloseEvent *event){
+    emit updateWindowState();
+    event->accept();
 }
