@@ -28,6 +28,7 @@ private slots:
 
 signals:
     void pressFunction(QString);
+    void pressSpecialFunction(QString);
     void updateWindowState();
 };
 
