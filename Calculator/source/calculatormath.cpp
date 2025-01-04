@@ -11,6 +11,7 @@ CalculatorMath::~CalculatorMath(){ }
 int CalculatorMath::CheckPrior(std::string _oper){
     if(_oper=="+" || _oper=="-") return 1;
     if(_oper=="*" || _oper=="/") return 2;
+    if(_oper=="mod") return 3;
     return 0;
 }
 
@@ -22,18 +23,17 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
         object_type=element.getObjectType();
         if(object_type==1){
             polishEntry.push_back(element);
-            if(element.toString()[0]=='('){
-                CalculatorObject temp;
-                temp.addSymbol("(");
-                oper_mas.push(temp);
-            }
             continue;
         }
-        if(object_type==6 || object_type==7){
+        if(object_type==2 || object_type==6 || object_type==7){
             CalculatorObject temp;
             temp.addSymbol("(");
             oper_mas.push(element);
             oper_mas.push(temp);
+            continue;
+        }
+        if(object_type==8){
+            polishEntry.push_back(element);
             continue;
         }
         if(object_type==3){
@@ -78,12 +78,18 @@ CalculatorObject CalculatorMath::GetResult(){
             else if(polishEntry[i].toString()=="*") polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else if(polishEntry[i].toString()=="/") polishEntry[i-2].setFullNum(MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy));
             else if(polishEntry[i].toString()=="^(") polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            else if(polishEntry[i].toString()=="mod") polishEntry[i-2].setFullNum(MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else{
                 delete_mode=1;
-                if(polishEntry[i].toString()=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
+                if(polishEntry[i].toString()=="(-") polishEntry[i-1].setFullNum(MathMul(polishEntry[i-1].toString(),"-1"));
+                else if(polishEntry[i].toString()=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
                 else if(polishEntry[i].toString()=="Cos(") polishEntry[i-1].setFullNum(MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
                 else if(polishEntry[i].toString()=="Tng(") polishEntry[i-1].setFullNum(MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
                 else if(polishEntry[i].toString()=="Ctng(") polishEntry[i-1].setFullNum(MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="!") polishEntry[i-1].setFullNum(MathFactorial(polishEntry[i-1].toString()));
+                else if(polishEntry[i].toString()=="Module(") polishEntry[i-1].setFullNum(MathModule(polishEntry[i-1].toString()));
+                else if(polishEntry[i].toString()=="RoundUp(") polishEntry[i-1].setFullNum(MathRoundUp(polishEntry[i-1].toString()));
+                else if(polishEntry[i].toString()=="RoundDown(") polishEntry[i-1].setFullNum(MathRoundDown(polishEntry[i-1].toString()));
             }
         } catch (std::exception) {
             throw;
