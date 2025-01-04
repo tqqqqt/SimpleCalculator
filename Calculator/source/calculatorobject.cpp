@@ -60,9 +60,11 @@ void CalculatorObject::addSymbol(std::string _symbol){
 }
 
 void CalculatorObject::addFunction(std::string _function){
-    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(") throw std::invalid_argument("input not a function");
+    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="!" && _function!="mod" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(") throw std::invalid_argument("input not a function");
     if(object_type!=0) return;
-    object_type=7;
+    if(_function=="mod") object_type=5;
+    if(_function=="!") object_type=8;
+    else object_type=7;
     text=_function;
     length=text.length();
 }
