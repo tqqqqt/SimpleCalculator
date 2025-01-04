@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
-    <height>117</height>
+    <width>386</width>
+    <height>159</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,15 +21,15 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pushButton_sin">
+    <item row="0" column="2">
+     <widget class="QPushButton" name="pushButton_fact">
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>9</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>Sin</string>
+       <string>!</string>
       </property>
      </widget>
     </item>
@@ -45,15 +45,15 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="pushButton_tng">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pushButton_sin">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>Tng</string>
+       <string>Sin</string>
       </property>
      </widget>
     </item>
@@ -69,6 +69,66 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushButton_tng">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Tng</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="pushButton_mod">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>mod</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pushButton_module">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Module</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton_round_up">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>RoundUp</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="pushButton_round_down">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>RoundDown</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -76,7 +136,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>274</width>
+     <width>386</width>
      <height>26</height>
     </rect>
    </property>
