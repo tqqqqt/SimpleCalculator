@@ -312,7 +312,7 @@ std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy){
 }
 
 std::string MathFactorial(std::string num){
-    if(num.find(',')!=std::string::npos) throw std::invalid_argument("incorect factorial num");
+    if(num.find(',')!=std::string::npos || num.find('-')!=std::string::npos) throw std::invalid_argument("incorect factorial num");
     if(MaxNumber(num,"1")>=0) return "1";
     std::string result="1", curent_num="2";
     int check_end=0;
@@ -321,6 +321,48 @@ std::string MathFactorial(std::string num){
         if(check_end==1) break;
         result=MathMul(result,curent_num);
         curent_num=MathSum(curent_num,"1");
+    }
+    return result;
+}
+
+std::string MathMod(std::string num, std::string mod_num){
+    if(mod_num[0]=='-') mod_num=mod_num.substr(1);
+    std::string module_num=MathModule(num), div_result=MathDiv(module_num,mod_num,10);
+    std::string temp_result=MathRoundDown(div_result), result=MathNeg(module_num,MathMul(mod_num,temp_result));
+    if(num[0]!='-') return result;
+    result=MathNeg(mod_num,result);
+    return result;
+}
+
+std::string MathModule(std::string num){
+    if(num.find('-')==std::string::npos) return num;
+    if(num.find('-')!=0) throw std::invalid_argument("incorect num or incorect minus position");
+    std::string result=num.substr(1);
+    return result;
+}
+
+std::string MathRoundUp(std::string num){
+    if(num.find(',')==std::string::npos) return num;
+    size_t size=num.length(), i=0;
+    std::string result="";
+    while(i<size){
+        if(num[i]==',') break;
+        result+=num[i];
+        i++;
+    }
+    std::string temp_num='0'+num.substr(i);
+    if(MaxNumber(temp_num,"0,5")<=0) result=MathSum(result,"1");
+    return result;
+}
+
+std::string MathRoundDown(std::string num){
+    if(num.find(',')==std::string::npos) return num;
+    std::string result="";
+    size_t i=0, size=num.length();
+    while(i<size){
+        if(num[i]==',') break;
+        result+=num[i];
+        i++;
     }
     return result;
 }
