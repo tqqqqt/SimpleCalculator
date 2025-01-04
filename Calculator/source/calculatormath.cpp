@@ -46,7 +46,7 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
                 oper_mas.pop();
             }
             oper_mas.pop();
-            if(oper_mas.size() && (oper_mas.top().getObjectType()==6 || oper_mas.top().getObjectType()==7)){
+            if(oper_mas.size() && (oper_mas.top().getObjectType()==2 || oper_mas.top().getObjectType()==6 || oper_mas.top().getObjectType()==7)){
                 polishEntry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
