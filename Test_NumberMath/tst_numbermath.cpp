@@ -298,19 +298,54 @@ void numbermath::test_mathDiv(){
 }
 
 void numbermath::test_mathPow_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<QString>("pow_num");
+    QTest::addColumn<int>("div_acuracy");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<"6"<<10<<"64";
+    QTest::newRow("test_2")<<"2"<<"0"<<10<<"1";
+    QTest::newRow("test_3")<<"2"<<"1"<<10<<"2";
+    QTest::newRow("test_4")<<"3,466"<<"12"<<10<<"3005679,716419116273457363412193535228973056";
+    QTest::newRow("test_5")<<"23"<<"10"<<10<<"41426511213649";
+    QTest::newRow("test_6")<<"2"<<"-8"<<10<<"0,00390625";
 }
 
 void numbermath::test_mathPow(){
+    QFETCH(QString,num);
+    QFETCH(QString,pow_num);
+    QFETCH(int,div_acuracy);
+    QFETCH(QString,result);
 
+    std::string curent_result="";
+
+    try{
+        curent_result=MathPow(num.toStdString(),pow_num.toStdString(),div_acuracy);
+        QCOMPARE(curent_result,result.toStdString());
+    }
+    catch(std::exception &exp){
+        QCOMPARE(exp.what(),result.toStdString());
+    }
 }
 
 void numbermath::test_mathSin_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<int>("div_acuracy");
+    QTest::addColumn<int>("function_acuracy");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<10<<10<<"0,0348994966";
 }
 
 void numbermath::test_mathSin(){
+    QFETCH(QString,num);
+    QFETCH(int,div_acuracy);
+    QFETCH(int,function_acuracy);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathSin(num.toStdString(),div_acuracy,function_acuracy);
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathCos_data(){
