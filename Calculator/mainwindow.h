@@ -59,6 +59,7 @@ private slots:
     void PressOperButton(QString buttonOper);
     void pressFunctionsButton();
     void addedFunction(QString);
+    void addedSpecialFunction(QString);
     void ButtonDot();
     void ButtonClear();
     void ButtonOpenBrackets();

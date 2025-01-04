@@ -111,7 +111,7 @@ void MainWindow::setFullText(){
 
 // Added num in the object
 void MainWindow::PressNumberButton(QChar buttonNum){
-    if(curent_object.getObjectType()>2){
+    if(curent_object.getObjectType()>1){
         objects.push_back(curent_object);
         curent_object.clear();
     }
@@ -132,10 +132,10 @@ void MainWindow::PressOperButton(QString buttonOper){
         setFullText();
         return;
     }
-    if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4){
+   // if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4 || curent_object.getObjectType()==8){
         objects.push_back(curent_object);
         curent_object.clear();
-    }
+   // }
     curent_object.addSymbol(buttonOper.toStdString());
     countOper++;
     if(buttonOper=="^(") countOpenBracket++;
@@ -148,6 +148,7 @@ void MainWindow::pressFunctionsButton(){
     if(function_window_show==true) return;
     FunctionsWindow *functions_window=new FunctionsWindow();
     this->connect(functions_window,SIGNAL(pressFunction(QString)),this,SLOT(addedFunction(QString)));
+    this->connect(functions_window,SIGNAL(pressSpecialFunction(QString)),this,SLOT(addedSpecialFunction(QString)));
     this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(needCloseWindow()));
     this->connect(functions_window,SIGNAL(updateWindowState()),this,SLOT(updateFunctionWindowState()));
     functions_window->show();
@@ -157,13 +158,23 @@ void MainWindow::pressFunctionsButton(){
 // Added function in the object
 void MainWindow::addedFunction(QString _function){
     if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4 || flagAfterResult==true) return;
-    if(curent_object.getObjectType()==5 || curent_object.getObjectType()==3 || curent_object.getObjectType()==7){
+    if(curent_object.getObjectType()==5 || curent_object.getObjectType()==3 || curent_object.getObjectType()==7 || curent_object.getObjectType()==2){
         objects.push_back(curent_object);
         curent_object.clear();
     }
     curent_object.addFunction(_function.toStdString());
     countOper+=1;
     countOpenBracket+=1;
+    setFullText();
+}
+
+// Added mod and factorial functions
+void MainWindow::addedSpecialFunction(QString _function){
+    if(curent_object.getObjectType()!=1 && curent_object.getObjectType()!=4) return;
+    objects.push_back(curent_object);
+    curent_object.clear();
+    curent_object.addFunction(_function.toStdString());
+    countOper+=1;
     setFullText();
 }
 
@@ -188,7 +199,7 @@ void MainWindow::ButtonClear(){
 
 // Added open brackets in the object
 void MainWindow::ButtonOpenBrackets(){
-    if(curent_object.getObjectType()!=5 && curent_object.getObjectType()!=0) return;
+    if(curent_object.getObjectType()!=5 && curent_object.getObjectType()!=0 && curent_object.getObjectType()!=2 && curent_object.getObjectType()!=3) return;
     if(curent_object.getObjectType()!=0){
         objects.push_back(curent_object);
         curent_object.clear();
@@ -222,7 +233,7 @@ void MainWindow::ButtonZnak(){
 
 // Calculate result and display on the screen
 void MainWindow::ButtonResult(){
-    if(curentText.length()==0 || (curent_object.getObjectType()!=1 && curent_object.getObjectType()!=4)) return;
+    if(curentText.length()==0 || (curent_object.getObjectType()!=1 && curent_object.getObjectType()!=4 && curent_object.getObjectType()!=8)) return;
     if(countOpenBracket || countOper==0) return;
     QString save_calculator_text=curentText;
     try {
