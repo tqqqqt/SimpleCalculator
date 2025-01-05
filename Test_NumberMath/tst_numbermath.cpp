@@ -334,7 +334,17 @@ void numbermath::test_mathSin_data(){
     QTest::addColumn<int>("function_acuracy");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("test_1")<<"2"<<10<<10<<"0,0348994966";
+    QTest::newRow("test_1")<<"2"<<10<<20<<"0,0348994966";
+    QTest::newRow("test_2")<<"0"<<10<<20<<"0";
+    QTest::newRow("test_3")<<"35"<<10<<20<<"0,5735764363";
+    QTest::newRow("test_4")<<"2,18"<<10<<20<<"0,0380389982";
+    QTest::newRow("test_5")<<"0,001"<<10<<20<<"0,0000174533";
+    QTest::newRow("test_6")<<"480"<<10<<20<<"0,8660254038";
+    QTest::newRow("test_7")<<"999"<<10<<20<<"-0,9876883406";
+    QTest::newRow("test_8")<<"-44"<<10<<20<<"-0,6946583705";
+    QTest::newRow("test_9")<<"-0,123"<<10<<20<<"-0,0021467534";
+    QTest::newRow("test_10")<<"-189,99"<<10<<20<<"0,1734762936";
+    QTest::newRow("test_11")<<"-888"<<10<<20<<"-0,2079116908";
 }
 
 void numbermath::test_mathSin(){
@@ -349,67 +359,205 @@ void numbermath::test_mathSin(){
 }
 
 void numbermath::test_mathCos_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<int>("div_acuracy");
+    QTest::addColumn<int>("function_acuracy");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<10<<20<<"0,9993908271";
+    QTest::newRow("test_2")<<"0"<<10<<20<<"1";
+    QTest::newRow("test_3")<<"0,001"<<10<<20<<"0,9999999998";
+    QTest::newRow("test_4")<<"0,024"<<10<<20<<"0,9999999123";
+    QTest::newRow("test_5")<<"27"<<10<<20<<"0,8910065242";
+    QTest::newRow("test_6")<<"-12"<<10<<20<<"0,9781476008";
+    QTest::newRow("test_7")<<"-6,002"<<10<<20<<"0,9945182460";
+    QTest::newRow("test_8")<<"-123"<<10<<20<<"-0,5446390351";
+    QTest::newRow("test_9")<<"888"<<10<<20<<"-0,9781476007";
+    QTest::newRow("test_10")<<"-999"<<10<<20<<"0,156434465";
 }
 
 void numbermath::test_mathCos(){
+    QFETCH(QString,num);
+    QFETCH(int,div_acuracy);
+    QFETCH(int,function_acuracy);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathCos(num.toStdString(),div_acuracy,function_acuracy);
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathTng_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<int>("div_acuracy");
+    QTest::addColumn<int>("function_acuracy");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<10<<20<<"0,0349207694";
+    QTest::newRow("test_2")<<"6"<<10<<20<<"0,1051042352";
+    QTest::newRow("test_3")<<"0,01"<<10<<20<<"0,0001745329";
+    QTest::newRow("test_4")<<"34,23"<<10<<20<<"0,6803649964";
+    QTest::newRow("test_5")<<"-8"<<10<<20<<"-0,1405408347";
+    QTest::newRow("test_6")<<"-99,333"<<10<<20<<"6,0846592905";
+    QTest::newRow("test_7")<<"-0,00002"<<10<<20<<"-0,0000003491";
+    QTest::newRow("test_8")<<"898"<<10<<20<<"-0,0349207695";
+    QTest::newRow("test_9")<<"-989"<<10<<20<<"-57,2899616308";
 }
 
 void numbermath::test_mathTng(){
+    QFETCH(QString,num);
+    QFETCH(int,div_acuracy);
+    QFETCH(int,function_acuracy);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathTng(num.toStdString(),div_acuracy,function_acuracy);
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathCtng_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<int>("div_acuracy");
+    QTest::addColumn<int>("function_acuracy");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<10<<20<<"28,6362533693";
+    QTest::newRow("test_2")<<"8"<<10<<20<<"7,1153697208";
+    QTest::newRow("test_3")<<"0,01"<<10<<20<<"5729,5786914673";
+    QTest::newRow("test_4")<<"23,32"<<10<<20<<"2,3197447516";
+    QTest::newRow("test_5")<<"-43"<<10<<20<<"-1,0723687104";
+    QTest::newRow("test_6")<<"-1,123"<<10<<20<<"-51,0137509797";
+    QTest::newRow("test_7")<<"-89"<<10<<20<<"-0,0174550649";
+    QTest::newRow("test_8")<<"989"<<10<<20<<"0,0174550649";
+    QTest::newRow("test_9")<<"-898"<<10<<20<<"28,6362532829";
 }
 
 void numbermath::test_mathCtng(){
+    QFETCH(QString,num);
+    QFETCH(int,div_acuracy);
+    QFETCH(int,function_acuracy);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathCtng(num.toStdString(),div_acuracy,function_acuracy);
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathFactorial_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<"2";
+    QTest::newRow("test_2")<<"12"<<"479001600";
+    QTest::newRow("test_3")<<"20"<<"2432902008176640000";
+    QTest::newRow("test_4")<<"6"<<"720";
+    QTest::newRow("test_5")<<"-15"<<"incorect factorial num";
+    QTest::newRow("test_6")<<"4,23"<<"incorect factorial num";
 }
 
 void numbermath::test_mathFactorial(){
+    QFETCH(QString,num);
+    QFETCH(QString,result);
 
+    std::string curent_result="";
+
+    try{
+        curent_result=MathFactorial(num.toStdString());
+        QCOMPARE(curent_result,result.toStdString());
+    }
+    catch(std::exception &exp){
+        QCOMPARE(exp.what(),result.toStdString());
+    }
 }
 
 void numbermath::test_mathMod_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<QString>("mod_num");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<"5"<<"2";
+    QTest::newRow("test_2")<<"12"<<"5"<<"2";
+    QTest::newRow("test_3")<<"37"<<"1"<<"0";
+    QTest::newRow("test_4")<<"1"<<"0"<<"1";
+    QTest::newRow("test_5")<<"-12"<<"5"<<"3";
+    QTest::newRow("test_6")<<"-28"<<"3"<<"2";
+    QTest::newRow("test_7")<<"-12"<<"-5"<<"3";
+    QTest::newRow("test_8")<<"-2"<<"1"<<"0";
 }
 
 void numbermath::test_mathMod(){
+    QFETCH(QString,num);
+    QFETCH(QString,mod_num);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathMod(num.toStdString(),mod_num.toStdString());
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathModule_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"23"<<"23";
+    QTest::newRow("test_2")<<"2,23"<<"2,23";
+    QTest::newRow("test_3")<<"-12"<<"12";
+    QTest::newRow("test_4")<<"16"<<"16";
+    QTest::newRow("test_5")<<"-0,0001"<<"0,0001";
+    QTest::newRow("test_6")<<"-999999"<<"999999";
 }
 
 void numbermath::test_mathModule(){
+    QFETCH(QString,num);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathModule(num.toStdString());
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathRoundUp_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<"2";
+    QTest::newRow("test_2")<<"12"<<"12";
+    QTest::newRow("test_3")<<"2,54"<<"3";
+    QTest::newRow("test_4")<<"1,000009"<<"1";
+    QTest::newRow("test_5")<<"-12,99"<<"-13";
+    QTest::newRow("test_6")<<"-44"<<"-44";
+    QTest::newRow("test_7")<<"23,49999"<<"23";
 }
 
 void numbermath::test_mathRoundUp(){
+    QFETCH(QString,num);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathRoundUp(num.toStdString());
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathRoundDown_data(){
+    QTest::addColumn<QString>("num");
+    QTest::addColumn<QString>("result");
 
+    QTest::newRow("test_1")<<"2"<<"2";
+    QTest::newRow("test_2")<<"23"<<"23";
+    QTest::newRow("test_3")<<"1,009"<<"1";
+    QTest::newRow("test_4")<<"-12"<<"-12";
+    QTest::newRow("test_5")<<"-4,666"<<"-4";
+    QTest::newRow("test_6")<<"-0,01"<<"0";
+    QTest::newRow("test_7")<<"0,01"<<"0";
 }
 
 void numbermath::test_mathRoundDown(){
+    QFETCH(QString,num);
+    QFETCH(QString,result);
 
+    std::string curent_result=MathRoundDown(num.toStdString());
+
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 QTEST_APPLESS_MAIN(numbermath)
