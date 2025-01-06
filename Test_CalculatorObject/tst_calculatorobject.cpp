@@ -113,7 +113,7 @@ void calculatorobject::test_getObjectType(){
     if(input_type==1) object.addNum(input.toStdString()[0]);
     else object.addSymbol(input.toStdString());
 
-    int curent_result=object.getObjectType();
+    int curent_result=static_cast<int>(object.getObjectType());
 
     QCOMPARE(curent_result,type);
 }
@@ -273,7 +273,7 @@ void calculatorobject::test_deleteLastSymbol(){
     else object.setFullNum(input.toStdString());
     object.deleteLastSymbol();
 
-    int curent_type=object.getObjectType(), curent_length=object.getLength();
+    int curent_type=static_cast<int>(object.getObjectType()), curent_length=object.getLength();
     std::string curent_result=object.toString();
 
     QCOMPARE(curent_type,type_object);

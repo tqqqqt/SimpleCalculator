@@ -85,6 +85,7 @@ void MainWindow::loadStyle(){
     QTextStream file_str(&file);
     QString content=file_str.readAll();
     file.close();
+
     this->setStyleSheet(content);
 }
 
@@ -104,14 +105,16 @@ void MainWindow::loadIcons(){
 // Collect text from all objects and display it on the screen
 void MainWindow::setFullText(){
     curentText="";
-    for(auto element:objects) curentText+=QString::fromStdString(element.toString());
+    for(auto element:objects){
+        curentText+=QString::fromStdString(element.toString());
+    }
     curentText+=QString::fromStdString(curent_object.toString());
     ui->label->setText(curentText);
 }
 
 // Added num in the object
 void MainWindow::PressNumberButton(QChar buttonNum){
-    if(curent_object.getObjectType()>1){
+    if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
         curent_object.clear();
     }
@@ -125,20 +128,20 @@ void MainWindow::PressNumberButton(QChar buttonNum){
 
 // Added operator in the object
 void MainWindow::PressOperButton(QString buttonOper){
-    if(curent_object.getObjectType()==0 || curent_object.getObjectType()==2 || curent_object.getObjectType()==5 || curent_object.getObjectType()==7) return;
-    if(buttonOper=='-' && curent_object.getObjectType()==3){
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::None || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Functins) return;
+    if(buttonOper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets){
         curent_object.addSymbol("-");
         if(flagAfterResult) flagAfterResult=false;
         setFullText();
         return;
     }
-   // if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4 || curent_object.getObjectType()==8){
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
-   // }
+    }
     curent_object.addSymbol(buttonOper.toStdString());
-    countOper++;
-    if(buttonOper=="^(") countOpenBracket++;
+    countOper+=1;
+    if(buttonOper=="^(") countOpenBracket+=1;
     if(flagAfterResult) flagAfterResult=false;
     setFullText();
 }
@@ -157,8 +160,8 @@ void MainWindow::pressFunctionsButton(){
 
 // Added function in the object
 void MainWindow::addedFunction(QString _function){
-    if(curent_object.getObjectType()==1 || curent_object.getObjectType()==4 || flagAfterResult==true) return;
-    if(curent_object.getObjectType()==5 || curent_object.getObjectType()==3 || curent_object.getObjectType()==7 || curent_object.getObjectType()==2){
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || flagAfterResult==true) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
     }
@@ -170,7 +173,7 @@ void MainWindow::addedFunction(QString _function){
 
 // Added mod and factorial functions
 void MainWindow::addedSpecialFunction(QString _function){
-    if(curent_object.getObjectType()!=1 && curent_object.getObjectType()!=4) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addFunction(_function.toStdString());
@@ -180,7 +183,7 @@ void MainWindow::addedSpecialFunction(QString _function){
 
 // Added dot in the object
 void MainWindow::ButtonDot(){
-    if(curent_object.getObjectType()!=1) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num) return;
     curent_object.addNum(',');
     if(flagAfterResult) flagAfterResult=false;
     setFullText();
@@ -199,8 +202,8 @@ void MainWindow::ButtonClear(){
 
 // Added open brackets in the object
 void MainWindow::ButtonOpenBrackets(){
-    if(curent_object.getObjectType()!=5 && curent_object.getObjectType()!=0 && curent_object.getObjectType()!=2 && curent_object.getObjectType()!=3 && curent_object.getObjectType()!=7) return;
-    if(curent_object.getObjectType()!=0){
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
     }
@@ -212,7 +215,7 @@ void MainWindow::ButtonOpenBrackets(){
 // Added close brackets in the object
 void MainWindow::ButtonCloseBrackets(){
     if(countOpenBracket==0) return;
-    if(curent_object.getObjectType()!=1 && curent_object.getObjectType()!=2 && curent_object.getObjectType()!=4) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol(")");
@@ -222,8 +225,8 @@ void MainWindow::ButtonCloseBrackets(){
 
 // Added minus oper after num to negative num
 void MainWindow::ButtonZnak(){
-    if(curent_object.getObjectType()==4 || curent_object.getObjectType()==1 || curent_object.getObjectType()==2) return;
-    if(curent_object.getObjectType()!=0) objects.push_back(curent_object);
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol("(-");
     countOpenBracket++;
@@ -233,7 +236,7 @@ void MainWindow::ButtonZnak(){
 
 // Calculate result and display on the screen
 void MainWindow::ButtonResult(){
-    if(curentText.length()==0 || (curent_object.getObjectType()!=1 && curent_object.getObjectType()!=4 && curent_object.getObjectType()!=8)) return;
+    if(curentText.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial)) return;
     if(countOpenBracket || countOper==0) return;
     QString save_calculator_text=curentText;
     try {
@@ -327,9 +330,9 @@ void MainWindow::ButtonDeleteLast(){
         }
         return;
     }
-    if(curent_object.getObjectType()==5) countOper--;
-    else if(curent_object.getObjectType()==4) countOpenBracket++;
-    else if(curent_object.getObjectType()==3) countOpenBracket--;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators) countOper--;
+    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) countOpenBracket++;
+    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets) countOpenBracket--;
     curent_object.deleteLastSymbol();
     if(curent_object.getLength()==0){
         if(objects.size()==0) curent_object.clear();
