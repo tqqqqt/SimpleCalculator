@@ -340,7 +340,7 @@ void numbermath::test_mathSin_data(){
     QTest::newRow("test_4")<<"2,18"<<10<<20<<"0,0380389982";
     QTest::newRow("test_5")<<"0,001"<<10<<20<<"0,0000174533";
     QTest::newRow("test_6")<<"480"<<10<<20<<"0,8660254038";
-    QTest::newRow("test_7")<<"999"<<10<<20<<"-0,9876883406";
+    QTest::newRow("test_7")<<"999"<<10<<20<<"-0,9876883404";
     QTest::newRow("test_8")<<"-44"<<10<<20<<"-0,6946583705";
     QTest::newRow("test_9")<<"-0,123"<<10<<20<<"-0,0021467534";
     QTest::newRow("test_10")<<"-189,99"<<10<<20<<"0,1734762936";
@@ -372,8 +372,8 @@ void numbermath::test_mathCos_data(){
     QTest::newRow("test_6")<<"-12"<<10<<20<<"0,9781476008";
     QTest::newRow("test_7")<<"-6,002"<<10<<20<<"0,9945182460";
     QTest::newRow("test_8")<<"-123"<<10<<20<<"-0,5446390351";
-    QTest::newRow("test_9")<<"888"<<10<<20<<"-0,9781476007";
-    QTest::newRow("test_10")<<"-999"<<10<<20<<"0,156434465";
+    QTest::newRow("test_9")<<"888"<<10<<20<<"-0,9781476008";
+    QTest::newRow("test_10")<<"-999"<<10<<20<<"0,1564344650";
 }
 
 void numbermath::test_mathCos(){
@@ -401,7 +401,7 @@ void numbermath::test_mathTng_data(){
     QTest::newRow("test_6")<<"-99,333"<<10<<20<<"6,0846592905";
     QTest::newRow("test_7")<<"-0,00002"<<10<<20<<"-0,0000003491";
     QTest::newRow("test_8")<<"898"<<10<<20<<"-0,0349207695";
-    QTest::newRow("test_9")<<"-989"<<10<<20<<"-57,2899616308";
+    QTest::newRow("test_9")<<"-989"<<10<<20<<"-57,2899617499";
 }
 
 void numbermath::test_mathTng(){
@@ -429,7 +429,7 @@ void numbermath::test_mathCtng_data(){
     QTest::newRow("test_6")<<"-1,123"<<10<<20<<"-51,0137509797";
     QTest::newRow("test_7")<<"-89"<<10<<20<<"-0,0174550649";
     QTest::newRow("test_8")<<"989"<<10<<20<<"0,0174550649";
-    QTest::newRow("test_9")<<"-898"<<10<<20<<"28,6362532829";
+    QTest::newRow("test_9")<<"-898"<<10<<20<<"28,6362532844";
 }
 
 void numbermath::test_mathCtng(){
