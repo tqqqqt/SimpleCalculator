@@ -44,6 +44,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_graphics">
+        <property name="text">
+         <string>Графики</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

@@ -9,6 +9,7 @@ ModeWindow::ModeWindow(QWidget *parent) :
     this->connect(ui->pushButton_calc,&QPushButton::clicked,[this]{ buttonMode(1); });
     this->connect(ui->pushButton_val,&QPushButton::clicked,[this]{ buttonMode(2); });
     this->connect(ui->pushButton_prog,&QPushButton::clicked,[this]{ buttonMode(3); });
+    this->connect(ui->pushButton_graphics,&QPushButton::clicked,[this]{ buttonMode(4); });
 }
 
 ModeWindow::~ModeWindow()
