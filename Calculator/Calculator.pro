@@ -26,6 +26,8 @@ CONFIG += c++11
 
 SOURCES += \
         Functions/functionswindow.cpp \
+        Graphics/GraphicsInfo/graphicsinfowindow.cpp \
+        Graphics/GraphicsPainter/graphicspainterwindow.cpp \
         History/historywindow.cpp \
         Mode/modewindow.cpp \
         Programmist/programmistwindow.cpp \
@@ -43,6 +45,8 @@ SOURCES += \
 
 HEADERS += \
         Functions/functionswindow.h \
+        Graphics/GraphicsInfo/graphicsinfowindow.h \
+        Graphics/GraphicsPainter/graphicspainterwindow.h \
         History/historywindow.h \
         Mode/modewindow.h \
         Programmist/programmistwindow.h \
@@ -60,6 +64,8 @@ HEADERS += \
 
 FORMS += \
         Functions/functionswindow.ui \
+        Graphics/GraphicsInfo/graphicsinfowindow.ui \
+        Graphics/GraphicsPainter/graphicspainterwindow.ui \
         History/historywindow.ui \
         Mode/modewindow.ui \
         Programmist/programmistwindow.ui \
