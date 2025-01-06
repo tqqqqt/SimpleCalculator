@@ -125,7 +125,7 @@ void MainWindow::PressNumberButton(QChar buttonNum){
 
 // Added operator in the object
 void MainWindow::PressOperButton(QString buttonOper){
-    if(curent_object.getObjectType()==0 || curent_object.getObjectType()==2 || curent_object.getObjectType()==5) return;
+    if(curent_object.getObjectType()==0 || curent_object.getObjectType()==2 || curent_object.getObjectType()==5 || curent_object.getObjectType()==7) return;
     if(buttonOper=='-' && curent_object.getObjectType()==3){
         curent_object.addSymbol("-");
         if(flagAfterResult) flagAfterResult=false;
@@ -199,7 +199,7 @@ void MainWindow::ButtonClear(){
 
 // Added open brackets in the object
 void MainWindow::ButtonOpenBrackets(){
-    if(curent_object.getObjectType()!=5 && curent_object.getObjectType()!=0 && curent_object.getObjectType()!=2 && curent_object.getObjectType()!=3) return;
+    if(curent_object.getObjectType()!=5 && curent_object.getObjectType()!=0 && curent_object.getObjectType()!=2 && curent_object.getObjectType()!=3 && curent_object.getObjectType()!=7) return;
     if(curent_object.getObjectType()!=0){
         objects.push_back(curent_object);
         curent_object.clear();
