@@ -18,35 +18,35 @@ int CalculatorMath::CheckPrior(std::string _oper){
 void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
     polishEntry.clear();
     std::stack<CalculatorObject> oper_mas;
-    int object_type=-1;
+    CalculatorObject::ObjectsTypes object_type=CalculatorObject::ObjectsTypes::None;
     for(CalculatorObject element:_objects){
         object_type=element.getObjectType();
-        if(object_type==1){
+        if(object_type==CalculatorObject::ObjectsTypes::Num){
             polishEntry.push_back(element);
             continue;
         }
-        if(object_type==2 || object_type==6 || object_type==7){
+        if(object_type==CalculatorObject::ObjectsTypes::MinusBrackets || object_type==CalculatorObject::ObjectsTypes::PowOperator || object_type==CalculatorObject::ObjectsTypes::Functins){
             CalculatorObject temp;
             temp.addSymbol("(");
             oper_mas.push(element);
             oper_mas.push(temp);
             continue;
         }
-        if(object_type==8){
+        if(object_type==CalculatorObject::ObjectsTypes::Factorial){
             polishEntry.push_back(element);
             continue;
         }
-        if(object_type==3){
+        if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets){
             oper_mas.push(element);
             continue;
         }
-        if(object_type==4){
-            while(oper_mas.size() && oper_mas.top().getObjectType()!=3){
+        if(object_type==CalculatorObject::ObjectsTypes::CloseBrackets){
+            while(oper_mas.size() && oper_mas.top().getObjectType()!=CalculatorObject::ObjectsTypes::OpenBrackets){
                 polishEntry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
             oper_mas.pop();
-            if(oper_mas.size() && (oper_mas.top().getObjectType()==2 || oper_mas.top().getObjectType()==6 || oper_mas.top().getObjectType()==7)){
+            if(oper_mas.size() && (oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::PowOperator || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Functins)){
                 polishEntry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
@@ -64,14 +64,14 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
         oper_mas.pop();
     }
     for(size_t i=0;i<polishEntry.size();i++){
-        if(polishEntry[i].getObjectType()==1) polishEntry[i]=polishEntry[i].getOnlyNum();
+        if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num) polishEntry[i]=polishEntry[i].getOnlyNum();
     }
 }
 
 CalculatorObject CalculatorMath::GetResult(){
     int delete_mode=0;
     for(size_t i=0;i<polishEntry.size();i++){
-        if(polishEntry[i].getObjectType()==1) continue;
+        if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num) continue;
         try {
             if(polishEntry[i].toString()=="-") polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else if(polishEntry[i].toString()=="+") polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
