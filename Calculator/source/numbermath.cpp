@@ -274,6 +274,12 @@ std::string MathPow(std::string num, std::string pow, int accuracy){
 }
 
 std::string MathSin(std::string degree, int div_acuracy, int function_acuracy){
+    while(MaxNumber(degree,"360")==-1){
+        degree=MathNeg(degree,"360");
+    }
+    while(MaxNumber(degree,"-360")==1){
+        degree=MathSum(degree,"360");
+    }
     std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
     std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
     for(int i=0;i<function_acuracy;i++){
@@ -287,6 +293,12 @@ std::string MathSin(std::string degree, int div_acuracy, int function_acuracy){
 }
 
 std::string MathCos(std::string degree, int div_acuracy, int function_acuracy){
+    while(MaxNumber(degree,"360")==-1){
+        degree=MathNeg(degree,"360");
+    }
+    while(MaxNumber(degree,"-360")==1){
+        degree=MathSum(degree,"360");
+    }
     std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
     std::string result="1", one_num="-1", pow_num=MathMul(radian,radian), factorial_num="3", factorial_res="2";
     for(int i=0;i<function_acuracy;i++){
@@ -326,7 +338,9 @@ std::string MathFactorial(std::string num){
 }
 
 std::string MathMod(std::string num, std::string mod_num){
+    if(MaxNumber(mod_num,"0")==0) return num;
     if(mod_num[0]=='-') mod_num=mod_num.substr(1);
+    if(MaxNumber(mod_num,"1")==0) return "0";
     std::string module_num=MathModule(num), div_result=MathDiv(module_num,mod_num,10);
     std::string temp_result=MathRoundDown(div_result), result=MathNeg(module_num,MathMul(mod_num,temp_result));
     if(num[0]!='-') return result;
@@ -351,7 +365,10 @@ std::string MathRoundUp(std::string num){
         i++;
     }
     std::string temp_num='0'+num.substr(i);
-    if(MaxNumber(temp_num,"0,5")<=0) result=MathSum(result,"1");
+    if(MaxNumber(temp_num,"0,5")<=0){
+        if(result[0]!='-') result=MathSum(result,"1");
+        else result=MathNeg(result,"1");
+    }
     return result;
 }
 
@@ -364,5 +381,6 @@ std::string MathRoundDown(std::string num){
         result+=num[i];
         i++;
     }
+    if(result.length()==2 && result[0]=='-' && result[1]=='0') return "0";
     return result;
 }
