@@ -85,6 +85,7 @@ void MainWindow::loadStyle(){
     QTextStream file_str(&file);
     QString content=file_str.readAll();
     file.close();
+
     this->setStyleSheet(content);
 }
 
@@ -104,7 +105,9 @@ void MainWindow::loadIcons(){
 // Collect text from all objects and display it on the screen
 void MainWindow::setFullText(){
     curentText="";
-    for(auto element:objects) curentText+=QString::fromStdString(element.toString());
+    for(auto element:objects){
+        curentText+=QString::fromStdString(element.toString());
+    }
     curentText+=QString::fromStdString(curent_object.toString());
     ui->label->setText(curentText);
 }
@@ -199,7 +202,7 @@ void MainWindow::ButtonClear(){
 
 // Added open brackets in the object
 void MainWindow::ButtonOpenBrackets(){
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Operators && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::OpenBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Functins && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::PowOperator) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
