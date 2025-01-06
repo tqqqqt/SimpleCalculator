@@ -193,14 +193,16 @@ void ProgrammistObject::addNum(char _num){
 
 std::string ProgrammistObject::convertTo10(std::string _num, int _system){
     if(_system!=2 && _system!=8 && _system!=16) throw std::invalid_argument("incorect system");
-    std::string result="0", num=_num, temp="", system=std::to_string(_system), pow_num="0";
+    std::string result="0", temp="", system=std::to_string(_system), pow_num="1";
     std::vector<std::string> nums_16={"10","11","12","13","14","15"};
-    for(int i=num.length()-1;i>=0;i--){
-        if(num[i]=='-') continue;
-        if(num[i]>='A') temp=nums_16[num[i]-'A'];
-        else temp=num[i];
-        result=MathSum(result,MathMul(temp,MathPow(system,pow_num)));
-        pow_num=MathSum(pow_num,"1");
+    size_t size=_num.length();
+    for(int i=size-1;i>=0;i--){
+        if(_num[i]!='-'){
+            if(_num[i]>='A') temp=nums_16[_num[i]-'A'];
+            else temp=_num[i];
+            result=MathSum(result,MathMul(temp,pow_num));
+        }
+        pow_num=MathMul(pow_num,system);
     }
     return result;
 }

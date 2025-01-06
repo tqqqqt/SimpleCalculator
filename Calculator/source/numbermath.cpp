@@ -79,17 +79,17 @@ std::string MathNeg(std::string num1, std::string num2){
         int tempPointNum1=num1.length()-1, tempPointNum2=num2.length()-1;
         while((tempPointNum1-dot1P)>=1 && (tempPointNum2-dot2P)>=1){
             int tempNum1=0, tempNum2=0;
-            if((tempPointNum1-dot1P)==(tempPointNum2-dot2P)){
-                tempNum1=num1[tempPointNum1--]-'0';
-                tempNum2=num2[tempPointNum2--]-'0';
-            }
-            else if(dot1P==std::string::npos) tempNum2=num2[tempPointNum2--]-'0';
+            if(dot1P==std::string::npos) tempNum2=num2[tempPointNum2--]-'0';
             else if(dot2P==std::string::npos) tempNum1=num1[tempPointNum1--]-'0';
             else if((tempPointNum1-dot1P)>(tempPointNum2-dot2P)) tempNum1=num1[tempPointNum1--]-'0';
             else if((tempPointNum1-dot1P)<(tempPointNum2-dot2P)) tempNum2=num2[tempPointNum2--]-'0';
+            else{
+                tempNum1=num1[tempPointNum1--]-'0';
+                tempNum2=num2[tempPointNum2--]-'0';
+            }
             if(carry){
                 tempNum1--;
-                carry=0;
+                if(tempNum1!=-1) carry=0;
             }
             if(tempNum1<tempNum2){
                 result=std::to_string((tempNum1+10)-tempNum2)+result;
@@ -106,8 +106,8 @@ std::string MathNeg(std::string num1, std::string num2){
         if(pointNum1>=0) tempNum1=num1[pointNum1--]-'0';
         if(pointNum2>=0) tempNum2=num2[pointNum2--]-'0';
         if(carry){
-            carry=0;
             tempNum1--;
+            if(tempNum1!=-1) carry=0;
         }
         if(tempNum1<tempNum2){
             result=std::to_string((tempNum1+10)-tempNum2)+result;
@@ -260,13 +260,127 @@ std::string MathDiv(std::string num1, std::string num2, int _accuracy){
     return curentNum;
 }
 
-std::string MathPow(std::string num, std::string pow){
+std::string MathPow(std::string num, std::string pow, int accuracy){
     if(pow=="0") return "1";
     if(pow=="1") return num;
+    if(pow.find(',')!=std::string::npos) throw std::invalid_argument("incorect pow num");
+    if(pow[0]=='-') return MathDiv("1",MathPow(num,pow.substr(1)),accuracy);
     std::string result=num;
     while(MaxNumber("1",pow)!=0){
         result=MathMul(result,num);
         pow=MathNeg(pow,"1");
     }
+    return result;
+}
+
+std::string MathSin(std::string degree, int div_acuracy, int function_acuracy){
+    while(MaxNumber(degree,"360")==-1){
+        degree=MathNeg(degree,"360");
+    }
+    while(MaxNumber(degree,"-360")==1){
+        degree=MathSum(degree,"360");
+    }
+    std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
+    std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
+    for(int i=0;i<function_acuracy;i++){
+        result=MathSum(result,MathDiv(MathMul(one_num,pow_num),factorial_res,div_acuracy));
+        one_num=MathMul(one_num,"-1");
+        pow_num=MathMul(MathMul(pow_num,radian),radian);
+        factorial_res=MathMul(MathMul(factorial_res,factorial_num),MathSum(factorial_num,"1"));
+        factorial_num=MathSum(factorial_num,"2");
+    }
+    return result;
+}
+
+std::string MathCos(std::string degree, int div_acuracy, int function_acuracy){
+    while(MaxNumber(degree,"360")==-1){
+        degree=MathNeg(degree,"360");
+    }
+    while(MaxNumber(degree,"-360")==1){
+        degree=MathSum(degree,"360");
+    }
+    std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
+    std::string result="1", one_num="-1", pow_num=MathMul(radian,radian), factorial_num="3", factorial_res="2";
+    for(int i=0;i<function_acuracy;i++){
+        result=MathSum(result,MathDiv(MathMul(one_num,pow_num),factorial_res,div_acuracy));
+        one_num=MathMul(one_num,"-1");
+        pow_num=MathMul(MathMul(pow_num,radian),radian);
+        factorial_res=MathMul(MathMul(factorial_res,factorial_num),MathSum(factorial_num,"1"));
+        factorial_num=MathSum(factorial_num,"2");
+    }
+    return result;
+}
+
+std::string MathTng(std::string degree, int div_acuracy, int function_acuracy){
+    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy), result_cos=MathCos(degree,div_acuracy,function_acuracy);
+    std::string result=MathDiv(result_sin,result_cos,div_acuracy);
+    return result;
+}
+
+std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy){
+    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy), result_cos=MathCos(degree,div_acuracy,function_acuracy);
+    std::string result=MathDiv(result_cos,result_sin,div_acuracy);
+    return result;
+}
+
+std::string MathFactorial(std::string num){
+    if(num.find(',')!=std::string::npos || num.find('-')!=std::string::npos) throw std::invalid_argument("incorect factorial num");
+    if(MaxNumber(num,"1")>=0) return "1";
+    std::string result="1", curent_num="2";
+    int check_end=0;
+    while(true){
+        check_end=MaxNumber(num,curent_num);
+        if(check_end==1) break;
+        result=MathMul(result,curent_num);
+        curent_num=MathSum(curent_num,"1");
+    }
+    return result;
+}
+
+std::string MathMod(std::string num, std::string mod_num){
+    if(MaxNumber(mod_num,"0")==0) return num;
+    if(mod_num[0]=='-') mod_num=mod_num.substr(1);
+    if(MaxNumber(mod_num,"1")==0) return "0";
+    std::string module_num=MathModule(num), div_result=MathDiv(module_num,mod_num,10);
+    std::string temp_result=MathRoundDown(div_result), result=MathNeg(module_num,MathMul(mod_num,temp_result));
+    if(num[0]!='-') return result;
+    result=MathNeg(mod_num,result);
+    return result;
+}
+
+std::string MathModule(std::string num){
+    if(num.find('-')==std::string::npos) return num;
+    if(num.find('-')!=0) throw std::invalid_argument("incorect num or incorect minus position");
+    std::string result=num.substr(1);
+    return result;
+}
+
+std::string MathRoundUp(std::string num){
+    if(num.find(',')==std::string::npos) return num;
+    size_t size=num.length(), i=0;
+    std::string result="";
+    while(i<size){
+        if(num[i]==',') break;
+        result+=num[i];
+        i++;
+    }
+    std::string temp_num='0'+num.substr(i);
+    if(MaxNumber(temp_num,"0,5")<=0){
+        if(result[0]!='-') result=MathSum(result,"1");
+        else result=MathNeg(result,"1");
+    }
+    return result;
+}
+
+std::string MathRoundDown(std::string num){
+    if(num.find(',')==std::string::npos) return num;
+    std::string result="";
+    size_t i=0, size=num.length();
+    while(i<size){
+        if(num[i]==',') break;
+        result+=num[i];
+        i++;
+    }
+    if(result.length()==2 && result[0]=='-' && result[1]=='0') return "0";
     return result;
 }

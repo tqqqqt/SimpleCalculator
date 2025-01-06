@@ -16,9 +16,11 @@ ModeWindow::~ModeWindow()
     delete ui;
 }
 
+// Save and send to calculator selected mode
 void ModeWindow::buttonMode(int _mode){
     QSettings settings("tqqqqt","calculator");
     settings.setValue("calc/mode",_mode);
+
     emit changeMode(_mode);
     this->close();
 }

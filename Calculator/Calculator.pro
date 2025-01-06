@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        Functions/functionswindow.cpp \
         History/historywindow.cpp \
         Mode/modewindow.cpp \
         Programmist/programmistwindow.cpp \
@@ -41,6 +42,7 @@ SOURCES += \
         source/valueobject.cpp
 
 HEADERS += \
+        Functions/functionswindow.h \
         History/historywindow.h \
         Mode/modewindow.h \
         Programmist/programmistwindow.h \
@@ -57,6 +59,7 @@ HEADERS += \
         source/valueobject.h
 
 FORMS += \
+        Functions/functionswindow.ui \
         History/historywindow.ui \
         Mode/modewindow.ui \
         Programmist/programmistwindow.ui \

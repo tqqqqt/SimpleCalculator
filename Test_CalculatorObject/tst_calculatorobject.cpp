@@ -13,18 +13,28 @@ public:
 private slots:
     void test_toString_data();
     void test_toString();
+
     void test_getLength_data();
     void test_getLength();
+
     void test_getObjectType_data();
     void test_getObjectType();
+
     void test_addNum_data();
     void test_addNum();
+
     void test_addSymbol_data();
     void test_addSymbol();
+
+    void test_addFunction_data();
+    void test_addFunction();
+
     void test_deleteLastSymbol_data();
     void test_deleteLastSymbol();
+
     void test_setFullNum_data();
     void test_setFullNum();
+
     void test_getOnlyNum_data();
     void test_getOnlyNum();
 };
@@ -49,7 +59,9 @@ void calculatorobject::test_toString(){
 
     CalculatorObject object;
     object.setFullNum(num.toStdString());
-    QCOMPARE(object.toString(),num.toStdString());
+    std::string curent_result=object.toString();
+
+    QCOMPARE(curent_result,num.toStdString());
 }
 
 void calculatorobject::test_getLength_data(){
@@ -70,7 +82,9 @@ void calculatorobject::test_getLength(){
 
     CalculatorObject object;
     object.setFullNum(num.toStdString());
-    QCOMPARE(object.getLength(),length);
+    int curent_result=object.getLength();
+
+    QCOMPARE(curent_result,length);
 }
 
 void calculatorobject::test_getObjectType_data(){
@@ -98,7 +112,10 @@ void calculatorobject::test_getObjectType(){
     CalculatorObject object;
     if(input_type==1) object.addNum(input.toStdString()[0]);
     else object.addSymbol(input.toStdString());
-    QCOMPARE(object.getObjectType(),type);
+
+    int curent_result=static_cast<int>(object.getObjectType());
+
+    QCOMPARE(curent_result,type);
 }
 
 void calculatorobject::test_addNum_data(){
@@ -129,9 +146,12 @@ void calculatorobject::test_addNum(){
     QFETCH(QString,result);
 
     CalculatorObject object;
+    std::string curent_result="";
+
     try {
         object.addNum(input);
-        QCOMPARE(object.toString(),result.toStdString());
+        curent_result=object.toString();
+        QCOMPARE(curent_result,result.toStdString());
     }
     catch (std::exception &exp) {
         QCOMPARE(exp.what(),result.toStdString());
@@ -167,11 +187,52 @@ void calculatorobject::test_addSymbol(){
     QFETCH(QString,result);
 
     CalculatorObject object;
+    std::string curent_result="";
+
     try {
         object.addSymbol(input.toStdString());
-        QCOMPARE(object.toString(),result.toStdString());
+        curent_result=object.toString();
+        QCOMPARE(curent_result,result.toStdString());
     }
     catch (std::exception &exp) {
+        QCOMPARE(exp.what(),result.toStdString());
+    }
+}
+
+void calculatorobject::test_addFunction_data(){
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("test_1")<<"Sin("<<"Sin(";
+    QTest::newRow("test_2")<<"Cos("<<"Cos(";
+    QTest::newRow("test_3")<<"Tng("<<"Tng(";
+    QTest::newRow("test_4")<<"Ctng("<<"Ctng(";
+    QTest::newRow("test_5")<<"mod"<<"mod";
+    QTest::newRow("test_6")<<"!"<<"!";
+    QTest::newRow("test_7")<<"Module("<<"Module(";
+    QTest::newRow("test_8")<<"RoundUp("<<"RoundUp(";
+    QTest::newRow("test_9")<<"RoundDown("<<"RoundDown(";
+    QTest::newRow("test_10")<<"("<<"input not a function";
+    QTest::newRow("test_11")<<"+"<<"input not a function";
+    QTest::newRow("test_12")<<"-"<<"input not a function";
+    QTest::newRow("test_13")<<"1"<<"input not a function";
+    QTest::newRow("test_14")<<","<<"input not a function";
+    QTest::newRow("test_15")<<"0"<<"input not a function";
+}
+
+void calculatorobject::test_addFunction(){
+    QFETCH(QString,input);
+    QFETCH(QString,result);
+
+    CalculatorObject object;
+    std::string curent_result="";
+
+    try{
+        object.addFunction(input.toStdString());
+        curent_result=object.toString();
+        QCOMPARE(curent_result,result.toStdString());
+    }
+    catch(std::exception &exp){
         QCOMPARE(exp.what(),result.toStdString());
     }
 }
@@ -211,9 +272,13 @@ void calculatorobject::test_deleteLastSymbol(){
     else if(type_input==2) object.addSymbol(input.toStdString());
     else object.setFullNum(input.toStdString());
     object.deleteLastSymbol();
-    QCOMPARE(object.getObjectType(),type_object);
-    QCOMPARE(object.getLength(),length);
-    QCOMPARE(object.toString(),result.toStdString());
+
+    int curent_type=static_cast<int>(object.getObjectType()), curent_length=object.getLength();
+    std::string curent_result=object.toString();
+
+    QCOMPARE(curent_type,type_object);
+    QCOMPARE(curent_length,length);
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void calculatorobject::test_setFullNum_data(){
@@ -236,9 +301,12 @@ void calculatorobject::test_setFullNum(){
     QFETCH(QString,result);
 
     CalculatorObject object;
+    std::string curent_result="";
+
     try{
         object.setFullNum(input.toStdString());
-        QCOMPARE(object.toString(),result.toStdString());
+        curent_result=object.toString();
+        QCOMPARE(curent_result,result.toStdString());
     }
     catch(std::exception &exp){
         QCOMPARE(exp.what(),result.toStdString());
@@ -268,8 +336,12 @@ void calculatorobject::test_getOnlyNum(){
     CalculatorObject object;
     if(input_type==1) object.setFullNum(input.toStdString());
     else object.addSymbol(input.toStdString());
+
+    std::string curent_result="";
+
     try{
-        QCOMPARE(object.getOnlyNum().toString(),result.toStdString());
+        curent_result=object.getOnlyNum().toString();
+        QCOMPARE(curent_result,result.toStdString());
     }
     catch(std::exception &exp){
         QCOMPARE(exp.what(),result.toStdString());
