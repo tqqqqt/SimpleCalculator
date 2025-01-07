@@ -23,7 +23,10 @@ public:
     void setVector(std::vector<CalculatorObject>);
     void SetDivAccuracy(int);
     void setFunctionAccuracy(int);
+    void simplifyExpression();
     CalculatorObject GetResult();
+    std::vector<CalculatorObject> getResultWithVariable(int, double);
+    std::vector<CalculatorObject> getPolishEntry();
 };
 
 #endif // CALCULATORMATH_H

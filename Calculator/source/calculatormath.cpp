@@ -21,7 +21,7 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
     CalculatorObject::ObjectsTypes object_type=CalculatorObject::ObjectsTypes::None;
     for(CalculatorObject element:_objects){
         object_type=element.getObjectType();
-        if(object_type==CalculatorObject::ObjectsTypes::Num){
+        if(object_type==CalculatorObject::ObjectsTypes::Num || object_type==CalculatorObject::ObjectsTypes::X_variable){
             polishEntry.push_back(element);
             continue;
         }
@@ -106,6 +106,64 @@ CalculatorObject CalculatorMath::GetResult(){
     }
     if(polishEntry[0].toString()[0]=='-') polishEntry[0].setFullNum('('+polishEntry[0].toString()+')');
     return polishEntry[0];
+}
+
+void CalculatorMath::simplifyExpression(){
+    int delete_mode=0, count_nums=0;
+    for(size_t i=0;i<polishEntry.size();i++){
+        if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){
+            count_nums+=1;
+            continue;
+        }
+        else if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::X_variable){
+            count_nums=0;
+            continue;
+        }
+        try {
+            if(count_nums==0) continue;
+            if(polishEntry[i].toString()=="-" && count_nums>=2) polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            else if(polishEntry[i].toString()=="+" && count_nums>=2) polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            else if(polishEntry[i].toString()=="*" && count_nums>=2) polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            else if(polishEntry[i].toString()=="/" && count_nums>=2) polishEntry[i-2].setFullNum(MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy));
+            else if(polishEntry[i].toString()=="^(" && count_nums>=2) polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            else if(polishEntry[i].toString()=="mod" && count_nums>=2) polishEntry[i-2].setFullNum(MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            else{
+                if(count_nums<1) continue;
+                delete_mode=1;
+                if(polishEntry[i].toString()=="(-") polishEntry[i-1].setFullNum(MathMul(polishEntry[i-1].toString(),"-1"));
+                else if(polishEntry[i].toString()=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="Cos(") polishEntry[i-1].setFullNum(MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="Tng(") polishEntry[i-1].setFullNum(MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="Ctng(") polishEntry[i-1].setFullNum(MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="!") polishEntry[i-1].setFullNum(MathFactorial(polishEntry[i-1].toString()));
+                else if(polishEntry[i].toString()=="Module(") polishEntry[i-1].setFullNum(MathModule(polishEntry[i-1].toString()));
+                else if(polishEntry[i].toString()=="RoundUp(") polishEntry[i-1].setFullNum(MathRoundUp(polishEntry[i-1].toString()));
+                else if(polishEntry[i].toString()=="RoundDown(") polishEntry[i-1].setFullNum(MathRoundDown(polishEntry[i-1].toString()));
+            }
+        } catch (std::exception) {
+            throw;
+        }
+        if(delete_mode==0){
+            polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
+            i-=2;
+            count_nums-=2;
+        }
+        else{
+            polishEntry.erase(polishEntry.begin()+i);
+            i-=1;
+            delete_mode=0;
+            count_nums-=1;
+        }
+    }
+}
+
+std::vector<CalculatorObject> CalculatorMath::getResultWithVariable(int, double){
+
+}
+
+std::vector<CalculatorObject> CalculatorMath::getPolishEntry(){
+    std::vector<CalculatorObject> result=polishEntry;
+    return result;
 }
 
 void CalculatorMath::SetDivAccuracy(int _accuracy){
