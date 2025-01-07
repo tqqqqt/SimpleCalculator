@@ -12,9 +12,9 @@
 #include <iostream>
 #include <string>
 
-#include "./../../source/graphicsobject.h"
+#include "./../../source/calculatorobject.h"
 #include "./../../source/graphicsinfoobject.h"
-#include "./../../source/graphicsmath.h"
+#include "./../../source/calculatormath.h"
 
 #include "./../GraphicsPainter/graphicspainterwindow.h"
 #include "./../../Functions/functionswindow.h"
@@ -36,10 +36,10 @@ private:
     Ui::GraphicsInfoWindow *ui;
     GraphicsPainterWindow *painter_window;
     bool painter_window_open;
-    GraphicsObject curent_object;
-    QVector<GraphicsObject> objects;
+    CalculatorObject curent_object;
+    QVector<CalculatorObject> objects;
     QVector<GraphicsInfoObject> info_objects;
-    GraphicsMath info_math;
+    CalculatorMath info_math;
     QString curent_text;
     bool function_window_show;
     int count_open_bracket, count_oper;
@@ -51,6 +51,7 @@ private:
 signals:
     void closeWindow();
     void changeWindow(int);
+    void needUpdateList();
 
 public:
     void openPainterWindow();
@@ -77,6 +78,9 @@ private slots:
     void buttonAdd();
     void buttonZnak();
     void buttonDeleteLast();
+    void deleteListElement();
+    void updateFunctionWindowState();
+    void updateListWidget();
     //void ButtonSettings();
     //void UpdateSettings();
 };

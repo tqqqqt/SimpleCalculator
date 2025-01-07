@@ -24,9 +24,10 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ pressNumberButton('8'); });
     this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ pressNumberButton('9'); });
 
-    //dot and minus buttons
+    //dot, minus and variable (X) buttons
     this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(buttonDot()));
     this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(buttonZnak()));
+    this->connect(ui->pushButton_x,SIGNAL(clicked()),this,SLOT(pressVariableButton()));
 
     //operator buttons and result
     this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ pressOperButton("+"); });
@@ -34,8 +35,9 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ pressOperButton("*"); });
     this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ pressOperButton("/"); });
     this->connect(ui->pushButton_pow,&QPushButton::clicked,[this]{ pressOperButton("^("); });
-    //this->connect(ui->pushButton_res,SIGNAL(clicked()),this,SLOT(ButtonResult()));
+    this->connect(ui->pushButton_add,SIGNAL(clicked()),this,SLOT(buttonAdd()));
 
+    //clear and delete last
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(buttonClear()));
     this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(buttonDeleteLast()));
 
@@ -43,12 +45,16 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(buttonOpenBrackets()));
     this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(buttonCloseBrackets()));
 
-    // mode and functions button
+    // delete list element, mode and functions button
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
     this->connect(ui->pushButton_functions,SIGNAL(clicked()),this,SLOT(pressFunctionsButton()));
+    this->connect(ui->pushButton_del_element,SIGNAL(clicked()),this,SLOT(deleteListElement()));
 
     // options and re-open painter
     this->connect(ui->action_open_painter,SIGNAL(triggered()),this,SLOT(openPainter()));
+
+    // signals
+    this->connect(this,SIGNAL(needUpdateList()),this,SLOT(updateListWidget()));
 }
 
 GraphicsInfoWindow::~GraphicsInfoWindow()
@@ -132,7 +138,11 @@ void GraphicsInfoWindow::pressOperButton(QString buttonOper){
 }
 
 void GraphicsInfoWindow::pressVariableButton(){
-
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
+    curent_object.clear();
+    curent_object.addVariable();
+    setFullText();
 }
 
 void GraphicsInfoWindow::pressFunctionsButton(){
@@ -147,7 +157,7 @@ void GraphicsInfoWindow::pressFunctionsButton(){
 }
 
 void GraphicsInfoWindow::addedFunction(QString _function){
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
@@ -183,7 +193,7 @@ void GraphicsInfoWindow::buttonClear(){
 }
 
 void GraphicsInfoWindow::buttonOpenBrackets(){
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
@@ -195,7 +205,7 @@ void GraphicsInfoWindow::buttonOpenBrackets(){
 
 void GraphicsInfoWindow::buttonCloseBrackets(){
     if(count_open_bracket==0) return;
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol(")");
@@ -204,11 +214,35 @@ void GraphicsInfoWindow::buttonCloseBrackets(){
 }
 
 void GraphicsInfoWindow::buttonAdd(){
-
+    if(curent_text.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable)) return;
+    if(count_open_bracket || count_oper==0) return;
+    QString save_text=curent_text;
+    std::vector<CalculatorObject> save_polish;
+    try {
+        objects.push_back(curent_object);
+        info_math.setVector(objects.toStdVector());
+        info_math.simplifyExpression();
+        save_polish=info_math.getPolishEntry();
+        objects.clear();
+        curent_object.clear();
+        setFullText();
+    }
+    catch (std::exception &exp) {
+        curent_text="";
+        curent_object.clear();
+        ui->label->setText(exp.what());
+    }
+    GraphicsInfoObject new_object;
+    new_object.setDisplayText(save_text.toStdString());
+    new_object.setPolishEntry(save_polish);
+    info_objects.push_back(new_object);
+    emit needUpdateList();
+    count_open_bracket=0;
+    count_oper=0;
 }
 
 void GraphicsInfoWindow::buttonZnak(){
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol("(-");
@@ -246,4 +280,22 @@ void GraphicsInfoWindow::buttonDeleteLast(){
         }
     }
     setFullText();
+}
+
+void GraphicsInfoWindow::deleteListElement(){
+    int curent_element=ui->listWidget_expressions->currentRow();
+    if(curent_element<0 || curent_element>info_objects.size()) return;
+    info_objects.erase(info_objects.begin()+curent_element);
+    emit needUpdateList();
+}
+
+void GraphicsInfoWindow::updateFunctionWindowState(){
+    function_window_show=false;
+}
+
+void GraphicsInfoWindow::updateListWidget(){
+    ui->listWidget_expressions->clear();
+    for(GraphicsInfoObject elem:info_objects){
+        ui->listWidget_expressions->addItem(QString::fromStdString(elem.getDisplayText()));
+    }
 }
