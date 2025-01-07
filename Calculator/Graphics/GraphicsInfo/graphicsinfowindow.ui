@@ -101,7 +101,7 @@
         <widget class="QListWidget" name="listWidget_expressions"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButton_del_element">
          <property name="text">
           <string>Удалить</string>
          </property>
