@@ -25,7 +25,10 @@ public:
         if(curent_mode==1) calculator_window->show();
         else if(curent_mode==2) value_window->show();
         else if(curent_mode==3) programmist_window->show();
-        else if(curent_mode==4) graphics_info_window->show();
+        else if(curent_mode==4){
+            graphics_info_window->show();
+            graphics_info_window->openPainter();
+        }
     }
 };
 
