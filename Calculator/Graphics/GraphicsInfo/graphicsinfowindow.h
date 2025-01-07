@@ -7,11 +7,14 @@
 #include <QTextStream>
 #include <QPixmap>
 #include <QCloseEvent>
+#include <QVector>
 
 #include <iostream>
 #include <string>
 
-//
+#include "./../../source/graphicsobject.h"
+#include "./../../source/graphicsinfoobject.h"
+#include "./../../source/graphicsmath.h"
 
 #include "./../GraphicsPainter/graphicspainterwindow.h"
 #include "./../../Functions/functionswindow.h"
@@ -33,16 +36,49 @@ private:
     Ui::GraphicsInfoWindow *ui;
     GraphicsPainterWindow *painter_window;
     bool painter_window_open;
+    GraphicsObject curent_object;
+    QVector<GraphicsObject> objects;
+    QVector<GraphicsInfoObject> info_objects;
+    GraphicsMath info_math;
+    QString curent_text;
+    bool function_window_show;
+    int count_open_bracket, count_oper;
+    int curent_acuracy, function_acuracy, graphics_point_count;
+
+private:
+    void closeEvent(QCloseEvent*);
 
 signals:
     void closeWindow();
     void changeWindow(int);
 
+public:
+    void openPainterWindow();
+
+public slots:
+    void openPainter();
+
 private slots:
     void buttonChangeMode();
     void updateMode(int);
+    //void openPainter();
     void updatePainterWindowState();
-    void openPainter();
+    void setFullText();
+    void pressNumberButton(QChar buttonNum);
+    void pressOperButton(QString buttonOper);
+    void pressVariableButton();
+    void pressFunctionsButton();
+    void addedFunction(QString);
+    void addedSpecialFunction(QString);
+    void buttonDot();
+    void buttonClear();
+    void buttonOpenBrackets();
+    void buttonCloseBrackets();
+    void buttonAdd();
+    void buttonZnak();
+    void buttonDeleteLast();
+    //void ButtonSettings();
+    //void UpdateSettings();
 };
 
 #endif // GRAPHICSINFOWINDOW_H
