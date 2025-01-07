@@ -38,6 +38,9 @@ SOURCES += \
         mainwindow.cpp \
         source/calculatormath.cpp \
         source/calculatorobject.cpp \
+        source/graphicsinfoobject.cpp \
+        source/graphicsmath.cpp \
+        source/graphicsobject.cpp \
         source/numbermath.cpp \
         source/programmistobject.cpp \
         source/valueinfo.cpp \
@@ -56,6 +59,9 @@ HEADERS += \
         mainwindow.h \
         source/calculatormath.h \
         source/calculatorobject.h \
+        source/graphicsinfoobject.h \
+        source/graphicsmath.h \
+        source/graphicsobject.h \
         source/numbermath.h \
         source/programmistobject.h \
         source/programobject.h \
