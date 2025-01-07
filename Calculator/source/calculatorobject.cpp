@@ -69,6 +69,13 @@ void CalculatorObject::addFunction(std::string _function){
     length=text.length();
 }
 
+void CalculatorObject::addVariable(){
+    if(object_type!=ObjectsTypes::None) return;
+    object_type=ObjectsTypes::X_variable;
+    text="x";
+    length=1;
+}
+
 void CalculatorObject::deleteLastSymbol(){
     if(length==0) return;
     if(object_type>ObjectsTypes::MinusBrackets){
