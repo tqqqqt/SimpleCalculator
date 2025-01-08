@@ -87,17 +87,14 @@ void GraphicsInfoWindow::updatePainterWindowState(){
     painter_window_open=false;
 }
 
-void GraphicsInfoWindow::openPainterWindow(){
-    openPainter();
-}
-
 void GraphicsInfoWindow::openPainter(){
     if(painter_window_open==true) return;
-    painter_window=new GraphicsPainterWindow();
+    painter_window=new GraphicsPainterWindow(&info_objects);
     painter_window_open=true;
 
     this->connect(this,SIGNAL(closeWindow()),painter_window,SLOT(needClose()));
     this->connect(painter_window,SIGNAL(closeWindow()),this,SLOT(updatePainterWindowState()));
+    this->connect(this,SIGNAL(needUpdateList()),painter_window,SLOT(paintGraphics()));
 
     painter_window->show();
 }
