@@ -3,6 +3,7 @@
 GraphicsInfoObject::GraphicsInfoObject()
 {
     display_text="";
+    graphic_enable=false;
 }
 
 void GraphicsInfoObject::setDisplayText(std::string _text){
@@ -20,5 +21,24 @@ void GraphicsInfoObject::setPolishEntry(std::vector<CalculatorObject> _polish_en
 
 std::vector<CalculatorObject> GraphicsInfoObject::getPolishEntry(){
     std::vector<CalculatorObject> result=polish_entry;
+    return result;
+}
+
+void GraphicsInfoObject::setGraphic(QPixmap *_graphic){
+    graphic=_graphic;
+    graphic_enable=true;
+}
+
+QPixmap GraphicsInfoObject::getGraphic(){
+    QPixmap result=*graphic;
+    return result;
+}
+
+void GraphicsInfoObject::clearGraphic(){
+    graphic_enable=false;
+}
+
+bool GraphicsInfoObject::getGraphicFlag(){
+    bool result=graphic_enable;
     return result;
 }
