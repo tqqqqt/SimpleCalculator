@@ -19,6 +19,7 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
     paintMainOrd();
     paintPoints();
 
+    clear_ord=curent_ord;
     ui->label->setPixmap(curent_ord);
 
     // pluss and minus buttons
@@ -29,6 +30,7 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
     this->connect(this,SIGNAL(needPaintOrd()),this,SLOT(paintMainOrd()));
     this->connect(this,SIGNAL(needPaintPoints()),this,SLOT(paintPoints()));
     this->connect(this,SIGNAL(needUpdatePicture()),this,SLOT(updatePicture()));
+    this->connect(this,SIGNAL(needClearGraphics()),this,SLOT(clearGraphics()));
 }
 
 GraphicsPainterWindow::~GraphicsPainterWindow()
@@ -70,25 +72,25 @@ void GraphicsPainterWindow::paintMainOrd(){
 void GraphicsPainterWindow::paintPoints(){
     QPainter painter(&curent_ord);
     painter.setPen(QPen(Qt::black,1));
-    int points_space=30, width=curent_ord.width(), height=curent_ord.height();
+    int width=curent_ord.width(), height=curent_ord.height();
     // points on X ord
-    for(int i=points_space;i<width/2;i+=points_space){
+    for(int i=POINT_SPACE;i<width/2;i+=POINT_SPACE){
         // right points
         painter.drawLine(width/2+i,height/2-5,width/2+i,height/2+5);
-        painter.drawText(width/2+i-4,height/2+16,QString::fromStdString(std::to_string((i/points_space)*curent_scale)));
+        painter.drawText(width/2+i-4,height/2+16,QString::fromStdString(std::to_string((i/POINT_SPACE)*curent_scale)));
         //left points
         painter.drawLine(width/2-i,height/2-5,width/2-i,height/2+5);
-        painter.drawText(width/2-i-4,height/2+16,QString::fromStdString(std::to_string(((i/points_space)*curent_scale)*-1)));
+        painter.drawText(width/2-i-4,height/2+16,QString::fromStdString(std::to_string(((i/POINT_SPACE)*curent_scale)*-1)));
     }
 
     // point on Y ord
-    for(int i=points_space;i<height/2;i+=points_space){
+    for(int i=POINT_SPACE;i<height/2;i+=POINT_SPACE){
         // upper points
         painter.drawLine(width/2-5,height/2-i,width/2+5,height/2-i);
-        painter.drawText(width/2-17,height/2-i+4,QString::fromStdString(std::to_string((i/points_space)*curent_scale)));
+        painter.drawText(width/2-17,height/2-i+4,QString::fromStdString(std::to_string((i/POINT_SPACE)*curent_scale)));
         //bottom points
         painter.drawLine(width/2-5,height/2+i,width/2+5,height/2+i);
-        painter.drawText(width/2-17,height/2+i+4,QString::fromStdString(std::to_string(((i/points_space)*curent_scale)*-1)));
+        painter.drawText(width/2-17,height/2+i+4,QString::fromStdString(std::to_string(((i/POINT_SPACE)*curent_scale)*-1)));
     }
 }
 
@@ -96,13 +98,22 @@ void GraphicsPainterWindow::updatePicture(){
     emit needPaintOrd();
     emit needPaintPoints();
 
+    clear_ord=curent_ord;
     ui->label->setPixmap(curent_ord);
+    paintGraphics();
+}
+
+void GraphicsPainterWindow::clearGraphics(){
+    for(GraphicsInfoObject element: *info_objects){
+        element.clearGraphic();
+    }
 }
 
 void GraphicsPainterWindow::addScale(){
     if(curent_scale>=20) return;
     curent_scale+=1;
 
+    emit needClearGraphics();
     emit needUpdatePicture();
 }
 
@@ -110,12 +121,70 @@ void GraphicsPainterWindow::minusScale(){
     if(curent_scale<=1) return;
     curent_scale-=1;
 
+    emit needClearGraphics();
     emit needUpdatePicture();
 }
 
 void GraphicsPainterWindow::paintGraphics(){
-    emit needUpdatePicture();
-
     if(info_objects->size()==0) return;
 
+    curent_ord=clear_ord;
+    int width=curent_ord.width(), height=curent_ord.height();
+    CalculatorMath math_object;
+    QPainter painter(&curent_ord);
+
+    // calculate all elements
+    for(GraphicsInfoObject element: *info_objects){
+        if(element.getGraphicFlag()==true){
+            painter.drawPixmap(curent_ord.rect(),element.getGraphic(),element.getGraphic().rect());
+            continue;
+        }
+        QVector<std::string> result_left, result_right;
+        CalculatorObject temp_result;
+        math_object.setPolishEntry(element.getPolishEntry());
+
+        // move to right X ord
+        double curent_point=0;
+        for(int i=0;i<width/2;i+=POINT_SPACE/10){
+            temp_result=math_object.getResultWithVariable(curent_point);
+            result_right.push_back(temp_result.toString());
+            curent_point+=0.1*curent_scale;
+        }
+
+        // move to left X ord
+        curent_point=-1*(0.1*curent_scale);
+        for(int i=POINT_SPACE/10;i<width/2;i+=POINT_SPACE/10){
+            temp_result=math_object.getResultWithVariable(curent_point);
+            result_left.push_back(temp_result.toString());
+            curent_point-=0.1*curent_scale;
+        }
+
+        // prepate pixmap
+        QPixmap new_graphic(width,height);
+        new_graphic.fill(Qt::transparent);
+        QPainter temp_painter(&new_graphic);
+        temp_painter.setPen(QPen(Qt::black,1));
+
+        // paint new graphic
+        // paint left part X ord
+        curent_point=0.0;
+        double next_point=curent_point+(0.1*curent_scale);
+        double curent_y=0.0, next_y=0.0;
+        for(int i=0;i<result_right.size()-1;i++){
+            if(result_right[i].find(',')) result_right[i][result_right[i].find(',')]='.';
+            if(result_right[i+1].find(',')) result_right[i+1][result_right[i+1].find(',')]='.';
+            curent_y=POINT_SPACE*std::stod(result_right[i]);
+            next_y=POINT_SPACE*std::stod(result_right[i+1]);
+            temp_painter.drawLine(width/2+curent_point,height/2-curent_y,width/2+next_point,height/2-next_y);
+            //temp_painter.drawLine(0,100,0+POINT_SPACE*i,100);
+            curent_point+=0.1*curent_scale;
+            next_point+=0.1*curent_scale;
+        }
+
+        // added to element and window
+        element.setGraphic(&new_graphic);
+        painter.drawPixmap(curent_ord.rect(),new_graphic,new_graphic.rect());
+    }
+
+    ui->label->setPixmap(curent_ord);
 }

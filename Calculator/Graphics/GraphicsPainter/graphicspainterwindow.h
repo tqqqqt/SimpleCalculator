@@ -9,6 +9,8 @@
 #include "./../../source/graphicsinfoobject.h"
 #include "./../../source/calculatormath.h"
 
+#define POINT_SPACE 30
+
 namespace Ui {
 class GraphicsPainterWindow;
 }
@@ -25,7 +27,7 @@ public:
 private:
     Ui::GraphicsPainterWindow *ui;
     QVector<GraphicsInfoObject> *info_objects;
-    QPixmap curent_ord;
+    QPixmap clear_ord, curent_ord;
     int curent_scale;
 
 private:
@@ -41,12 +43,14 @@ private slots:
     void addScale();
     void minusScale();
     void updatePicture();
+    void clearGraphics();
 
 signals:
     void closeWindow();
     void needPaintOrd();
     void needPaintPoints();
     void needUpdatePicture();
+    void needClearGraphics();
 };
 
 #endif // GRAPHICSPAINTERWINDOW_H
