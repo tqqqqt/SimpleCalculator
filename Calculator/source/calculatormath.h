@@ -25,8 +25,9 @@ public:
     void setFunctionAccuracy(int);
     void simplifyExpression();
     CalculatorObject GetResult();
-    std::vector<CalculatorObject> getResultWithVariable(int, double);
+    CalculatorObject getResultWithVariable(double);
     std::vector<CalculatorObject> getPolishEntry();
+    void setPolishEntry(std::vector<CalculatorObject>);
 };
 
 #endif // CALCULATORMATH_H

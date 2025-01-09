@@ -157,13 +157,66 @@ void CalculatorMath::simplifyExpression(){
     }
 }
 
-std::vector<CalculatorObject> CalculatorMath::getResultWithVariable(int, double){
-
+CalculatorObject CalculatorMath::getResultWithVariable(double _point){
+    std::stack<CalculatorObject> stack;
+    CalculatorObject x_object, temp_result;
+    std::string x_num=std::to_string(_point);
+    if(x_num.find('.')) x_num[x_num.find('.')]=',';
+    x_object.setFullNum(x_num);
+    for(int i=0;i<polishEntry.size();i++){
+        if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){
+            stack.push(polishEntry[i]);
+            continue;
+        }
+        if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::X_variable){
+            stack.push(x_object);
+            continue;
+        }
+        try {
+            CalculatorObject::ObjectsTypes object_type=polishEntry[i].getObjectType();
+            if(object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator){
+                CalculatorObject num_1, num_2;
+                num_2=stack.top();
+                stack.pop();
+                num_1=stack.top();
+                stack.pop();
+                if(polishEntry[i].toString()=="-") temp_result.setFullNum(MathNeg(num_1.toString(),num_2.toString()));
+                else if(polishEntry[i].toString()=="+") temp_result.setFullNum(MathSum(num_1.toString(),num_2.toString()));
+                else if(polishEntry[i].toString()=="*") temp_result.setFullNum(MathMul(num_1.toString(),num_2.toString()));
+                else if(polishEntry[i].toString()=="/") temp_result.setFullNum(MathDiv(num_1.toString(),num_2.toString(),div_accuracy));
+                else if(polishEntry[i].toString()=="^(") temp_result.setFullNum(MathPow(num_1.toString(),num_2.toString()));
+                else if(polishEntry[i].toString()=="mod") temp_result.setFullNum(MathMod(num_1.toString(),num_2.toString()));
+            }
+            else{
+                CalculatorObject num;
+                num=stack.top();
+                stack.pop();
+                if(polishEntry[i].toString()=="(-") temp_result.setFullNum(MathMul(num.toString(),"-1"));
+                else if(polishEntry[i].toString()=="Sin(") temp_result.setFullNum(MathSin(num.toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="Cos(") temp_result.setFullNum(MathCos(num.toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="Tng(") temp_result.setFullNum(MathTng(num.toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="Ctng(") temp_result.setFullNum(MathCtng(num.toString(),div_accuracy,function_accuracy));
+                else if(polishEntry[i].toString()=="!") temp_result.setFullNum(MathFactorial(num.toString()));
+                else if(polishEntry[i].toString()=="Module(") temp_result.setFullNum(MathModule(num.toString()));
+                else if(polishEntry[i].toString()=="RoundUp(") temp_result.setFullNum(MathRoundUp(num.toString()));
+                else if(polishEntry[i].toString()=="RoundDown(") temp_result.setFullNum(MathRoundDown(num.toString()));
+            }
+        }
+        catch (std::exception) {
+            throw;
+        }
+        stack.push(temp_result);
+    }
+    return stack.top();
 }
 
 std::vector<CalculatorObject> CalculatorMath::getPolishEntry(){
     std::vector<CalculatorObject> result=polishEntry;
     return result;
+}
+
+void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
+    polishEntry=_arr;
 }
 
 void CalculatorMath::SetDivAccuracy(int _accuracy){
