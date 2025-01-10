@@ -73,6 +73,7 @@ void GraphicsPainterWindow::paintPoints(){
     QPainter painter(&curent_ord);
     painter.setPen(QPen(Qt::black,1));
     int width=curent_ord.width(), height=curent_ord.height();
+
     // points on X ord
     for(int i=POINT_SPACE;i<width/2;i+=POINT_SPACE){
         // right points
@@ -126,20 +127,30 @@ void GraphicsPainterWindow::minusScale(){
 }
 
 void GraphicsPainterWindow::paintGraphics(){
-    if(info_objects->size()==0) return;
-
     curent_ord=clear_ord;
+    // if no objects in graphics
+    if(info_objects->size()==0){
+        ui->label->setPixmap(curent_ord);
+        return;
+    }
+
+    // paint size
     int width=curent_ord.width(), height=curent_ord.height();
     CalculatorMath math_object;
+    math_object.setFunctionAccuracy(5);
+    math_object.SetDivAccuracy(5);
+    math_object.setFunctionRadianFlag(true);
     QPainter painter(&curent_ord);
 
     // calculate all elements
-    for(GraphicsInfoObject element: *info_objects){
+    for(GraphicsInfoObject& element: *info_objects){
+        // if graphics already paint do not rewrite and set on screen
         if(element.getGraphicFlag()==true){
             painter.drawPixmap(curent_ord.rect(),element.getGraphic(),element.getGraphic().rect());
             continue;
         }
-        QVector<std::string> result_left, result_right;
+
+        std::vector<std::string> result_left, result_right;
         CalculatorObject temp_result;
         math_object.setPolishEntry(element.getPolishEntry());
 
@@ -152,8 +163,8 @@ void GraphicsPainterWindow::paintGraphics(){
         }
 
         // move to left X ord
-        curent_point=-1*(0.1*curent_scale);
-        for(int i=POINT_SPACE/10;i<width/2;i+=POINT_SPACE/10){
+        curent_point=0;
+        for(int i=0;i<width/2;i+=POINT_SPACE/10){
             temp_result=math_object.getResultWithVariable(curent_point);
             result_left.push_back(temp_result.toString());
             curent_point-=0.1*curent_scale;
@@ -166,23 +177,37 @@ void GraphicsPainterWindow::paintGraphics(){
         temp_painter.setPen(QPen(Qt::black,1));
 
         // paint new graphic
+        double next_point=0.0, curent_y=0.0, next_y=0.0;
         // paint left part X ord
         curent_point=0.0;
-        double next_point=curent_point+(0.1*curent_scale);
-        double curent_y=0.0, next_y=0.0;
         for(int i=0;i<result_right.size()-1;i++){
-            if(result_right[i].find(',')) result_right[i][result_right[i].find(',')]='.';
-            if(result_right[i+1].find(',')) result_right[i+1][result_right[i+1].find(',')]='.';
+            // change ',' to '.' for stod
+            if(result_right[i].find(',')!=std::string::npos) result_right[i][result_right[i].find(',')]='.';
+            if(result_right[i+1].find(',')!=std::string::npos) result_right[i+1][result_right[i+1].find(',')]='.';
+
+            next_point=curent_point+POINT_SPACE/10;
             curent_y=POINT_SPACE*std::stod(result_right[i]);
             next_y=POINT_SPACE*std::stod(result_right[i+1]);
             temp_painter.drawLine(width/2+curent_point,height/2-curent_y,width/2+next_point,height/2-next_y);
-            //temp_painter.drawLine(0,100,0+POINT_SPACE*i,100);
-            curent_point+=0.1*curent_scale;
-            next_point+=0.1*curent_scale;
+            curent_point+=POINT_SPACE/10;
+        }
+
+        // paint right part X ord
+        curent_point=0.0;
+        for(int i=0;i<result_left.size()-1;i++){
+            // change ',' to '.' for stod
+            if(result_left[i].find(',')!=std::string::npos) result_left[i][result_left[i].find(',')]='.';
+            if(result_left[i+1].find(',')!=std::string::npos) result_left[i+1][result_left[i+1].find(',')]='.';
+
+            next_point=curent_point-POINT_SPACE/10;
+            curent_y=POINT_SPACE*std::stod(result_left[i]);
+            next_y=POINT_SPACE*std::stod(result_left[i+1]);
+            temp_painter.drawLine(width/2+curent_point,height/2-curent_y,width/2+next_point,height/2-next_y);
+            curent_point-=POINT_SPACE/10;
         }
 
         // added to element and window
-        element.setGraphic(&new_graphic);
+        element.setGraphic(new_graphic);
         painter.drawPixmap(curent_ord.rect(),new_graphic,new_graphic.rect());
     }
 
