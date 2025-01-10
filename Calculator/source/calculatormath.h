@@ -13,6 +13,7 @@ class CalculatorMath
 private:
     std::vector<CalculatorObject> polishEntry;
     int div_accuracy, function_accuracy;
+    bool function_radian_data;
 
     int CheckPrior(std::string);
 
@@ -28,6 +29,7 @@ public:
     CalculatorObject getResultWithVariable(double);
     std::vector<CalculatorObject> getPolishEntry();
     void setPolishEntry(std::vector<CalculatorObject>);
+    void setFunctionRadianFlag(bool);
 };
 
 #endif // CALCULATORMATH_H
