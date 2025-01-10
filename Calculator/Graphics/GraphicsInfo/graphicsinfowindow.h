@@ -52,6 +52,7 @@ signals:
     void closeWindow();
     void changeWindow(int);
     void needUpdateList();
+    void addNewElement();
 
 public slots:
     void openPainter();
