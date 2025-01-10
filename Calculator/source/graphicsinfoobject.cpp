@@ -24,13 +24,13 @@ std::vector<CalculatorObject> GraphicsInfoObject::getPolishEntry(){
     return result;
 }
 
-void GraphicsInfoObject::setGraphic(QPixmap *_graphic){
+void GraphicsInfoObject::setGraphic(QPixmap _graphic){
     graphic=_graphic;
     graphic_enable=true;
 }
 
 QPixmap GraphicsInfoObject::getGraphic(){
-    QPixmap result=*graphic;
+    QPixmap result=graphic;
     return result;
 }
 
