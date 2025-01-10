@@ -17,10 +17,13 @@ std::string MathMul(std::string num1, std::string num2);
 
 std::string MathPow(std::string num, std::string pow, int accuracy=10);
 
-std::string MathSin(std::string degree, int div_acuracy, int function_acuracy);
-std::string MathCos(std::string degree, int div_acuracy, int function_acuracy);
-std::string MathTng(std::string degree, int div_acuracy, int function_acuracy);
-std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy);
+std::string MathConvertDegreeToRadian(std::string degree, int div_acuracy);
+std::string MathCheckRadian(std::string radian);
+
+std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
+std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
+std::string MathTng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
+std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
 
 std::string MathFactorial(std::string num);
 std::string MathMod(std::string num, std::string mod_num);

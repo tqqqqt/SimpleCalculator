@@ -273,7 +273,7 @@ std::string MathPow(std::string num, std::string pow, int accuracy){
     return result;
 }
 
-std::string MathSin(std::string degree, int div_acuracy, int function_acuracy){
+std::string MathConvertDegreeToRadian(std::string degree, int div_acuracy){
     while(MaxNumber(degree,"360")==-1){
         degree=MathNeg(degree,"360");
     }
@@ -281,6 +281,25 @@ std::string MathSin(std::string degree, int div_acuracy, int function_acuracy){
         degree=MathSum(degree,"360");
     }
     std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
+    return radian;
+}
+
+std::string MathCheckRadian(std::string radian){
+    std::string max_num=MathMul("2","3,141592653589793");
+    while(MaxNumber(radian,max_num)==-1){
+        radian=MathNeg(radian,max_num);
+    }
+    std::string min_num=MathMul(max_num,"-1");
+    while(MaxNumber(radian,max_num)==1){
+        radian=MathSum(radian,max_num);
+    }
+    return radian;
+}
+
+std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
+    std::string radian="0";
+    if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
+    else radian=MathCheckRadian(degree);
     std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
     for(int i=0;i<function_acuracy;i++){
         result=MathSum(result,MathDiv(MathMul(one_num,pow_num),factorial_res,div_acuracy));
@@ -292,14 +311,10 @@ std::string MathSin(std::string degree, int div_acuracy, int function_acuracy){
     return result;
 }
 
-std::string MathCos(std::string degree, int div_acuracy, int function_acuracy){
-    while(MaxNumber(degree,"360")==-1){
-        degree=MathNeg(degree,"360");
-    }
-    while(MaxNumber(degree,"-360")==1){
-        degree=MathSum(degree,"360");
-    }
-    std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
+std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
+    std::string radian="0";
+    if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
+    else radian=MathCheckRadian(degree);
     std::string result="1", one_num="-1", pow_num=MathMul(radian,radian), factorial_num="3", factorial_res="2";
     for(int i=0;i<function_acuracy;i++){
         result=MathSum(result,MathDiv(MathMul(one_num,pow_num),factorial_res,div_acuracy));
@@ -311,15 +326,27 @@ std::string MathCos(std::string degree, int div_acuracy, int function_acuracy){
     return result;
 }
 
-std::string MathTng(std::string degree, int div_acuracy, int function_acuracy){
-    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy), result_cos=MathCos(degree,div_acuracy,function_acuracy);
-    std::string result=MathDiv(result_sin,result_cos,div_acuracy);
+std::string MathTng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
+    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy,radian_flag), result_cos=MathCos(degree,div_acuracy,function_acuracy,radian_flag);
+    std::string result="0";
+    try{
+        result=MathDiv(result_sin,result_cos,div_acuracy);
+    }
+    catch(std::exception){
+        return "0";
+    }
     return result;
 }
 
-std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy){
-    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy), result_cos=MathCos(degree,div_acuracy,function_acuracy);
-    std::string result=MathDiv(result_cos,result_sin,div_acuracy);
+std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
+    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy,radian_flag), result_cos=MathCos(degree,div_acuracy,function_acuracy,radian_flag);
+    std::string result="0";
+    try{
+        result=MathDiv(result_cos,result_sin,div_acuracy);
+    }
+    catch(std::exception){
+        return "0";
+    }
     return result;
 }
 
