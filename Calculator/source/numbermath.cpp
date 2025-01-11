@@ -290,7 +290,7 @@ std::string MathCheckRadian(std::string radian){
         radian=MathNeg(radian,max_num);
     }
     std::string min_num=MathMul(max_num,"-1");
-    while(MaxNumber(radian,max_num)==1){
+    while(MaxNumber(radian,min_num)==1){
         radian=MathSum(radian,max_num);
     }
     return radian;
