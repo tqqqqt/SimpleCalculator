@@ -19,6 +19,8 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
     paintMainOrd();
     paintPoints();
 
+    // clear_ord it's pixmap for display ord and points without graphics
+    // curent_ord it's pixmap with graphics
     clear_ord=curent_ord;
     ui->label->setPixmap(curent_ord);
     paintGraphics();
