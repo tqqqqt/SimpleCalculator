@@ -8,11 +8,13 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     ui->setupUi(this);
 
     painter_window_open=false;
+    function_window_show=false;
     curent_text="";
     count_open_bracket=0;
     count_oper=0;
 
-    //nums buttons
+    // connects
+    // nums buttons
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
     this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ pressNumberButton('1'); });
     this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ pressNumberButton('2'); });
@@ -24,12 +26,12 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ pressNumberButton('8'); });
     this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ pressNumberButton('9'); });
 
-    //dot, minus and variable (X) buttons
+    // dot, minus and variable (X) buttons
     this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(buttonDot()));
     this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(buttonZnak()));
     this->connect(ui->pushButton_x,SIGNAL(clicked()),this,SLOT(pressVariableButton()));
 
-    //operator buttons and result
+    // operator buttons and result
     this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ pressOperButton("+"); });
     this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ pressOperButton("-"); });
     this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ pressOperButton("*"); });
@@ -37,11 +39,11 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     this->connect(ui->pushButton_pow,&QPushButton::clicked,[this]{ pressOperButton("^("); });
     this->connect(ui->pushButton_add,SIGNAL(clicked()),this,SLOT(buttonAdd()));
 
-    //clear and delete last
+    // clear and delete last
     this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(buttonClear()));
     this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(buttonDeleteLast()));
 
-    //bracket buttons
+    // bracket buttons
     this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(buttonOpenBrackets()));
     this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(buttonCloseBrackets()));
 
@@ -62,17 +64,20 @@ GraphicsInfoWindow::~GraphicsInfoWindow()
     delete ui;
 }
 
+// emit signal before close window
 void GraphicsInfoWindow::closeEvent(QCloseEvent *event){
     emit closeWindow();
     event->accept();
 }
 
+// open mode window and wait result
 void GraphicsInfoWindow::buttonChangeMode(){
     ModeWindow *mode_window=new ModeWindow(this);
     this->connect(mode_window,SIGNAL(changeMode(int)),this,SLOT(updateMode(int)));
     mode_window->exec();
 }
 
+// change curent window mode if it not 4 couse 4 is graphics
 void GraphicsInfoWindow::updateMode(int _mode){
     if(_mode==4) return;
 
@@ -83,10 +88,12 @@ void GraphicsInfoWindow::updateMode(int _mode){
     this->hide();
 }
 
+// change flag to enable open new window
 void GraphicsInfoWindow::updatePainterWindowState(){
     painter_window_open=false;
 }
 
+// open painter window if no one open
 void GraphicsInfoWindow::openPainter(){
     if(painter_window_open==true) return;
     painter_window=new GraphicsPainterWindow(&info_objects);
@@ -94,11 +101,12 @@ void GraphicsInfoWindow::openPainter(){
 
     this->connect(this,SIGNAL(closeWindow()),painter_window,SLOT(needClose()));
     this->connect(painter_window,SIGNAL(closeWindow()),this,SLOT(updatePainterWindowState()));
-    this->connect(this,SIGNAL(needUpdateList()),painter_window,SLOT(paintGraphics()));
+    this->connect(this,SIGNAL(addNewElement()),painter_window,SLOT(paintGraphics()));
 
     painter_window->show();
 }
 
+// collect text from all objects and display on screen
 void GraphicsInfoWindow::setFullText(){
     curent_text="";
     for(auto element:objects){
@@ -108,6 +116,7 @@ void GraphicsInfoWindow::setFullText(){
     ui->label->setText(curent_text);
 }
 
+// added pressed num to curent object
 void GraphicsInfoWindow::pressNumberButton(QChar buttonNum){
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
@@ -117,6 +126,7 @@ void GraphicsInfoWindow::pressNumberButton(QChar buttonNum){
     setFullText();
 }
 
+// added operator to curent object
 void GraphicsInfoWindow::pressOperButton(QString buttonOper){
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::None || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Functins) return;
     if(buttonOper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets){
@@ -134,6 +144,7 @@ void GraphicsInfoWindow::pressOperButton(QString buttonOper){
     setFullText();
 }
 
+// added X variable to curent object
 void GraphicsInfoWindow::pressVariableButton(){
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
@@ -142,6 +153,7 @@ void GraphicsInfoWindow::pressVariableButton(){
     setFullText();
 }
 
+// open function window if it's not open
 void GraphicsInfoWindow::pressFunctionsButton(){
     if(function_window_show==true) return;
     FunctionsWindow *functions_window=new FunctionsWindow();
@@ -153,6 +165,7 @@ void GraphicsInfoWindow::pressFunctionsButton(){
     function_window_show=true;
 }
 
+// react to press function in function window and added function to curent object
 void GraphicsInfoWindow::addedFunction(QString _function){
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
@@ -165,8 +178,9 @@ void GraphicsInfoWindow::addedFunction(QString _function){
     setFullText();
 }
 
+// some function with more arguments then 1 (mod)
 void GraphicsInfoWindow::addedSpecialFunction(QString _function){
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addFunction(_function.toStdString());
@@ -174,12 +188,14 @@ void GraphicsInfoWindow::addedSpecialFunction(QString _function){
     setFullText();
 }
 
+// added dot for curent object
 void GraphicsInfoWindow::buttonDot(){
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num) return;
     curent_object.addNum(',');
     setFullText();
 }
 
+// clear all states
 void GraphicsInfoWindow::buttonClear(){
     curent_text="";
     objects.clear();
@@ -189,6 +205,7 @@ void GraphicsInfoWindow::buttonClear(){
     setFullText();
 }
 
+// added open bracket to curent object
 void GraphicsInfoWindow::buttonOpenBrackets(){
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
@@ -200,6 +217,7 @@ void GraphicsInfoWindow::buttonOpenBrackets(){
     setFullText();
 }
 
+// added close bracket to curent object
 void GraphicsInfoWindow::buttonCloseBrackets(){
     if(count_open_bracket==0) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
@@ -210,6 +228,7 @@ void GraphicsInfoWindow::buttonCloseBrackets(){
     setFullText();
 }
 
+// added full object to list and display in window
 void GraphicsInfoWindow::buttonAdd(){
     if(curent_text.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable)) return;
     if(count_open_bracket || count_oper==0) return;
@@ -234,10 +253,12 @@ void GraphicsInfoWindow::buttonAdd(){
     new_object.setPolishEntry(save_polish);
     info_objects.push_back(new_object);
     emit needUpdateList();
+    emit addNewElement();
     count_open_bracket=0;
     count_oper=0;
 }
 
+// added minus in curent object
 void GraphicsInfoWindow::buttonZnak(){
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
@@ -247,6 +268,7 @@ void GraphicsInfoWindow::buttonZnak(){
     setFullText();
 }
 
+// delete last input symbol or function
 void GraphicsInfoWindow::buttonDeleteLast(){
     if(curent_object.getLength()==0){
         int size=objects.size()-1;
@@ -279,17 +301,22 @@ void GraphicsInfoWindow::buttonDeleteLast(){
     setFullText();
 }
 
+// delete element in list
 void GraphicsInfoWindow::deleteListElement(){
     int curent_element=ui->listWidget_expressions->currentRow();
     if(curent_element<0 || curent_element>info_objects.size()) return;
     info_objects.erase(info_objects.begin()+curent_element);
+
     emit needUpdateList();
+    emit addNewElement();
 }
 
+// set flag to false for open new function window
 void GraphicsInfoWindow::updateFunctionWindowState(){
     function_window_show=false;
 }
 
+// update widget to display all elements
 void GraphicsInfoWindow::updateListWidget(){
     ui->listWidget_expressions->clear();
     for(GraphicsInfoObject elem:info_objects){
