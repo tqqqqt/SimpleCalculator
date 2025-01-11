@@ -21,6 +21,7 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
 
     clear_ord=curent_ord;
     ui->label->setPixmap(curent_ord);
+    paintGraphics();
 
     // pluss and minus buttons
     this->connect(ui->pushButton_pluss,SIGNAL(clicked()),this,SLOT(addScale()));
@@ -38,17 +39,21 @@ GraphicsPainterWindow::~GraphicsPainterWindow()
     delete ui;
 }
 
+// function close window if close main graphics window
 void GraphicsPainterWindow::needClose(){
     this->close();
 }
 
+// function do something before close window
 void GraphicsPainterWindow::closeEvent(QCloseEvent *event){
     emit closeWindow();
     event->accept();
 }
 
+// paint X and Y ord without points num
 void GraphicsPainterWindow::paintMainOrd(){
-    int window_height=height(),buttons_height=ui->frame->height()+20;
+    int window_height=height(), buttons_height=ui->frame->height()+20;
+    // picture size
     int height=window_height-buttons_height, width=QWidget::width()-8;
 
     QPixmap pixmap(width,height);
@@ -69,6 +74,7 @@ void GraphicsPainterWindow::paintMainOrd(){
     curent_ord=pixmap;
 }
 
+// paint points on already done ord
 void GraphicsPainterWindow::paintPoints(){
     QPainter painter(&curent_ord);
     painter.setPen(QPen(Qt::black,1));
@@ -95,6 +101,7 @@ void GraphicsPainterWindow::paintPoints(){
     }
 }
 
+// update picture when change scale
 void GraphicsPainterWindow::updatePicture(){
     emit needPaintOrd();
     emit needPaintPoints();
@@ -104,12 +111,14 @@ void GraphicsPainterWindow::updatePicture(){
     paintGraphics();
 }
 
+// clear elements graphics when change scale
 void GraphicsPainterWindow::clearGraphics(){
-    for(GraphicsInfoObject element: *info_objects){
+    for(GraphicsInfoObject& element: *info_objects){
         element.clearGraphic();
     }
 }
 
+// change picture scale to pluss one
 void GraphicsPainterWindow::addScale(){
     if(curent_scale>=20) return;
     curent_scale+=1;
@@ -118,6 +127,7 @@ void GraphicsPainterWindow::addScale(){
     emit needUpdatePicture();
 }
 
+// change picture scale to minus one
 void GraphicsPainterWindow::minusScale(){
     if(curent_scale<=1) return;
     curent_scale-=1;
@@ -126,6 +136,7 @@ void GraphicsPainterWindow::minusScale(){
     emit needUpdatePicture();
 }
 
+// paint all graphics in elements on screen or create and save graphics on element and display on screen
 void GraphicsPainterWindow::paintGraphics(){
     curent_ord=clear_ord;
     // if no objects in graphics
@@ -136,11 +147,11 @@ void GraphicsPainterWindow::paintGraphics(){
 
     // paint size
     int width=curent_ord.width(), height=curent_ord.height();
-    CalculatorMath math_object;
-    math_object.setFunctionAccuracy(5);
-    math_object.SetDivAccuracy(5);
-    math_object.setFunctionRadianFlag(true);
     QPainter painter(&curent_ord);
+    CalculatorMath math_object;
+    math_object.setFunctionAccuracy(10); // if set more can freez
+    math_object.SetDivAccuracy(4); // no need very big accuracy, not seen in graphics
+    math_object.setFunctionRadianFlag(true); // all points already in radian
 
     // calculate all elements
     for(GraphicsInfoObject& element: *info_objects){
@@ -150,7 +161,7 @@ void GraphicsPainterWindow::paintGraphics(){
             continue;
         }
 
-        std::vector<std::string> result_left, result_right;
+        std::vector<std::string> result_left, result_right; // maybe need rewrite to save memory?
         CalculatorObject temp_result;
         math_object.setPolishEntry(element.getPolishEntry());
 
@@ -180,28 +191,28 @@ void GraphicsPainterWindow::paintGraphics(){
         double next_point=0.0, curent_y=0.0, next_y=0.0;
         // paint left part X ord
         curent_point=0.0;
-        for(int i=0;i<result_right.size()-1;i++){
+        for(size_t i=0;i<result_right.size()-1;i++){
             // change ',' to '.' for stod
             if(result_right[i].find(',')!=std::string::npos) result_right[i][result_right[i].find(',')]='.';
             if(result_right[i+1].find(',')!=std::string::npos) result_right[i+1][result_right[i+1].find(',')]='.';
 
             next_point=curent_point+POINT_SPACE/10;
-            curent_y=POINT_SPACE*std::stod(result_right[i]);
-            next_y=POINT_SPACE*std::stod(result_right[i+1]);
+            curent_y=(POINT_SPACE*std::stod(result_right[i]))/curent_scale;
+            next_y=(POINT_SPACE*std::stod(result_right[i+1]))/curent_scale;
             temp_painter.drawLine(width/2+curent_point,height/2-curent_y,width/2+next_point,height/2-next_y);
             curent_point+=POINT_SPACE/10;
         }
 
         // paint right part X ord
         curent_point=0.0;
-        for(int i=0;i<result_left.size()-1;i++){
+        for(size_t i=0;i<result_left.size()-1;i++){
             // change ',' to '.' for stod
             if(result_left[i].find(',')!=std::string::npos) result_left[i][result_left[i].find(',')]='.';
             if(result_left[i+1].find(',')!=std::string::npos) result_left[i+1][result_left[i+1].find(',')]='.';
 
             next_point=curent_point-POINT_SPACE/10;
-            curent_y=POINT_SPACE*std::stod(result_left[i]);
-            next_y=POINT_SPACE*std::stod(result_left[i+1]);
+            curent_y=(POINT_SPACE*std::stod(result_left[i]))/curent_scale;
+            next_y=(POINT_SPACE*std::stod(result_left[i+1]))/curent_scale;
             temp_painter.drawLine(width/2+curent_point,height/2-curent_y,width/2+next_point,height/2-next_y);
             curent_point-=POINT_SPACE/10;
         }
