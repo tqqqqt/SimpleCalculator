@@ -6,12 +6,15 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
     ui(new Ui::SettingsWindow)
 {
     ui->setupUi(this);
-    this->connect(ui->pushButton_accept,SIGNAL(clicked()),this,SLOT(buttonAccept()));
-    this->connect(ui->pushButton_cancel,SIGNAL(clicked()),this,SLOT(buttonClose()));
 
+    // open PC settings and load curent settings
     QSettings settings("tqqqqt","calculator");
     ui->spinBox_div_acuracy->setValue(settings.value("calc/acuracy").toInt());
     ui->spinBox_function_acuracy->setValue(settings.value("calc/func_acuracy").toInt());
+
+    // buttons connect
+    this->connect(ui->pushButton_accept,SIGNAL(clicked()),this,SLOT(buttonAccept()));
+    this->connect(ui->pushButton_cancel,SIGNAL(clicked()),this,SLOT(buttonClose()));
 }
 
 SettingsWindow::~SettingsWindow()
@@ -21,10 +24,12 @@ SettingsWindow::~SettingsWindow()
 
 // Save in settings new value and emit signal to calculator
 void SettingsWindow::buttonAccept(){
+    // open settings and load changes
     QSettings settings("tqqqqt","calculator");
     settings.setValue("calc/acuracy",ui->spinBox_div_acuracy->value());
     settings.setValue("calc/func_acuracy",ui->spinBox_function_acuracy->value());
 
+    // emit signal to main window to load new settings
     emit acceptSettings();
     this->close();
 }
