@@ -176,7 +176,7 @@ void MainWindow::addedSpecialFunction(QString _function){
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
     objects.push_back(curent_object);
     curent_object.clear();
-    curent_object.addFunction(_function.toStdString());
+    curent_object.addSpecialFunction(_function.toStdString());
     countOper+=1;
     setFullText();
 }
