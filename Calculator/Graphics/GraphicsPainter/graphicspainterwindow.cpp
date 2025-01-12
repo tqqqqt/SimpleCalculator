@@ -54,6 +54,7 @@ void GraphicsPainterWindow::closeEvent(QCloseEvent *event){
 
 // paint X and Y ord without points num
 void GraphicsPainterWindow::paintMainOrd(){
+    // get window and buttons height to calculate free space for pixmap
     int window_height=height(), buttons_height=ui->frame->height()+20;
     // picture size
     int height=window_height-buttons_height, width=QWidget::width()-8;
@@ -97,7 +98,7 @@ void GraphicsPainterWindow::paintPoints(){
         // upper points
         painter.drawLine(width/2-5,height/2-i,width/2+5,height/2-i);
         painter.drawText(width/2-17,height/2-i+4,QString::fromStdString(std::to_string((i/POINT_SPACE)*curent_scale)));
-        //bottom points
+        // bottom points
         painter.drawLine(width/2-5,height/2+i,width/2+5,height/2+i);
         painter.drawText(width/2-17,height/2+i+4,QString::fromStdString(std::to_string(((i/POINT_SPACE)*curent_scale)*-1)));
     }
@@ -122,7 +123,7 @@ void GraphicsPainterWindow::clearGraphics(){
 
 // change picture scale to pluss one
 void GraphicsPainterWindow::addScale(){
-    if(curent_scale>=20) return;
+    if(curent_scale>=20) return; // more then 20 scale it's big nums
     curent_scale+=1;
 
     emit needClearGraphics();
@@ -131,7 +132,7 @@ void GraphicsPainterWindow::addScale(){
 
 // change picture scale to minus one
 void GraphicsPainterWindow::minusScale(){
-    if(curent_scale<=1) return;
+    if(curent_scale<=1) return; // don't use dot nums like 0.5
     curent_scale-=1;
 
     emit needClearGraphics();
@@ -155,7 +156,7 @@ void GraphicsPainterWindow::paintGraphics(){
     math_object.SetDivAccuracy(4); // no need very big accuracy, not seen in graphics
     math_object.setFunctionRadianFlag(true); // all points already in radian
 
-    // calculate all elements
+    // paint graphics of all elements
     for(GraphicsInfoObject& element: *info_objects){
         // if graphics already paint do not rewrite and set on screen
         if(element.getGraphicFlag()==true){
@@ -170,16 +171,28 @@ void GraphicsPainterWindow::paintGraphics(){
         // move to right X ord
         double curent_point=0;
         for(int i=0;i<width/2;i+=POINT_SPACE/10){
-            temp_result=math_object.getResultWithVariable(curent_point);
-            result_right.push_back(temp_result.toString());
+            try{
+                if(i%POINT_SPACE==0) curent_point=round(curent_point);
+                temp_result=math_object.getResultWithVariable(curent_point);
+                result_right.push_back(temp_result.toString());
+            }
+            catch(std::exception){
+                // skip exception and point
+            }
             curent_point+=0.1*curent_scale;
         }
 
         // move to left X ord
         curent_point=0;
         for(int i=0;i<width/2;i+=POINT_SPACE/10){
-            temp_result=math_object.getResultWithVariable(curent_point);
-            result_left.push_back(temp_result.toString());
+            try{
+                if(i%POINT_SPACE==0) curent_point=round(curent_point);
+                temp_result=math_object.getResultWithVariable(curent_point);
+                result_left.push_back(temp_result.toString());
+            }
+            catch(std::exception){
+                // skip exception and point
+            }
             curent_point-=0.1*curent_scale;
         }
 
@@ -191,9 +204,12 @@ void GraphicsPainterWindow::paintGraphics(){
 
         // paint new graphic
         double next_point=0.0, curent_y=0.0, next_y=0.0;
-        // paint left part X ord
+        // paint right part X ord
         curent_point=0.0;
-        for(size_t i=0;i<result_right.size()-1;i++){
+        for(int i=0;i<result_right.size()-1;i++){
+            // check if curent or next point is skip point
+            if(result_right[i]=="S" || result_right[i+1]=="S") continue;
+
             // change ',' to '.' for stod
             if(result_right[i].find(',')!=std::string::npos) result_right[i][result_right[i].find(',')]='.';
             if(result_right[i+1].find(',')!=std::string::npos) result_right[i+1][result_right[i+1].find(',')]='.';
@@ -205,9 +221,12 @@ void GraphicsPainterWindow::paintGraphics(){
             curent_point+=POINT_SPACE/10;
         }
 
-        // paint right part X ord
+        // paint left part X ord
         curent_point=0.0;
-        for(size_t i=0;i<result_left.size()-1;i++){
+        for(int i=0;i<result_left.size()-1;i++){
+            // check if curent or next point is skip point
+            if(result_left[i]=="S" || result_left[i+1]=="S") continue;
+
             // change ',' to '.' for stod
             if(result_left[i].find(',')!=std::string::npos) result_left[i][result_left[i].find(',')]='.';
             if(result_left[i+1].find(',')!=std::string::npos) result_left[i+1][result_left[i+1].find(',')]='.';
@@ -224,5 +243,6 @@ void GraphicsPainterWindow::paintGraphics(){
         painter.drawPixmap(curent_ord.rect(),new_graphic,new_graphic.rect());
     }
 
+    // set complete picture on screen
     ui->label->setPixmap(curent_ord);
 }
