@@ -333,7 +333,7 @@ std::string MathTng(std::string degree, int div_acuracy, int function_acuracy, b
         result=MathDiv(result_sin,result_cos,div_acuracy);
     }
     catch(std::exception){
-        return "0";
+        return "value is not defined";
     }
     return result;
 }
@@ -345,7 +345,7 @@ std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy, 
         result=MathDiv(result_cos,result_sin,div_acuracy);
     }
     catch(std::exception){
-        return "0";
+        return "value is not defined";
     }
     return result;
 }
