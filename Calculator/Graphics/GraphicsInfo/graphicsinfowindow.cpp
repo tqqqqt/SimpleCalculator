@@ -31,7 +31,7 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(buttonZnak()));
     this->connect(ui->pushButton_x,SIGNAL(clicked()),this,SLOT(pressVariableButton()));
 
-    // operator buttons and result
+    // operator, pow and add buttons
     this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ pressOperButton("+"); });
     this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ pressOperButton("-"); });
     this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ pressOperButton("*"); });
@@ -74,6 +74,7 @@ void GraphicsInfoWindow::closeEvent(QCloseEvent *event){
 void GraphicsInfoWindow::buttonChangeMode(){
     ModeWindow *mode_window=new ModeWindow(this);
     this->connect(mode_window,SIGNAL(changeMode(int)),this,SLOT(updateMode(int)));
+
     mode_window->exec();
 }
 
@@ -99,9 +100,10 @@ void GraphicsInfoWindow::openPainter(){
     painter_window=new GraphicsPainterWindow(&info_objects);
     painter_window_open=true;
 
+    // connects signals with painter window
     this->connect(this,SIGNAL(closeWindow()),painter_window,SLOT(needClose()));
-    this->connect(painter_window,SIGNAL(closeWindow()),this,SLOT(updatePainterWindowState()));
     this->connect(this,SIGNAL(addNewElement()),painter_window,SLOT(paintGraphics()));
+    this->connect(painter_window,SIGNAL(closeWindow()),this,SLOT(updatePainterWindowState()));
 
     painter_window->show();
 }
@@ -109,89 +111,128 @@ void GraphicsInfoWindow::openPainter(){
 // collect text from all objects and display on screen
 void GraphicsInfoWindow::setFullText(){
     curent_text="";
+
+    // collect all texts
     for(auto element:objects){
         curent_text+=QString::fromStdString(element.toString());
     }
     curent_text+=QString::fromStdString(curent_object.toString());
+
     ui->label->setText(curent_text);
 }
 
 // added pressed num to curent object
 void GraphicsInfoWindow::pressNumberButton(QChar buttonNum){
+    // drop curent object in vector if it's not a num
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
         curent_object.clear();
     }
     curent_object.addNum(buttonNum.toLatin1());
+
     setFullText();
 }
 
 // added operator to curent object
 void GraphicsInfoWindow::pressOperButton(QString buttonOper){
+    // rules for use operator
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::None || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Functins) return;
+
+    // change object to minus bracket without drop in vector
     if(buttonOper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets){
         curent_object.addSymbol("-");
         setFullText();
         return;
     }
+
+    // drop object in vector if it's not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
     }
+
     curent_object.addSymbol(buttonOper.toStdString());
     count_oper+=1;
     if(buttonOper=="^(") count_open_bracket+=1;
+
+    // display curent text
     setFullText();
 }
 
 // added X variable to curent object
 void GraphicsInfoWindow::pressVariableButton(){
+    // variable use rules
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+
+    // drop objects in vector if it's not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
+
     curent_object.clear();
     curent_object.addVariable();
+
+    // display curent text
     setFullText();
 }
 
 // open function window if it's not open
 void GraphicsInfoWindow::pressFunctionsButton(){
+    // if already open don't open again
     if(function_window_show==true) return;
+
     FunctionsWindow *functions_window=new FunctionsWindow();
+
+    // connects signals
     this->connect(functions_window,SIGNAL(pressFunction(QString)),this,SLOT(addedFunction(QString)));
     this->connect(functions_window,SIGNAL(pressSpecialFunction(QString)),this,SLOT(addedSpecialFunction(QString)));
-    this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(needCloseWindow()));
     this->connect(functions_window,SIGNAL(updateWindowState()),this,SLOT(updateFunctionWindowState()));
+    this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(needCloseWindow()));
+
     functions_window->show();
     function_window_show=true;
 }
 
 // react to press function in function window and added function to curent object
 void GraphicsInfoWindow::addedFunction(QString _function){
+    // function use rules
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+
+    // drop object in vector if it's not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
     }
+
     curent_object.addFunction(_function.toStdString());
     count_oper+=1;
     count_open_bracket+=1;
+
+    // display text
     setFullText();
 }
 
 // some function with more arguments then 1 (mod)
 void GraphicsInfoWindow::addedSpecialFunction(QString _function){
+    // special function use rules
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
+
+    // always drop curetn object in vector
     objects.push_back(curent_object);
     curent_object.clear();
-    curent_object.addFunction(_function.toStdString());
+    curent_object.addSpecialFunction(_function.toStdString());
     count_oper+=1;
+
+    // display text
     setFullText();
 }
 
 // added dot for curent object
 void GraphicsInfoWindow::buttonDot(){
+    // dot use rulles
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num) return;
+
     curent_object.addNum(',');
+
+    // display text
     setFullText();
 }
 
@@ -202,43 +243,63 @@ void GraphicsInfoWindow::buttonClear(){
     curent_object.clear();
     count_oper=0;
     count_open_bracket=0;
+
     setFullText();
 }
 
 // added open bracket to curent object
 void GraphicsInfoWindow::buttonOpenBrackets(){
+    // open bracket rules use
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+
+    // drop curent object in vector
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
         curent_object.clear();
     }
+
     curent_object.addSymbol("(");
     count_open_bracket+=1;
+
+    // display text
     setFullText();
 }
 
 // added close bracket to curent object
 void GraphicsInfoWindow::buttonCloseBrackets(){
+    // no need close bracket if dont have open bracket
     if(count_open_bracket==0) return;
+
+    // rules to use close bracket
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
+
+    // always drop curent object in vector
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol(")");
     count_open_bracket--;
+
+    // display text
     setFullText();
 }
 
 // added full object to list and display in window
 void GraphicsInfoWindow::buttonAdd(){
+    // rules to add input to list
     if(curent_text.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable)) return;
     if(count_open_bracket || count_oper==0) return;
+
+    // save text and polish entry to add in info object
     QString save_text=curent_text;
     std::vector<CalculatorObject> save_polish;
+
     try {
         objects.push_back(curent_object);
         info_math.setVector(objects.toStdVector());
         info_math.simplifyExpression();
+
         save_polish=info_math.getPolishEntry();
+
         objects.clear();
         curent_object.clear();
         setFullText();
@@ -248,49 +309,75 @@ void GraphicsInfoWindow::buttonAdd(){
         curent_object.clear();
         ui->label->setText(exp.what());
     }
+
+    // create new info object
     GraphicsInfoObject new_object;
     new_object.setDisplayText(save_text.toStdString());
     new_object.setPolishEntry(save_polish);
+
+    // added in list
     info_objects.push_back(new_object);
+
     emit needUpdateList();
     emit addNewElement();
+
+    // clear states
     count_open_bracket=0;
     count_oper=0;
 }
 
 // added minus in curent object
 void GraphicsInfoWindow::buttonZnak(){
+    // rules for use minus bracket
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+
+    // drop object in vector if his not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
+
     curent_object.clear();
     curent_object.addSymbol("(-");
     count_open_bracket++;
+
+    // display text
     setFullText();
 }
 
 // delete last input symbol or function
 void GraphicsInfoWindow::buttonDeleteLast(){
+    // check what curent object length is null
     if(curent_object.getLength()==0){
         int size=objects.size()-1;
+        // while have objects in vector check them all
         while(size>=0){
+            // if length null delete object
             if(objects[size].getLength()==0){
                 objects.pop_back();
                 continue;
             }
+            // delete last symbol if length not null
             objects[size].deleteLastSymbol();
+
+            // pop if after delete symbol length == 0
             if(objects[size].getLength()==0) objects.pop_back();
+
+            // break cause we found object with no null length
             break;
         }
+        // set find object as curent object
         if(size>=0){
             curent_object=objects.back();
             objects.pop_back();
         }
         return;
     }
+    // if curent object length not null
+    // some checks for change count brackets and operators
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators) count_oper--;
     else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) count_open_bracket++;
     else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets) count_open_bracket--;
+
     curent_object.deleteLastSymbol();
+    // check curent length and change curent object if can
     if(curent_object.getLength()==0){
         if(objects.size()==0) curent_object.clear();
         else{
@@ -298,12 +385,16 @@ void GraphicsInfoWindow::buttonDeleteLast(){
             objects.pop_back();
         }
     }
+
+    // display text
     setFullText();
 }
 
 // delete element in list
 void GraphicsInfoWindow::deleteListElement(){
     int curent_element=ui->listWidget_expressions->currentRow();
+
+    // check for bound
     if(curent_element<0 || curent_element>info_objects.size()) return;
     info_objects.erase(info_objects.begin()+curent_element);
 
@@ -318,6 +409,7 @@ void GraphicsInfoWindow::updateFunctionWindowState(){
 
 // update widget to display all elements
 void GraphicsInfoWindow::updateListWidget(){
+    // clear list widget for added elements
     ui->listWidget_expressions->clear();
     for(GraphicsInfoObject elem:info_objects){
         ui->listWidget_expressions->addItem(QString::fromStdString(elem.getDisplayText()));
