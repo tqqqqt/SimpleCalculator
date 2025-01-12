@@ -10,5 +10,6 @@
         <file>Programmist/programmist_enable_button.css</file>
         <file>Programmist/programmist_curent_system.css</file>
         <file>Programmist/programmist_style.css</file>
+        <file>Graphics/GraphicsInfo/enter-icon.png</file>
     </qresource>
 </RCC>
