@@ -47,7 +47,7 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
                 oper_mas.pop();
             }
             oper_mas.pop();
-            if(oper_mas.size() && (oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::PowOperator || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Functins)){
+            if(oper_mas.size() && (oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::PowOperator || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Functins || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Mod)){
                 polishEntry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
@@ -162,7 +162,8 @@ CalculatorObject CalculatorMath::getResultWithVariable(double _point){
     std::stack<CalculatorObject> stack;
     CalculatorObject x_object, temp_result;
     std::string x_num=std::to_string(_point);
-    if(x_num.find('.')) x_num[x_num.find('.')]=',';
+    if(std::modf(_point,nullptr)==0) x_num=std::to_string(static_cast<int>(_point));
+    if(x_num.find('.')!=std::string::npos) x_num[x_num.find('.')]=',';
     x_object.setFullNum(x_num);
     for(int i=0;i<polishEntry.size();i++){
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){
@@ -175,7 +176,7 @@ CalculatorObject CalculatorMath::getResultWithVariable(double _point){
         }
         try {
             CalculatorObject::ObjectsTypes object_type=polishEntry[i].getObjectType();
-            if(object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator){
+            if(object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator || object_type==CalculatorObject::ObjectsTypes::Mod){
                 CalculatorObject num_1, num_2;
                 num_2=stack.top();
                 stack.pop();

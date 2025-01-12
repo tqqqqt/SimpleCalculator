@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <cmath>
 
 #include "./numbermath.h"
 #include "./calculatorobject.h"
