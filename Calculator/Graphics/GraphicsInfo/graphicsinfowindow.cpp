@@ -5,7 +5,9 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GraphicsInfoWindow)
 {
+    loadStyles();
     ui->setupUi(this);
+    loadIcons();
 
     painter_window_open=false;
     function_window_show=false;
@@ -62,6 +64,24 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
 GraphicsInfoWindow::~GraphicsInfoWindow()
 {
     delete ui;
+}
+
+// load all need icons and set in buttons
+void GraphicsInfoWindow::loadIcons(){
+    QPixmap pixmap(":/menu-icon.png");
+    QIcon button_icon(pixmap);
+    ui->pushButton_mode->setIcon(button_icon);
+    ui->pushButton_mode->setIconSize(pixmap.rect().size()/2);
+
+    pixmap.load(":/Graphics/GraphicsInfo/enter-icon.png");
+    button_icon.addPixmap(pixmap);
+    ui->pushButton_add->setIcon(button_icon);
+    ui->pushButton_add->setIconSize(pixmap.rect().size()/2);
+}
+
+// load styles use in window
+void GraphicsInfoWindow::loadStyles(){
+
 }
 
 // emit signal before close window

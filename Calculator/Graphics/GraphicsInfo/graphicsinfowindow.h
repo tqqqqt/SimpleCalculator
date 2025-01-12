@@ -47,6 +47,8 @@ private:
 
 private:
     void closeEvent(QCloseEvent*);
+    void loadIcons();
+    void loadStyles();
 
 signals:
     void closeWindow();
