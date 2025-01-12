@@ -60,12 +60,19 @@ void CalculatorObject::addSymbol(std::string _symbol){
 }
 
 void CalculatorObject::addFunction(std::string _function){
-    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="!" && _function!="mod" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(") throw std::invalid_argument("input not a function");
+    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(") throw std::invalid_argument("input not a function");
     if(object_type!=ObjectsTypes::None) return;
-    if(_function=="mod") object_type=ObjectsTypes::Operators;
-    if(_function=="!") object_type=ObjectsTypes::Factorial;
-    else object_type=ObjectsTypes::Functins;
+    object_type=ObjectsTypes::Functins;
     text=_function;
+    length=text.length();
+}
+
+void CalculatorObject::addSpecialFunction(std::string _special_function){
+    if(_special_function!="mod" && _special_function!="!") throw std::invalid_argument("input not a function");
+    if(object_type!=ObjectsTypes::None) return;
+    if(_special_function=="mod") object_type=ObjectsTypes::Mod;
+    else if(_special_function=="!") object_type=ObjectsTypes::Factorial;
+    text=_special_function;
     length=text.length();
 }
 
