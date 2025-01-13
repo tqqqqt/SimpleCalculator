@@ -102,9 +102,13 @@ void GraphicsInfoWindow::buttonChangeMode(){
 void GraphicsInfoWindow::updateMode(int _mode){
     if(_mode==4) return;
 
-    //
+    // set false to window state
+    function_window_show=false;
+    painter_window_open=false;
 
+    // emit signal to close child window like function or painter
     emit closeWindow();
+    // emit signal to main to change curent calculator mode
     emit changeWindow(_mode);
     this->hide();
 }
@@ -264,6 +268,7 @@ void GraphicsInfoWindow::buttonClear(){
     count_oper=0;
     count_open_bracket=0;
 
+    // update display text after changes
     setFullText();
 }
 
@@ -338,7 +343,9 @@ void GraphicsInfoWindow::buttonAdd(){
     // added in list
     info_objects.push_back(new_object);
 
+    // emit signal to update diplay list
     emit needUpdateList();
+    // emit signal to pointer window to paint graphics for new element
     emit addNewElement();
 
     // clear states
