@@ -4,6 +4,7 @@ GraphicsInfoObject::GraphicsInfoObject()
 {
     display_text="";
     graphic_enable=false;
+    color_enable=false;
 }
 
 void GraphicsInfoObject::setDisplayText(std::string _text){
@@ -38,7 +39,22 @@ void GraphicsInfoObject::clearGraphic(){
     graphic_enable=false;
 }
 
+void GraphicsInfoObject::setGraphicsColor(Qt::GlobalColor _color){
+    graphics_color=_color;
+    color_enable=true;
+}
+
+Qt::GlobalColor GraphicsInfoObject::getGraphicsColor(){
+    Qt::GlobalColor result=graphics_color;
+    return result;
+}
+
 bool GraphicsInfoObject::getGraphicFlag(){
     bool result=graphic_enable;
+    return result;
+}
+
+bool GraphicsInfoObject::getColorFlag(){
+    bool result=color_enable;
     return result;
 }
