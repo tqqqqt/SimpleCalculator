@@ -27,7 +27,7 @@ public:
 private:
     Ui::GraphicsPainterWindow *ui;
     QVector<GraphicsInfoObject> *info_objects;
-    QPixmap clear_ord, curent_ord;
+    QPixmap clear_ord, clear_ord_with_point, curent_ord;
     int curent_scale, curent_new_color;
 
 private:
@@ -39,7 +39,7 @@ public slots:
 
 private slots:
     void needClose();
-    void paintMainOrd();
+    QPixmap paintMainOrd();
     void paintPoints();
     void addScale();
     void minusScale();
@@ -48,7 +48,6 @@ private slots:
 
 signals:
     void closeWindow();
-    void needPaintOrd();
     void needPaintPoints();
     void needUpdatePicture();
     void needClearGraphics();

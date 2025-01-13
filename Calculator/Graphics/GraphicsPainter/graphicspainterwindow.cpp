@@ -17,12 +17,18 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
     curent_new_color=0;
     curent_scale=1;
     info_objects=_arr;
-    paintMainOrd();
-    paintPoints();
 
-    // clear_ord it's pixmap for display ord and points without graphics
+    // clear_ord it's pixmap for display only ord
+    // clear_ord_with_point it's pixmap ord and point then always update when change scale
     // curent_ord it's pixmap with graphics
-    clear_ord=curent_ord;
+
+    // create clean main ord
+    clear_ord=paintMainOrd();
+    // set clean ord as curent and add points
+    curent_ord=clear_ord;
+    paintPoints();
+    // save ord with points in variable
+    clear_ord_with_point=curent_ord;
     ui->label->setPixmap(curent_ord);
     paintGraphics();
 
@@ -31,7 +37,6 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
     this->connect(ui->pushButton_minus,SIGNAL(clicked()),this,SLOT(minusScale()));
 
     // signals
-    this->connect(this,SIGNAL(needPaintOrd()),this,SLOT(paintMainOrd()));
     this->connect(this,SIGNAL(needPaintPoints()),this,SLOT(paintPoints()));
     this->connect(this,SIGNAL(needUpdatePicture()),this,SLOT(updatePicture()));
     this->connect(this,SIGNAL(needClearGraphics()),this,SLOT(clearGraphics()));
@@ -54,7 +59,7 @@ void GraphicsPainterWindow::closeEvent(QCloseEvent *event){
 }
 
 // paint X and Y ord without points num
-void GraphicsPainterWindow::paintMainOrd(){
+QPixmap GraphicsPainterWindow::paintMainOrd(){
     // get window and buttons height to calculate free space for pixmap
     int window_height=height(), buttons_height=ui->frame->height()+20;
     // picture size
@@ -65,6 +70,7 @@ void GraphicsPainterWindow::paintMainOrd(){
     QPainter painter(&pixmap);
     painter.setPen(QPen(Qt::black,1));
 
+    // main ord
     // X ord
     painter.drawLine(0,height/2,width,height/2);
     painter.drawLine(width,height/2,width-10,height/2-10);
@@ -75,7 +81,22 @@ void GraphicsPainterWindow::paintMainOrd(){
     painter.drawLine(width/2,0,width/2-10,10);
     painter.drawLine(width/2,0,width/2+10,10);
 
-    curent_ord=pixmap;
+    // points hiden lines
+    for(int i=0;i<width/2;i+=POINT_SPACE/10){
+        // more thick line on 0.5, thin on 0.1
+        if(i%(POINT_SPACE/2)==0) painter.setPen(QPen(Qt::gray,0.3));
+        else painter.setPen(QPen(Qt::gray,0.1));
+        // x right side
+        painter.drawLine(width/2+i,0,width/2+i,height);
+        // x left side
+        painter.drawLine(width/2-i,0,width/2-i,height);
+        // y up side
+        painter.drawLine(0,height/2-i,width,height/2-i);
+        // y down side
+        painter.drawLine(0,height/2+i,width,height/2+i);
+    }
+
+    return pixmap;
 }
 
 // paint points on already done ord
@@ -107,10 +128,11 @@ void GraphicsPainterWindow::paintPoints(){
 
 // update picture when change scale
 void GraphicsPainterWindow::updatePicture(){
-    emit needPaintOrd();
+    curent_ord=clear_ord;
+
     emit needPaintPoints();
 
-    clear_ord=curent_ord;
+    clear_ord_with_point=curent_ord;
     ui->label->setPixmap(curent_ord);
     paintGraphics();
 }
@@ -145,37 +167,29 @@ void GraphicsPainterWindow::minusScale(){
 }
 
 Qt::GlobalColor GraphicsPainterWindow::getNewColor(){
-    Qt::GlobalColor result;
-    switch (curent_new_color) {
-    case 0:
-        result=Qt::GlobalColor::red;
-        break;
-    case 1:
-        result=Qt::GlobalColor::blue;
-        break;
-    case 2:
-        result=Qt::GlobalColor::cyan;
-        break;
-    case 3:
-        result=Qt::GlobalColor::gray;
-        break;
-    case 4:
-        result=Qt::GlobalColor::green;
-        break;
-    case 5:
-        result=Qt::GlobalColor::yellow;
-        break;
-    case 6:
-        result=Qt::GlobalColor::magenta;
-        break;
-    }
     curent_new_color=(curent_new_color+1)%7;
-    return result;
+    switch (curent_new_color) {
+    default: case 0:
+        return Qt::GlobalColor::red;
+    case 1:
+        return Qt::GlobalColor::blue;
+    case 2:
+        return Qt::GlobalColor::cyan;
+    case 3:
+        return Qt::GlobalColor::gray;
+    case 4:
+        return Qt::GlobalColor::green;
+    case 5:
+        return Qt::GlobalColor::yellow;
+    case 6:
+        return Qt::GlobalColor::magenta;
+    }
 }
 
 // paint all graphics in elements on screen or create and save graphics on element and display on screen
 void GraphicsPainterWindow::paintGraphics(){
-    curent_ord=clear_ord;
+    // set pixmap with points as curent ord
+    curent_ord=clear_ord_with_point;
     // if no objects in graphics
     if(info_objects->size()==0){
         ui->label->setPixmap(curent_ord);
