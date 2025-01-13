@@ -610,6 +610,9 @@
          <property name="text">
           <string>x</string>
          </property>
+         <property name="shortcut">
+          <string>X</string>
+         </property>
          <property name="autoRepeatDelay">
           <number>50</number>
          </property>
@@ -658,7 +661,6 @@
      <string>Опции</string>
     </property>
     <addaction name="action_open_painter"/>
-    <addaction name="action"/>
    </widget>
    <addaction name="menu"/>
   </widget>
