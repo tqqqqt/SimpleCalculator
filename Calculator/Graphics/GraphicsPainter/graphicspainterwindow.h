@@ -28,10 +28,11 @@ private:
     Ui::GraphicsPainterWindow *ui;
     QVector<GraphicsInfoObject> *info_objects;
     QPixmap clear_ord, curent_ord;
-    int curent_scale;
+    int curent_scale, curent_new_color;
 
 private:
     void closeEvent(QCloseEvent*);
+    Qt::GlobalColor getNewColor();
 
 public slots:
     void paintGraphics();

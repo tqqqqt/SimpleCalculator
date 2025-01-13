@@ -14,6 +14,7 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
 {
     ui->setupUi(this);
 
+    curent_new_color=0;
     curent_scale=1;
     info_objects=_arr;
     paintMainOrd();
@@ -143,6 +144,35 @@ void GraphicsPainterWindow::minusScale(){
     emit needUpdatePicture();
 }
 
+Qt::GlobalColor GraphicsPainterWindow::getNewColor(){
+    Qt::GlobalColor result;
+    switch (curent_new_color) {
+    case 0:
+        result=Qt::GlobalColor::red;
+        break;
+    case 1:
+        result=Qt::GlobalColor::blue;
+        break;
+    case 2:
+        result=Qt::GlobalColor::cyan;
+        break;
+    case 3:
+        result=Qt::GlobalColor::gray;
+        break;
+    case 4:
+        result=Qt::GlobalColor::green;
+        break;
+    case 5:
+        result=Qt::GlobalColor::yellow;
+        break;
+    case 6:
+        result=Qt::GlobalColor::magenta;
+        break;
+    }
+    curent_new_color=(curent_new_color+1)%7;
+    return result;
+}
+
 // paint all graphics in elements on screen or create and save graphics on element and display on screen
 void GraphicsPainterWindow::paintGraphics(){
     curent_ord=clear_ord;
@@ -164,6 +194,7 @@ void GraphicsPainterWindow::paintGraphics(){
     for(GraphicsInfoObject& element: *info_objects){
         // if graphics already paint do not rewrite and set on screen
         if(element.getGraphicFlag()==true){
+            painter.setPen(QPen(element.getGraphicsColor(),1));
             painter.drawPixmap(curent_ord.rect(),element.getGraphic(),element.getGraphic().rect());
             continue;
         }
@@ -175,8 +206,12 @@ void GraphicsPainterWindow::paintGraphics(){
         // create new pixmap
         QPixmap new_graphic(width,height);
         new_graphic.fill(Qt::transparent);
+        Qt::GlobalColor new_color;
+        // if color already set in object use or set new color
+        if(element.getColorFlag()==false) new_color=getNewColor();
+        else new_color=element.getGraphicsColor();
         QPainter temp_painter(&new_graphic);
-        temp_painter.setPen(QPen(Qt::blue,1));
+        temp_painter.setPen(QPen(new_color,1));
 
         // save last known point
         double last_x=0.0, last_y=0.0;
@@ -244,6 +279,7 @@ void GraphicsPainterWindow::paintGraphics(){
 
         // added pixmap to element and window
         element.setGraphic(new_graphic);
+        element.setGraphicsColor(new_color);
         painter.drawPixmap(curent_ord.rect(),new_graphic,new_graphic.rect());
     }
 
