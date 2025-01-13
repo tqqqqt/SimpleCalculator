@@ -126,7 +126,9 @@ void GraphicsPainterWindow::addScale(){
     if(curent_scale>=20) return; // more then 20 scale it's big nums
     curent_scale+=1;
 
+    // emit signal to delete graphics in all info objects
     emit needClearGraphics();
+    // emit signal to draw new paint whis new scale
     emit needUpdatePicture();
 }
 
@@ -135,7 +137,9 @@ void GraphicsPainterWindow::minusScale(){
     if(curent_scale<=1) return; // don't use dot nums like 0.5
     curent_scale-=1;
 
+    // emit signal to delete graphics in all info objects
     emit needClearGraphics();
+    // emit signal to draw new paint whis new scale
     emit needUpdatePicture();
 }
 
@@ -164,9 +168,11 @@ void GraphicsPainterWindow::paintGraphics(){
             continue;
         }
 
+        // object to collect results after calculate
         CalculatorObject temp_result;
         math_object.setPolishEntry(element.getPolishEntry());
 
+        // create new pixmap
         QPixmap new_graphic(width,height);
         new_graphic.fill(Qt::transparent);
         QPainter temp_painter(&new_graphic);
@@ -176,10 +182,10 @@ void GraphicsPainterWindow::paintGraphics(){
         double last_x=0.0, last_y=0.0;
         // move to right X ord
         double curent_point=0, curent_y=0;
-        for(int i=0;i<width/2;i+=POINT_SPACE/10){
+        for(int curent_x=0, count_points=0;curent_x<width/2;curent_x+=POINT_SPACE/10){
             try{
-                // round point couse no need double error like 2.000000000001
-                if(i%POINT_SPACE==0) curent_point=round(curent_point);
+                // round point cause no need double error like 2.000000000001
+                if(curent_x%POINT_SPACE==0) curent_point=round(curent_point);
                 temp_result=math_object.getResultWithVariable(curent_point);
 
                 std::string string_result=temp_result.toString();
@@ -187,11 +193,16 @@ void GraphicsPainterWindow::paintGraphics(){
                 if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
                 curent_y=(POINT_SPACE*std::stod(string_result))/curent_scale;
 
-                temp_painter.drawLine(width/2+last_x,height/2-last_y,width/2+i,height/2-curent_y);
+                // need count point > 0 for not draw line from 0,0 point in ord
+                if(count_points>0){
+                    temp_painter.drawLine(width/2+last_x,height/2-last_y,width/2+curent_x,height/2-curent_y);
+                }
 
                 // save last coords
-                last_x=i;
+                last_x=curent_x;
                 last_y=curent_y;
+                // count curent points
+                count_points+=1;
             }
             catch(std::exception){
                 // skip exception and point
@@ -203,10 +214,10 @@ void GraphicsPainterWindow::paintGraphics(){
         last_y=0;
         curent_point=0;
         // move to left X ord
-        for(int i=0;i<width/2;i+=POINT_SPACE/10){
+        for(int curent_x=0, count_points=0;curent_x<width/2;curent_x+=POINT_SPACE/10){
             try{
                 // round num
-                if(i%POINT_SPACE==0) curent_point=round(curent_point);
+                if(curent_x%POINT_SPACE==0) curent_point=round(curent_point);
                 temp_result=math_object.getResultWithVariable(curent_point);
 
                 std::string string_result=temp_result.toString();
@@ -214,11 +225,16 @@ void GraphicsPainterWindow::paintGraphics(){
                 if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
                 curent_y=(POINT_SPACE*std::stod(string_result))/curent_scale;
 
-                temp_painter.drawLine(width/2-last_x,height/2-last_y,width/2-i,height/2-curent_y);
+                // need count point > 0 for not draw line from 0,0 point in ord
+                if(count_points>0){
+                    temp_painter.drawLine(width/2-last_x,height/2-last_y,width/2-curent_x,height/2-curent_y);
+                }
 
                 // save last coords
-                last_x=i;
+                last_x=curent_x;
                 last_y=curent_y;
+                // count points
+                count_points+=1;
             }
             catch(std::exception){
                 // skip exception and point
@@ -226,7 +242,7 @@ void GraphicsPainterWindow::paintGraphics(){
             curent_point-=0.1*curent_scale;
         }
 
-        // added to element and window
+        // added pixmap to element and window
         element.setGraphic(new_graphic);
         painter.drawPixmap(curent_ord.rect(),new_graphic,new_graphic.rect());
     }
