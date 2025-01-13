@@ -52,6 +52,13 @@ void GraphicsPainterWindow::needClose(){
     this->close();
 }
 
+void GraphicsPainterWindow::resizeEvent(QResizeEvent *event){
+    event->accept();
+
+    clear_ord=paintMainOrd();
+    emit needUpdatePicture();
+}
+
 // function do something before close window
 void GraphicsPainterWindow::closeEvent(QCloseEvent *event){
     emit closeWindow();

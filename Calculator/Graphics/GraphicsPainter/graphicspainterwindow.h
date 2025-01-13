@@ -32,6 +32,7 @@ private:
 
 private:
     void closeEvent(QCloseEvent*);
+    void resizeEvent(QResizeEvent*);
     Qt::GlobalColor getNewColor();
 
 public slots:
