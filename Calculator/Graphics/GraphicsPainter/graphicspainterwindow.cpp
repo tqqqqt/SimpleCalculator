@@ -164,17 +164,34 @@ void GraphicsPainterWindow::paintGraphics(){
             continue;
         }
 
-        std::vector<std::string> result_left, result_right; // maybe need rewrite to save memory?
         CalculatorObject temp_result;
         math_object.setPolishEntry(element.getPolishEntry());
 
+        QPixmap new_graphic(width,height);
+        new_graphic.fill(Qt::transparent);
+        QPainter temp_painter(&new_graphic);
+        temp_painter.setPen(QPen(Qt::blue,1));
+
+        // save last known point
+        double last_x=0.0, last_y=0.0;
         // move to right X ord
-        double curent_point=0;
+        double curent_point=0, curent_y=0;
         for(int i=0;i<width/2;i+=POINT_SPACE/10){
             try{
+                // round point couse no need double error like 2.000000000001
                 if(i%POINT_SPACE==0) curent_point=round(curent_point);
                 temp_result=math_object.getResultWithVariable(curent_point);
-                result_right.push_back(temp_result.toString());
+
+                std::string string_result=temp_result.toString();
+                // change to dot becouse std::stod dont know what is it
+                if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
+                curent_y=(POINT_SPACE*std::stod(string_result))/curent_scale;
+
+                temp_painter.drawLine(width/2+last_x,height/2-last_y,width/2+i,height/2-curent_y);
+
+                // save last coords
+                last_x=i;
+                last_y=curent_y;
             }
             catch(std::exception){
                 // skip exception and point
@@ -182,60 +199,31 @@ void GraphicsPainterWindow::paintGraphics(){
             curent_point+=0.1*curent_scale;
         }
 
-        // move to left X ord
+        last_x=0;
+        last_y=0;
         curent_point=0;
+        // move to left X ord
         for(int i=0;i<width/2;i+=POINT_SPACE/10){
             try{
+                // round num
                 if(i%POINT_SPACE==0) curent_point=round(curent_point);
                 temp_result=math_object.getResultWithVariable(curent_point);
-                result_left.push_back(temp_result.toString());
+
+                std::string string_result=temp_result.toString();
+                // change becouse std::stod
+                if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
+                curent_y=(POINT_SPACE*std::stod(string_result))/curent_scale;
+
+                temp_painter.drawLine(width/2-last_x,height/2-last_y,width/2-i,height/2-curent_y);
+
+                // save last coords
+                last_x=i;
+                last_y=curent_y;
             }
             catch(std::exception){
                 // skip exception and point
             }
             curent_point-=0.1*curent_scale;
-        }
-
-        // prepate pixmap
-        QPixmap new_graphic(width,height);
-        new_graphic.fill(Qt::transparent);
-        QPainter temp_painter(&new_graphic);
-        temp_painter.setPen(QPen(Qt::black,1));
-
-        // paint new graphic
-        double next_point=0.0, curent_y=0.0, next_y=0.0;
-        // paint right part X ord
-        curent_point=0.0;
-        for(int i=0;i<result_right.size()-1;i++){
-            // check if curent or next point is skip point
-            if(result_right[i]=="S" || result_right[i+1]=="S") continue;
-
-            // change ',' to '.' for stod
-            if(result_right[i].find(',')!=std::string::npos) result_right[i][result_right[i].find(',')]='.';
-            if(result_right[i+1].find(',')!=std::string::npos) result_right[i+1][result_right[i+1].find(',')]='.';
-
-            next_point=curent_point+POINT_SPACE/10;
-            curent_y=(POINT_SPACE*std::stod(result_right[i]))/curent_scale;
-            next_y=(POINT_SPACE*std::stod(result_right[i+1]))/curent_scale;
-            temp_painter.drawLine(width/2+curent_point,height/2-curent_y,width/2+next_point,height/2-next_y);
-            curent_point+=POINT_SPACE/10;
-        }
-
-        // paint left part X ord
-        curent_point=0.0;
-        for(int i=0;i<result_left.size()-1;i++){
-            // check if curent or next point is skip point
-            if(result_left[i]=="S" || result_left[i+1]=="S") continue;
-
-            // change ',' to '.' for stod
-            if(result_left[i].find(',')!=std::string::npos) result_left[i][result_left[i].find(',')]='.';
-            if(result_left[i+1].find(',')!=std::string::npos) result_left[i+1][result_left[i+1].find(',')]='.';
-
-            next_point=curent_point-POINT_SPACE/10;
-            curent_y=(POINT_SPACE*std::stod(result_left[i]))/curent_scale;
-            next_y=(POINT_SPACE*std::stod(result_left[i+1]))/curent_scale;
-            temp_painter.drawLine(width/2+curent_point,height/2-curent_y,width/2+next_point,height/2-next_y);
-            curent_point-=POINT_SPACE/10;
         }
 
         // added to element and window
