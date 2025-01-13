@@ -62,7 +62,6 @@ public slots:
 private slots:
     void buttonChangeMode();
     void updateMode(int);
-    //void openPainter();
     void updatePainterWindowState();
     void setFullText();
     void pressNumberButton(QChar buttonNum);
@@ -81,8 +80,6 @@ private slots:
     void deleteListElement();
     void updateFunctionWindowState();
     void updateListWidget();
-    //void ButtonSettings();
-    //void UpdateSettings();
 };
 
 #endif // GRAPHICSINFOWINDOW_H
