@@ -42,7 +42,7 @@ private:
     CalculatorMath info_math;
     QString curent_text;
     bool function_window_show;
-    int count_open_bracket, count_oper;
+    int count_open_bracket;
     int curent_acuracy, function_acuracy, graphics_point_count;
 
 private:

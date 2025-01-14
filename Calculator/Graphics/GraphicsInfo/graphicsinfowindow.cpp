@@ -13,7 +13,6 @@ GraphicsInfoWindow::GraphicsInfoWindow(QWidget *parent) :
     function_window_show=false;
     curent_text="";
     count_open_bracket=0;
-    count_oper=0;
 
     // connects
     // nums buttons
@@ -176,7 +175,6 @@ void GraphicsInfoWindow::pressOperButton(QString buttonOper){
     }
 
     curent_object.addSymbol(buttonOper.toStdString());
-    count_oper+=1;
     if(buttonOper=="^(") count_open_bracket+=1;
 
     // display curent text
@@ -227,7 +225,6 @@ void GraphicsInfoWindow::addedFunction(QString _function){
     }
 
     curent_object.addFunction(_function.toStdString());
-    count_oper+=1;
     count_open_bracket+=1;
 
     // display text
@@ -243,7 +240,6 @@ void GraphicsInfoWindow::addedSpecialFunction(QString _function){
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSpecialFunction(_function.toStdString());
-    count_oper+=1;
 
     // display text
     setFullText();
@@ -265,7 +261,6 @@ void GraphicsInfoWindow::buttonClear(){
     curent_text="";
     objects.clear();
     curent_object.clear();
-    count_oper=0;
     count_open_bracket=0;
 
     // update display text after changes
@@ -311,8 +306,8 @@ void GraphicsInfoWindow::buttonCloseBrackets(){
 // added full object to list and display in window
 void GraphicsInfoWindow::buttonAdd(){
     // rules to add input to list
-    if(curent_text.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable)) return;
-    if(count_open_bracket || count_oper==0) return;
+    if(curent_text.length()==0 || count_open_bracket!=0) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
 
     // save text and polish entry to add in info object
     QString save_text=curent_text;
@@ -350,7 +345,6 @@ void GraphicsInfoWindow::buttonAdd(){
 
     // clear states
     count_open_bracket=0;
-    count_oper=0;
 }
 
 // added minus in curent object
@@ -399,8 +393,7 @@ void GraphicsInfoWindow::buttonDeleteLast(){
     }
     // if curent object length not null
     // some checks for change count brackets and operators
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators) count_oper--;
-    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) count_open_bracket++;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) count_open_bracket++;
     else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets) count_open_bracket--;
 
     curent_object.deleteLastSymbol();
