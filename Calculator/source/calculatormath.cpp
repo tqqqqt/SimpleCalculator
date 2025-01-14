@@ -9,6 +9,7 @@ CalculatorMath::CalculatorMath()
 
 CalculatorMath::~CalculatorMath(){ }
 
+// check prior of curent operator for polish entry
 int CalculatorMath::CheckPrior(std::string _oper){
     if(_oper=="+" || _oper=="-") return 1;
     if(_oper=="*" || _oper=="/") return 2;
@@ -16,16 +17,21 @@ int CalculatorMath::CheckPrior(std::string _oper){
     return 0;
 }
 
+// set curent vector of CalculatorObject and make polish entry
 void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
     polishEntry.clear();
+    // oper mas need to operator and functions
     std::stack<CalculatorObject> oper_mas;
     CalculatorObject::ObjectsTypes object_type=CalculatorObject::ObjectsTypes::None;
+    // check all elements in vector
     for(CalculatorObject element:_objects){
         object_type=element.getObjectType();
-        if(object_type==CalculatorObject::ObjectsTypes::Num || object_type==CalculatorObject::ObjectsTypes::X_variable){
+        // nums, x variable and factorial dont need do something
+        if(object_type==CalculatorObject::ObjectsTypes::Num || object_type==CalculatorObject::ObjectsTypes::X_variable || object_type==CalculatorObject::ObjectsTypes::Factorial){
             polishEntry.push_back(element);
             continue;
         }
+        // function and operator who use bracket need special move
         if(object_type==CalculatorObject::ObjectsTypes::MinusBrackets || object_type==CalculatorObject::ObjectsTypes::PowOperator || object_type==CalculatorObject::ObjectsTypes::Functins){
             CalculatorObject temp;
             temp.addSymbol("(");
@@ -33,26 +39,28 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
             oper_mas.push(temp);
             continue;
         }
-        if(object_type==CalculatorObject::ObjectsTypes::Factorial){
-            polishEntry.push_back(element);
-            continue;
-        }
+        // open bracket simply add to oper_mas
         if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets){
             oper_mas.push(element);
             continue;
         }
+        // if find close bracket we need add all while not find open bracket what add before
         if(object_type==CalculatorObject::ObjectsTypes::CloseBrackets){
+            // add in polish entry all what find between open and close bracket
             while(oper_mas.size() && oper_mas.top().getObjectType()!=CalculatorObject::ObjectsTypes::OpenBrackets){
                 polishEntry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
+            // delete open bracket
             oper_mas.pop();
+            // to function special move need add this function and delete from oper mas
             if(oper_mas.size() && (oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::PowOperator || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Functins || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Mod)){
                 polishEntry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
             continue;
         }
+        // for simply operators need check prior and add in oper_mas
         int curent_prior=CheckPrior(element.toString());
         while(oper_mas.size() && curent_prior<=CheckPrior(oper_mas.top().toString())){
             polishEntry.push_back(oper_mas.top());
@@ -60,20 +68,26 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
         }
         oper_mas.push(element);
     }
+    // if something exist in oper mas after check all elements in vector
     while(oper_mas.size()){
         polishEntry.push_back(oper_mas.top());
         oper_mas.pop();
     }
+    // change nums to correct only nums without bracket from calculator
     for(size_t i=0;i<polishEntry.size();i++){
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num) polishEntry[i]=polishEntry[i].getOnlyNum();
     }
 }
 
+// calculate result from polish entry
 CalculatorObject CalculatorMath::GetResult(){
     int delete_mode=0;
+    // move while not find operators or functions
     for(size_t i=0;i<polishEntry.size();i++){
+        // nums skip
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num) continue;
         try {
+            // check if it operator
             if(polishEntry[i].toString()=="-") polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else if(polishEntry[i].toString()=="+") polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else if(polishEntry[i].toString()=="*") polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
@@ -81,6 +95,7 @@ CalculatorObject CalculatorMath::GetResult(){
             else if(polishEntry[i].toString()=="^(") polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else if(polishEntry[i].toString()=="mod") polishEntry[i-2].setFullNum(MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
             else{
+                // check if it function
                 delete_mode=1;
                 if(polishEntry[i].toString()=="(-") polishEntry[i-1].setFullNum(MathMul(polishEntry[i-1].toString(),"-1"));
                 else if(polishEntry[i].toString()=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
@@ -95,34 +110,43 @@ CalculatorObject CalculatorMath::GetResult(){
         } catch (std::exception) {
             throw;
         }
+        // delete two nums becouse operators use two nums
         if(delete_mode==0){
             polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
             i-=2;
         }
+        // delete only one num becose function use only one num
         else{
             polishEntry.erase(polishEntry.begin()+i);
             i-=1;
             delete_mode=0;
         }
     }
+    // add bracket to calculator display
     if(polishEntry[0].toString()[0]=='-') polishEntry[0].setFullNum('('+polishEntry[0].toString()+')');
     return polishEntry[0];
 }
 
+// try simplify polish entry
+// use only in graphics mode
 void CalculatorMath::simplifyExpression(){
     int delete_mode=0, count_nums=0;
+    // check all avalible elements
     for(size_t i=0;i<polishEntry.size();i++){
         delete_mode=-1;
         CalculatorObject::ObjectsTypes object_type=polishEntry[i].getObjectType();
+        // count avalible nums
         if(object_type==CalculatorObject::ObjectsTypes::Num){
             count_nums+=1;
             continue;
         }
+        // skip x variable
         else if(object_type==CalculatorObject::ObjectsTypes::X_variable){
             count_nums=0;
             continue;
         }
         try {
+            // if no nums continue
             if(count_nums==0) continue;
             std::string object_string=polishEntry[i].toString();
             if(object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::Mod || object_type==CalculatorObject::ObjectsTypes::PowOperator){
@@ -159,10 +183,12 @@ void CalculatorMath::simplifyExpression(){
         } catch (std::exception) {
             throw;
         }
+        // operators use 2 objects
         if(delete_mode==0){
             polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
             i-=2;
         }
+        // functions use 1 objects
         else if(delete_mode==1){
             polishEntry.erase(polishEntry.begin()+i);
             i-=1;
@@ -170,23 +196,30 @@ void CalculatorMath::simplifyExpression(){
     }
 }
 
+// calculate result in polish entry to _point and not change polish_entry vector
+// use only in graphics mode
 CalculatorObject CalculatorMath::getResultWithVariable(double _point){
     std::stack<CalculatorObject> stack;
     CalculatorObject x_object, temp_result;
     std::string x_num=std::to_string(_point);
+    // delete float part in nums like 2.00000000001
     if(std::modf(_point,nullptr)==0) x_num=std::to_string(static_cast<int>(_point));
+    // change dot cause math use nums with ','
     if(x_num.find('.')!=std::string::npos) x_num[x_num.find('.')]=',';
     x_object.setFullNum(x_num);
     for(int i=0;i<polishEntry.size();i++){
+        // added nums to stack
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){
             stack.push(polishEntry[i]);
             continue;
         }
+        // change x to _point value and add to stack
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::X_variable){
             stack.push(x_object);
             continue;
         }
         try {
+            // calculate operators, pow and mode, use to nums
             CalculatorObject::ObjectsTypes object_type=polishEntry[i].getObjectType();
             if(object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator || object_type==CalculatorObject::ObjectsTypes::Mod){
                 CalculatorObject num_1, num_2;
@@ -202,6 +235,7 @@ CalculatorObject CalculatorMath::getResultWithVariable(double _point){
                 else if(polishEntry[i].toString()=="mod") temp_result.setFullNum(MathMod(num_1.toString(),num_2.toString()));
             }
             else{
+                // calculate functions, use only one num
                 CalculatorObject num;
                 num=stack.top();
                 stack.pop();
@@ -219,28 +253,36 @@ CalculatorObject CalculatorMath::getResultWithVariable(double _point){
         catch (std::exception) {
             throw;
         }
+        // add result in stack
         stack.push(temp_result);
     }
+    // always only one element stay in stack in result
     return stack.top();
 }
 
+// get polish entry from object
 std::vector<CalculatorObject> CalculatorMath::getPolishEntry(){
     std::vector<CalculatorObject> result=polishEntry;
     return result;
 }
 
+// set polish entry to curent object
 void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
     polishEntry=_arr;
 }
 
+// change div acuracy to number math
 void CalculatorMath::SetDivAccuracy(int _accuracy){
     div_accuracy=_accuracy;
 }
 
+// change fucntion accuracy to number math
+// function acuracy show how much element need to calculate Sin and Cos
 void CalculatorMath::setFunctionAccuracy(int _accuracy){
     function_accuracy=_accuracy;
 }
 
+// set flag what all nums to sin, cos, tang and ctang is radian or not
 void CalculatorMath::setFunctionRadianFlag(bool _flag){
     function_radian_data=_flag;
 }
