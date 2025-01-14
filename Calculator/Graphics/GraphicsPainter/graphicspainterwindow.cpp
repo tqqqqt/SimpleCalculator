@@ -52,17 +52,21 @@ void GraphicsPainterWindow::needClose(){
     this->close();
 }
 
+// function do something before close window
+void GraphicsPainterWindow::closeEvent(QCloseEvent *event){
+    // close all child windows
+    emit closeWindow();
+    event->accept();
+}
+
+// function do something after resize window
 void GraphicsPainterWindow::resizeEvent(QResizeEvent *event){
     event->accept();
 
+    // rewrite clear ord
     clear_ord=paintMainOrd();
+    // add points and draw graphics
     emit needUpdatePicture();
-}
-
-// function do something before close window
-void GraphicsPainterWindow::closeEvent(QCloseEvent *event){
-    emit closeWindow();
-    event->accept();
 }
 
 // paint X and Y ord without points num
@@ -173,23 +177,24 @@ void GraphicsPainterWindow::minusScale(){
     emit needUpdatePicture();
 }
 
+// return color for new graphics
 Qt::GlobalColor GraphicsPainterWindow::getNewColor(){
     curent_new_color=(curent_new_color+1)%7;
     switch (curent_new_color) {
     default: case 0:
-        return Qt::GlobalColor::red;
+        return Qt::GlobalColor::darkRed;
     case 1:
-        return Qt::GlobalColor::blue;
+        return Qt::GlobalColor::darkBlue;
     case 2:
-        return Qt::GlobalColor::cyan;
+        return Qt::GlobalColor::darkGray;
     case 3:
-        return Qt::GlobalColor::gray;
+        return Qt::GlobalColor::darkGreen;
     case 4:
-        return Qt::GlobalColor::green;
+        return Qt::GlobalColor::darkMagenta;
     case 5:
-        return Qt::GlobalColor::yellow;
+        return Qt::GlobalColor::darkCyan;
     case 6:
-        return Qt::GlobalColor::magenta;
+        return Qt::GlobalColor::darkYellow;
     }
 }
 
@@ -236,13 +241,20 @@ void GraphicsPainterWindow::paintGraphics(){
 
         // save last known point
         double last_x=0.0, last_y=0.0;
+        double curent_y=0;
+        // create two part of num becouse double have trouble with accuracy
+        // trouble like 2.0000000001 or 1.999999999999
+        int whole_num_part=0, fractional_num_part=0, curent_step=1*curent_scale;
+        // full num use to set in math
+        std::string full_num="";
         // move to right X ord
-        double curent_point=0, curent_y=0;
         for(int curent_x=0, count_points=0;curent_x<width/2;curent_x+=POINT_SPACE/10){
             try{
-                // round point cause no need double error like 2.000000000001
-                if(curent_x%POINT_SPACE==0) curent_point=round(curent_point);
-                temp_result=math_object.getResultWithVariable(curent_point);
+                // collect two variable in one num
+                if(fractional_num_part==0) full_num=std::to_string(whole_num_part);
+                else full_num=std::to_string(whole_num_part)+','+std::to_string(fractional_num_part);
+                // calculate result
+                temp_result=math_object.getResultWithVariable(full_num);
 
                 std::string string_result=temp_result.toString();
                 // change to dot becouse std::stod dont know what is it
@@ -263,18 +275,26 @@ void GraphicsPainterWindow::paintGraphics(){
             catch(std::exception){
                 // skip exception and point
             }
-            curent_point+=0.1*curent_scale;
+            fractional_num_part+=curent_step;
+            // round num, nums only one digit after dot
+            if(fractional_num_part>=10){
+                whole_num_part+=1;
+                fractional_num_part%=10;
+            }
         }
 
         last_x=0;
         last_y=0;
-        curent_point=0;
+        whole_num_part=0;
+        fractional_num_part=0;
         // move to left X ord
         for(int curent_x=0, count_points=0;curent_x<width/2;curent_x+=POINT_SPACE/10){
             try{
-                // round num
-                if(curent_x%POINT_SPACE==0) curent_point=round(curent_point);
-                temp_result=math_object.getResultWithVariable(curent_point);
+                // collect all num
+                if(fractional_num_part==0) full_num='-'+std::to_string(whole_num_part);
+                else full_num='-'+std::to_string(whole_num_part)+','+std::to_string(fractional_num_part);
+                // calculate result
+                temp_result=math_object.getResultWithVariable(full_num);
 
                 std::string string_result=temp_result.toString();
                 // change becouse std::stod
@@ -295,7 +315,12 @@ void GraphicsPainterWindow::paintGraphics(){
             catch(std::exception){
                 // skip exception and point
             }
-            curent_point-=0.1*curent_scale;
+            fractional_num_part+=curent_step;
+            // num have only one num after dote
+            if(fractional_num_part>=10){
+                whole_num_part+=1;
+                fractional_num_part%=10;
+            }
         }
 
         // added pixmap to element and window
