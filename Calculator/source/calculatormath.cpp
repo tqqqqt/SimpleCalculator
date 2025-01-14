@@ -198,15 +198,10 @@ void CalculatorMath::simplifyExpression(){
 
 // calculate result in polish entry to _point and not change polish_entry vector
 // use only in graphics mode
-CalculatorObject CalculatorMath::getResultWithVariable(double _point){
+CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
     std::stack<CalculatorObject> stack;
     CalculatorObject x_object, temp_result;
-    std::string x_num=std::to_string(_point);
-    // delete float part in nums like 2.00000000001
-    if(std::modf(_point,nullptr)==0) x_num=std::to_string(static_cast<int>(_point));
-    // change dot cause math use nums with ','
-    if(x_num.find('.')!=std::string::npos) x_num[x_num.find('.')]=',';
-    x_object.setFullNum(x_num);
+    x_object.setFullNum(_point);
     for(int i=0;i<polishEntry.size();i++){
         // added nums to stack
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){

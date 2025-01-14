@@ -27,7 +27,7 @@ public:
     void setFunctionAccuracy(int);
     void simplifyExpression();
     CalculatorObject GetResult();
-    CalculatorObject getResultWithVariable(double);
+    CalculatorObject getResultWithVariable(std::string);
     std::vector<CalculatorObject> getPolishEntry();
     void setPolishEntry(std::vector<CalculatorObject>);
     void setFunctionRadianFlag(bool);
