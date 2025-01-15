@@ -283,7 +283,7 @@ std::string MathNeg(std::string num_1, std::string num_2){
         result.erase(0,1);
         result_length-=1;
     }
-    if(result.length()==0 || result[0]==',') result='0'+result;
+    if(result_length<=0 || result[0]==',') result='0'+result;
 
     // add minus if in start we change nums
     if(check_max_num==1) result='-'+result;
@@ -291,51 +291,108 @@ std::string MathNeg(std::string num_1, std::string num_2){
     return result;
 }
 
-std::string MathMul(std::string num1, std::string num2){
-    if(num1[0]=='-' && num2[0]!='-'){
-        std::string temp=MathMul(num1.substr(1),num2);
-        return temp=="0"?temp:'-'+temp;
-    }
-    if(num1[0]=='-' && num2[0]=='-') return MathMul(num1.substr(1),num2.substr(1));
-    if(num1[0]!='-' && num2[0]=='-'){
-        std::string temp=MathMul(num1,num2.substr(1));
-        return temp=="0"?temp:'-'+temp;
-    }
-    int countNumDot=0, lenNum1=num1.length(), lenNum2=num2.length();
-    size_t dot1P=num1.find(','), dot2P=num2.find(',');
-    if((num1[0]=='0' && dot1P==std::string::npos) || (num2[0]=='0' && dot2P==std::string::npos)) return "0";
-    if(dot1P!=std::string::npos){
-        countNumDot+=lenNum1-1-dot1P;
-        num1.erase(dot1P,1);
-        lenNum1--;
-    }
-    if(dot2P!=std::string::npos){
-        countNumDot+=lenNum2-1-dot2P;
-        num2.erase(dot2P,1);
-        lenNum2--;
-    }
+// function multiplies the second num by the first
+std::string MathMul(std::string num_1, std::string num_2){
+    size_t length_num_1=num_1.length(), length_num_2=num_2.length();
+
+    // exceptions
+    if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, dont have symbols");
+
     std::string result="";
-    int carry=0;
-    for(int i=lenNum2-1, index=0;i>=0;i--, index++){
+    // special situations
+    if(num_1[0]=='-' && num_2[0]!='-'){
+        result=MathMul(num_1.substr(1),num_2);
+        int check_num=MaxNumber(result,"0");
+        if(check_num==0) return result;
+        return '-'+result;
+    }
+    if(num_1[0]=='-' && num_2[0]=='-'){
+        result=MathMul(num_1.substr(1),num_2.substr(1));
+        return result;
+    }
+    if(num_1[0]!='-' && num_2[0]=='-'){
+        result=MathMul(num_1,num_2.substr(1));
+        int check_num=MaxNumber(result,"0");
+        if(check_num==0) return result;
+        return '-'+result;
+    }
+
+    // find dot in nums
+    size_t dot_position_num_1=num_1.find(','), dot_position_num_2=num_2.find(',');
+    // count nums after dot
+    size_t count_nums_after_dot=0;
+    if(dot_position_num_1!=std::string::npos) count_nums_after_dot+=(length_num_1-1)-dot_position_num_1;
+    if(dot_position_num_2!=std::string::npos) count_nums_after_dot+=(length_num_2-1)-dot_position_num_2;
+
+    // calculate mull
+    int curent_num_1=0, curent_num_2=0, result_mul=0, carry=0;
+    int curent_index=0, result_length=result.length();
+    for(int bottom_num=length_num_2-1;bottom_num>=0;bottom_num--){
+        // dont calculate dot
+        if(num_2[bottom_num]==',') continue;
+
         carry=0;
-        for(int j=lenNum1-1, curIndex=index;j>=0;j--,curIndex++){
-            if(curIndex>=result.length()){
-                carry=(num1[j]-'0')*(num2[i]-'0')+carry;
-                result+=std::to_string(carry%10);
+        // collect bottom symbol
+        curent_num_2=num_2[bottom_num]-'0';
+
+        // summ nums from first +1 every iteration
+        int temp_index=curent_index;
+        // mull all up nums and add to result
+        for(int up_num=length_num_1-1;up_num>=0;up_num--){
+            // dont calculate dot
+            if(num_1[up_num]==',') continue;
+
+            // collect up symbol
+            curent_num_1=num_1[up_num]-'0';
+
+            // mull
+            result_mul=curent_num_1*curent_num_2+carry;
+
+            // if mul bigger or result length is null add to end
+            if(temp_index>=result_length){
+                carry=result_mul/10;
+                result_mul%=10;
+                result+=std::to_string(result_mul);
+                result_length+=1;
             }
+            // else summ nums
             else{
-                carry=(num1[j]-'0')*(num2[i]-'0')+(result[curIndex]-'0')+carry;
-                result[curIndex]='0'+(carry%10);
+                int temp_num=result[temp_index]-'0';
+                result_mul+=temp_num;
+                carry=result_mul/10;
+                result_mul%=10;
+                result[temp_index]='0'+result_mul;
             }
-            carry/=10;
+
+            // next index to add num
+            temp_index+=1;
         }
-        if(carry) result+=std::to_string(carry);
+
+        // check carry
+        if(carry!=0){
+            result+=std::to_string(carry);
+            result_length+=1;
+        }
+
+        curent_index+=1;
     }
+
+    // need reverse string
     std::reverse(result.begin(),result.end());
-    if(countNumDot){
-        result.insert(result.begin()+(result.length()-countNumDot),',');
-        while(result.length() && result[0]=='0' && result[1]!=',') result=result.substr(1);
+    result_length=result.length();
+
+    // add dot if dot exist in start
+    if(count_nums_after_dot!=0){
+        // insert dot
+        result.insert(result.begin()+(result_length-count_nums_after_dot),',');
+        // delete firs no need nuls
+        while(result_length>0 && result[0]=='0'){
+            result.erase(0,1);
+            result_length-=1;
+        }
+        if(result_length<=0 || result[0]==',') result='0'+result;
     }
+
     return result;
 }
 
