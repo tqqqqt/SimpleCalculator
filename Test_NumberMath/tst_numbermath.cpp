@@ -353,7 +353,7 @@ void numbermath::test_mathSin(){
     QFETCH(int,function_acuracy);
     QFETCH(QString,result);
 
-    std::string curent_result=MathSin(num.toStdString(),div_acuracy,function_acuracy);
+    std::string curent_result=MathSin(num.toStdString(),div_acuracy,function_acuracy,false);
 
     QCOMPARE(curent_result,result.toStdString());
 }
@@ -382,7 +382,7 @@ void numbermath::test_mathCos(){
     QFETCH(int,function_acuracy);
     QFETCH(QString,result);
 
-    std::string curent_result=MathCos(num.toStdString(),div_acuracy,function_acuracy);
+    std::string curent_result=MathCos(num.toStdString(),div_acuracy,function_acuracy,false);
 
     QCOMPARE(curent_result,result.toStdString());
 }
@@ -410,7 +410,7 @@ void numbermath::test_mathTng(){
     QFETCH(int,function_acuracy);
     QFETCH(QString,result);
 
-    std::string curent_result=MathTng(num.toStdString(),div_acuracy,function_acuracy);
+    std::string curent_result=MathTng(num.toStdString(),div_acuracy,function_acuracy,false);
 
     QCOMPARE(curent_result,result.toStdString());
 }
@@ -438,7 +438,7 @@ void numbermath::test_mathCtng(){
     QFETCH(int,function_acuracy);
     QFETCH(QString,result);
 
-    std::string curent_result=MathCtng(num.toStdString(),div_acuracy,function_acuracy);
+    std::string curent_result=MathCtng(num.toStdString(),div_acuracy,function_acuracy,false);
 
     QCOMPARE(curent_result,result.toStdString());
 }

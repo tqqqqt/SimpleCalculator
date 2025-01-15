@@ -7,6 +7,7 @@ FunctionsWindow::FunctionsWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // buttons connects
     this->connect(ui->pushButton_sin,&QPushButton::clicked,[this]{ pressButtons("Sin("); });
     this->connect(ui->pushButton_cos,&QPushButton::clicked,[this]{ pressButtons("Cos("); });
     this->connect(ui->pushButton_tng,&QPushButton::clicked,[this]{ pressButtons("Tng("); });
@@ -25,6 +26,8 @@ FunctionsWindow::~FunctionsWindow()
 
 // Send to calculator what function selected
 void FunctionsWindow::pressButtons(QString _function){
+    // special functions
+    // becouse factorial not need brackets, mod use like operators
     if(_function=="!" || _function=="mod") emit pressSpecialFunction(_function);
     else emit pressFunction(_function);
 }
@@ -36,6 +39,8 @@ void FunctionsWindow::needCloseWindow(){
 
 // Send signal to calculator to change state and close window
 void FunctionsWindow::closeEvent(QCloseEvent *event){
+    // signal to main window to change status of window
     emit updateWindowState();
+
     event->accept();
 }

@@ -21,9 +21,11 @@ ProgrammistSettingsWindow::~ProgrammistSettingsWindow()
 
 // Save new settings and emit signal to calculator
 void ProgrammistSettingsWindow::buttonAccept(){
+    // open PC settings and save changes
     QSettings settings("tqqqqt","calculator");
     settings.setValue("progr/count",ui->spinBox_count->value());
 
+    // emit signal to main window to load new settings
     emit acceptSettings();
     this->close();
 }
