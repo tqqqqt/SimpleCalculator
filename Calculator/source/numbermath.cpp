@@ -86,10 +86,12 @@ int FindMultiplier(std::string num_1, std::string num_2){
 
 // calculate sum of num_1 and num_2
 std::string MathSum(std::string num_1, std::string num_2){
-    std::string result="";
     size_t length_num_1=num_1.length(), length_num_2=num_2.length();
+
     // exceptions
     if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, no symbols in num");
+
+    std::string result="";
     // special situations
     if(num_1[0]=='-' && num_2[0]!='-'){
         result=MathNeg(num_2,num_1.substr(1));
@@ -108,8 +110,8 @@ std::string MathSum(std::string num_1, std::string num_2){
     size_t dot_position_num_1=num_1.find(','), dot_position_num_2=num_2.find(',');
     // count nums after dot
     size_t count_nums_after_dot_1=0, count_nums_after_dot_2=0;
-    if(dot_position_num_1!=std::string::npos) count_nums_after_dot_1=((length_num_1-1)-dot_position_num_1);
-    if(dot_position_num_2!=std::string::npos) count_nums_after_dot_2=((length_num_2-1)-dot_position_num_2);
+    if(dot_position_num_1!=std::string::npos) count_nums_after_dot_1=(length_num_1-1)-dot_position_num_1;
+    if(dot_position_num_2!=std::string::npos) count_nums_after_dot_2=(length_num_2-1)-dot_position_num_2;
     size_t max_num=std::max(count_nums_after_dot_1,count_nums_after_dot_2);
 
     int curent_num_1=0, curent_num_2=0, curent_sum=0, carry=0;
@@ -118,6 +120,7 @@ std::string MathSum(std::string num_1, std::string num_2){
         curent_num_1=0;
         curent_num_2=0;
 
+        // collect nums
         if(count_nums_after_dot_1>0 && (dot_position_num_1+i)<length_num_1) curent_num_1=num_1[dot_position_num_1+i]-'0';
         if(count_nums_after_dot_2>0 && (dot_position_num_2+i)<length_num_2) curent_num_2=num_2[dot_position_num_2+i]-'0';
 
@@ -142,6 +145,7 @@ std::string MathSum(std::string num_1, std::string num_2){
     while(point_num_1>=0 || point_num_2>=0){
         curent_num_1=0;
         curent_num_2=0;
+
         // collect nums
         if(point_num_1>=0){
             curent_num_1=num_1[point_num_1]-'0';
@@ -163,59 +167,127 @@ std::string MathSum(std::string num_1, std::string num_2){
     return result;
 }
 
-std::string MathNeg(std::string num1, std::string num2){
-    if(num1[0]=='-' && num2[0]!='-') return '-'+MathSum(num1.substr(1),num2);
-    if(num1[0]=='-' && num2[0]=='-') return MathNeg(num2.substr(1),num1.substr(1));
-    if(num1[0]!='-' && num2[0]=='-') return MathSum(num1,num2.substr(1));
-    int minusFlg=MaxNumber(num1,num2);
-    if(minusFlg==1) std::swap(num1,num2);
-    else if(minusFlg==0) return "0";
+// function substract second num from first
+std::string MathNeg(std::string num_1, std::string num_2){
+    size_t length_num_1=num_1.length(), length_num_2=num_2.length();
+
+    // exceptions
+    if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, dont have symbols");
+
     std::string result="";
-    int carry=0, dot1P=num1.find(','), dot2P=num2.find(',');;
-    if((dot1P!=std::string::npos && dot2P!=std::string::npos) || (dot1P==std::string::npos && dot2P!=std::string::npos)){
-        int tempPointNum1=num1.length()-1, tempPointNum2=num2.length()-1;
-        while((tempPointNum1-dot1P)>=1 && (tempPointNum2-dot2P)>=1){
-            int tempNum1=0, tempNum2=0;
-            if(dot1P==std::string::npos) tempNum2=num2[tempPointNum2--]-'0';
-            else if(dot2P==std::string::npos) tempNum1=num1[tempPointNum1--]-'0';
-            else if((tempPointNum1-dot1P)>(tempPointNum2-dot2P)) tempNum1=num1[tempPointNum1--]-'0';
-            else if((tempPointNum1-dot1P)<(tempPointNum2-dot2P)) tempNum2=num2[tempPointNum2--]-'0';
-            else{
-                tempNum1=num1[tempPointNum1--]-'0';
-                tempNum2=num2[tempPointNum2--]-'0';
-            }
-            if(carry){
-                tempNum1--;
-                if(tempNum1!=-1) carry=0;
-            }
-            if(tempNum1<tempNum2){
-                result=std::to_string((tempNum1+10)-tempNum2)+result;
-                carry=1;
-            }
-            else result=std::to_string(tempNum1-tempNum2)+result;
-        }
-        result=','+result;
+    // special situation
+    if(num_1[0]=='-' && num_2[0]!='-'){
+        result=MathSum(num_1.substr(1),num_2);
+        return '-'+result;
     }
-    else if(dot1P!=std::string::npos && dot2P==std::string::npos) result=','+num1.substr(dot1P+1);
-    int pointNum1=dot1P==std::string::npos?num1.length()-1:dot1P-1, pointNum2=dot2P==std::string::npos?num2.length()-1:dot2P-1;
-    while(pointNum1>=0 || pointNum2>=0){
-        int tempNum1=0, tempNum2=0;
-        if(pointNum1>=0) tempNum1=num1[pointNum1--]-'0';
-        if(pointNum2>=0) tempNum2=num2[pointNum2--]-'0';
-        if(carry){
-            tempNum1--;
-            if(tempNum1!=-1) carry=0;
-        }
-        if(tempNum1<tempNum2){
-            result=std::to_string((tempNum1+10)-tempNum2)+result;
-            carry=1;
-        }
-        else result=std::to_string(tempNum1-tempNum2)+result;
+    if(num_1[0]=='-' && num_2[0]=='-'){
+        result=MathNeg(num_2.substr(1),num_1.substr(1));
+        return result;
     }
-    while(result.length() && result[0]=='0') result.erase(0,1);
-    if(result=="") return "0";
-    else if(result[0]==',') result='0'+result;
-    if(minusFlg==1) result='-'+result;
+    if(num_1[0]!='-' && num_2[0]=='-'){
+        result=MathSum(num_1,num_2.substr(1));
+        return result;
+    }
+
+    // check nums
+    int check_max_num=MaxNumber(num_1,num_2);
+    // substract equals nums is null
+    if(check_max_num==0){
+        result="0";
+        return result;
+    }
+    // need that num_1 is bigger then num_2
+    if(check_max_num==1){
+        std::swap(num_1,num_2);
+        std::swap(length_num_1,length_num_2);
+    }
+
+    // find dot in nums
+    size_t dot_position_num_1=num_1.find(','), dot_position_num_2=num_2.find(',');
+    // count nums after dot
+    size_t count_nums_after_dot_1=0, count_nums_after_dot_2=0;
+    if(dot_position_num_1!=std::string::npos) count_nums_after_dot_1=(length_num_1-1)-dot_position_num_1;
+    if(dot_position_num_2!=std::string::npos) count_nums_after_dot_2=(length_num_2-1)-dot_position_num_2;
+    size_t max_count=std::max(count_nums_after_dot_1,count_nums_after_dot_2);
+
+    // substract nums after dot, from max right symbol to dot
+    int curent_num_1=0, curent_num_2=0, curent_substract=0, carry=0;
+    for(size_t i=max_count;i>0;i--){
+        curent_num_1=0;
+        curent_num_2=0;
+
+        // collect nums
+        if(count_nums_after_dot_1>0 && (dot_position_num_1+i)<length_num_1) curent_num_1=num_1[dot_position_num_1+i]-'0';
+        if(count_nums_after_dot_2>0 && (dot_position_num_2+i)<length_num_2) curent_num_2=num_2[dot_position_num_2+i]-'0';
+
+        // check carry
+        if(carry!=0){
+            curent_num_1-=1;
+            carry=0;
+        }
+
+        // check nums
+        if(curent_num_1<curent_num_2){
+            curent_num_1+=10;
+            carry+=1;
+        }
+
+        curent_substract=curent_num_1-curent_num_2;
+        result=std::to_string(curent_substract)+result;
+    }
+
+    // add dot if one of nums have dot part
+    if(dot_position_num_1!=std::string::npos || dot_position_num_2!=std::string::npos) result=','+result;
+
+    // set point before dot
+    int point_num_1=0, point_num_2=0;
+    if(dot_position_num_1!=std::string::npos) point_num_1=dot_position_num_1-1;
+    else point_num_1=length_num_1-1;
+    if(dot_position_num_2!=std::string::npos) point_num_2=dot_position_num_2-1;
+    else point_num_2=length_num_2-1;
+
+    // substract nums before dot, from right to left
+    while(point_num_1>=0 || point_num_2>=0){
+        curent_num_1=0;
+        curent_num_2=0;
+
+        // collect nums
+        if(point_num_1>=0){
+            curent_num_1=num_1[point_num_1]-'0';
+            point_num_1-=1;
+        }
+        if(point_num_2>=0){
+            curent_num_2=num_2[point_num_2]-'0';
+            point_num_2-=1;
+        }
+
+        // substract carry
+        if(carry!=0){
+            curent_num_1-=1;
+            carry=0;
+        }
+
+        // add 10 if first simbol < second symbol
+        if(curent_num_1<curent_num_2){
+            curent_num_1+=10;
+            carry+=1;
+        }
+
+        curent_substract=curent_num_1-curent_num_2;
+        result=std::to_string(curent_substract)+result;
+    }
+
+    // delete first null if exists
+    int result_length=result.length();
+    while(result_length>0 && result[0]=='0'){
+        result.erase(0,1);
+        result_length-=1;
+    }
+    if(result.length()==0 || result[0]==',') result='0'+result;
+
+    // add minus if in start we change nums
+    if(check_max_num==1) result='-'+result;
+
     return result;
 }
 
