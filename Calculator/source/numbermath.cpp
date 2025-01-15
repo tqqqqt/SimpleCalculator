@@ -1,25 +1,59 @@
 #include "numbermath.h"
 
-int MaxNumber(std::string num1, std::string num2){
-    if(num1[0]=='-' && num2[0]!='-') return 1;
-    if(num1[0]!='-' && num2[0]=='-') return -1;
-    if(num1[0]=='-' && num2[0]=='-') return -1*MaxNumber(num1.substr(1),num2.substr(1));
-    size_t dot1P=num1.find(','), dot2P=num2.find(',');
-    size_t rightPointNum1=dot1P==std::string::npos?num1.length():dot1P, rightPointNum2=dot2P==std::string::npos?num2.length():dot2P;
-    if(rightPointNum1>rightPointNum2) return -1;
-    if(rightPointNum1<rightPointNum2) return 1;
-    for(size_t i=0;i<rightPointNum1;i++){
-        if((num1[i]-'0')>(num2[i]-'0')) return -1;
-        if((num1[i]-'0')<(num2[i]-'0')) return 1;
+// choose max number in num_1 and num_2
+int MaxNumber(std::string num_1, std::string num_2){
+    // special situation
+    if(num_1[0]=='-' && num_2[0]!='-') return 1;
+    if(num_1[0]!='-' && num_2[0]=='-') return -1;
+    if(num_1[0]=='-' && num_2[0]=='-') return -1*MaxNumber(num_1.substr(1),num_2.substr(1));
+
+    // find dot in nums
+    size_t position_dot_num_1=num_1.find(','), position_dot_num_2=num_2.find(',');
+    // count nums before dot
+    size_t count_before_dot_num_1=0, count_before_dot_num_2=0;
+    if(position_dot_num_1==std::string::npos) count_before_dot_num_1=num_1.length();
+    else count_before_dot_num_1=position_dot_num_1;
+    if(position_dot_num_2==std::string::npos) count_before_dot_num_2=num_2.length();
+    else count_before_dot_num_2=position_dot_num_2;
+
+    // check count nums before dot
+    if(count_before_dot_num_1>count_before_dot_num_2) return -1;
+    else if(count_before_dot_num_1<count_before_dot_num_2) return 1;
+
+    // check nums before dot
+    int curent_num_1=0, curent_num_2=0;
+    for(size_t i=0;i<count_before_dot_num_1;i++){
+        curent_num_1=num_1[i]-'0';
+        curent_num_2=num_2[i]-'0';
+
+        if(curent_num_1>curent_num_2) return -1;
+        if(curent_num_1<curent_num_2) return 1;
     }
-    //if(dot1P==std::string::npos && dot2P==std::string::npos) return 0;
-    for(size_t i=rightPointNum1+1;i<std::max(num1.length(),num2.length());i++){
-        int tempNum1=0, tempNum2=0;
-        if(i<num1.length()) tempNum1=num1[i]-'0';
-        if(i<num2.length()) tempNum2=num2[i]-'0';
-        if(tempNum1>tempNum2) return -1;
-        if(tempNum1<tempNum2) return 1;
+
+    // check what nums have dot part
+    if(position_dot_num_1==std::string::npos && position_dot_num_2==std::string::npos) return 0;
+
+    // get max length of nums and start point to check
+    size_t len_num_1=num_1.length(), len_num_2=num_2.length();
+    size_t max_len=std::max(len_num_1,len_num_2), start_point=0;
+    // +1 cause we need check symbol of nums, not a dot
+    if(position_dot_num_1!=std::string::npos) start_point=position_dot_num_1+1;
+    else if(position_dot_num_2!=std::string::npos) start_point=position_dot_num_2+1;
+
+    // check nums after dot
+    for(size_t i=start_point;i<max_len;i++){
+        curent_num_1=0;
+        curent_num_2=0;
+
+        // check what num have symbol
+        if(i<len_num_1) curent_num_1=num_1[i]-'0';
+        if(i<len_num_2) curent_num_2=num_2[i]-'0';
+
+        if(curent_num_1>curent_num_2) return -1;
+        else if(curent_num_1<curent_num_2) return 1;
     }
+
+    // nums equals
     return 0;
 }
 
