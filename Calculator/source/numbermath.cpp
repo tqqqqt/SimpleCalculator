@@ -301,8 +301,11 @@ std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, b
     if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
     else radian=MathCheckRadian(degree);
     std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
+    std::string up_fraction_num="", fraction_num="";
     for(int i=0;i<function_acuracy;i++){
-        result=MathSum(result,MathDiv(MathMul(one_num,pow_num),factorial_res,div_acuracy));
+        up_fraction_num=MathMul(one_num,pow_num);
+        fraction_num=MathDiv(up_fraction_num,factorial_res,div_acuracy);
+        result=MathSum(result,fraction_num);
         one_num=MathMul(one_num,"-1");
         pow_num=MathMul(MathMul(pow_num,radian),radian);
         factorial_res=MathMul(MathMul(factorial_res,factorial_num),MathSum(factorial_num,"1"));
@@ -316,8 +319,11 @@ std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, b
     if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
     else radian=MathCheckRadian(degree);
     std::string result="1", one_num="-1", pow_num=MathMul(radian,radian), factorial_num="3", factorial_res="2";
+    std::string up_fraction_num="", fraction_num="";
     for(int i=0;i<function_acuracy;i++){
-        result=MathSum(result,MathDiv(MathMul(one_num,pow_num),factorial_res,div_acuracy));
+        up_fraction_num=MathMul(one_num,pow_num);
+        fraction_num=MathDiv(up_fraction_num,factorial_res,div_acuracy);
+        result=MathSum(result,fraction_num);
         one_num=MathMul(one_num,"-1");
         pow_num=MathMul(MathMul(pow_num,radian),radian);
         factorial_res=MathMul(MathMul(factorial_res,factorial_num),MathSum(factorial_num,"1"));
