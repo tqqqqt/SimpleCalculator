@@ -174,6 +174,15 @@ std::string MathSum(std::string num_1, std::string num_2){
         result=std::to_string(curent_sum)+result;
     }
     if(carry!=0) result=std::to_string(carry)+result;
+
+    // delete no need null
+    size_t length_result=result.length();
+    while(length_result>0 && result[0]=='0'){
+        result.erase(0,1);
+        length_result-=1;
+    }
+    if(length_result==0 || result[0]==',') result='0'+result;
+
     return result;
 }
 
@@ -393,15 +402,16 @@ std::string MathMul(std::string num_1, std::string num_2){
 
     // add dot if dot exist in start
     if(count_nums_after_dot!=0){
-        // insert dot
         result.insert(result.begin()+(result_length-count_nums_after_dot),',');
-        // delete firs no need nuls
-        while(result_length>0 && result[0]=='0'){
-            result.erase(0,1);
-            result_length-=1;
-        }
-        if(result_length<=0 || result[0]==',') result='0'+result;
+        result_length+=1;
     }
+
+    // delete firs no need nuls
+    while(result_length>0 && result[0]=='0'){
+        result.erase(0,1);
+        result_length-=1;
+    }
+    if(result_length<=0 || result[0]==',') result='0'+result;
 
     return result;
 }
@@ -416,6 +426,9 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     if(length_num_2==1 && num_2[0]=='0') throw std::invalid_argument("Error div 0");
 
     std::string result="";
+    if(length_num_1==1 && num_1[0]=='0') return "0";
+    if(length_num_2==1 && num_2[0]=='1') return num_1;
+
     // special situatios
     if(num_1[0]=='-' && num_2[0]!='-'){
         try {
@@ -524,6 +537,10 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     int check_max=0, multiplier=0;
     size_t length_temp_num=0, length_result=0, last_position=0;
 
+    // set flag what num_1 have dot part
+    dot_position_num_1=num_1.find(',');
+    if(dot_position_num_1==std::string::npos) last_position=length_num_1;
+
     // start div num without dot part
     for(size_t i=0;i<num_1.length();i++){
         // stop calculate if find div part
@@ -579,7 +596,11 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     size_t length_dot_result=0, count_add=0;
 
     // added zero to num
-    temp_num+='0';
+    if(last_position!=0 && last_position<length_num_1){
+        temp_num+=num_1[last_position];
+        last_position+=1;
+    }
+    else temp_num+='0';
     length_temp_num+=1;
     count_add+=1;
 
@@ -599,12 +620,12 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
         }
 
         // check what div nums can have dot result
-        if(length_temp_num==0 || (length_temp_num==1 && temp_num[0]=='0')) break;
+        if(length_temp_num==0 || (length_temp_num==1 && temp_num[0]=='0' && last_position>=length_num_1)) break;
 
         // check numbers
         check_max=MaxNumber(temp_num,num_2);
         if(check_max==1){
-            if(last_position!=0 && last_position<length_num_1){
+            if(last_position<length_num_1){
                 temp_num+=num_1[last_position];
                 last_position+=1;
             }
@@ -648,7 +669,24 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     if(_accuracy==0 && length_dot_result!=0){
         int last_num=dot_result.back()-'0';
         dot_result.pop_back();
-        if(last_num>=5) dot_result=MathSum(dot_result,"1");
+        length_dot_result-=1;
+        if(last_num>=5){
+            int temp=0, carry=1;
+            for(int i=length_dot_result-1;i>=0;i--){
+                if(carry==0) break;
+                temp=dot_result[i]-'0';
+                temp+=carry;
+                carry=temp/10;
+                temp%=10;
+                dot_result[i]='0'+temp;
+            }
+        }
+    }
+
+    // delete no need null in no dot result
+    while(length_result>0 && result[0]=='0'){
+        result.erase(0,1);
+        length_result-=1;
     }
 
     // check all results and collect in one result
