@@ -68,11 +68,21 @@ int FindMultiplier(std::string num_1, std::string num_2){
     // exceptions
     if(len_num_1==0 || len_num_2==0) throw std::invalid_argument("incorect num, num don't have symbols");
     // special situations
-    if(num_1[0]=='-' && num_2[0]!='-') return -1*FindMultiplier(num_1.substr(1),num_2);
-    if(num_1[0]!='-' && num_2[0]=='-') return -1*FindMultiplier(num_1,num_2.substr(1));
-    if(num_1[0]=='-' && num_2[0]=='-') return FindMultiplier(num_1.substr(1),num_2.substr(1));
+    int result=1;
+    if(num_1[0]=='-' && num_2[0]!='-'){
+        result=FindMultiplier(num_1.substr(1),num_2);
+        return result*-1;
+    }
+    if(num_1[0]!='-' && num_2[0]=='-'){
+        result=FindMultiplier(num_1,num_2.substr(1));
+        return result*-1;
+    }
+    if(num_1[0]=='-' && num_2[0]=='-'){
+        result=FindMultiplier(num_1.substr(1),num_2.substr(1));
+        return result;
+    }
 
-    int result=1, max_check_result=0;
+    int max_check_result=0;
     std::string mul_result="";
     // try find maximum num
     for(int i=2;i<10;i++){
@@ -396,94 +406,256 @@ std::string MathMul(std::string num_1, std::string num_2){
     return result;
 }
 
-std::string MathDiv(std::string num1, std::string num2, int _accuracy){
-    if(num2.length()==1 && num2[0]=='0') throw std::invalid_argument("Error div 0");
-    if(num1[0]=='-' && num2[0]!='-'){
-        std::string temp="";
-        try{ temp=MathDiv(num1.substr(1),num2,_accuracy); }
-        catch(std::exception){ throw; }
-        return temp=="0"?temp:'-'+temp;
+// function divide first num by second with accuracy
+std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
+    size_t length_num_1=num_1.length(), length_num_2=num_2.length();
+
+    // exceptions
+    if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect nums, no symbols in num");
+    if(_accuracy<0) throw std::invalid_argument("incorect accuracy value");
+    if(length_num_2==1 && num_2[0]=='0') throw std::invalid_argument("Error div 0");
+
+    std::string result="";
+    // special situatios
+    if(num_1[0]=='-' && num_2[0]!='-'){
+        try {
+            result=MathDiv(num_1.substr(1),num_2,_accuracy);
+        }
+        catch (std::exception) {
+            throw;
+        }
+        int check_num=MaxNumber(result,"0");
+        if(check_num==0) return result;
+        return '-'+result;
     }
-    if(num1[0]=='-' && num2[0]=='-'){
-        try{ return MathDiv(num1.substr(1),num2.substr(1),_accuracy); }
-        catch(std::exception){ throw; }
+    if(num_1[0]=='-' && num_2[0]=='-'){
+        try{
+            result=MathDiv(num_1.substr(1),num_2.substr(1),_accuracy);
+        }
+        catch(std::exception){
+            throw;
+        }
+        return result;
     }
-    if(num1[0]!='-' && num2[0]=='-'){
-        std::string temp="";
-        try{ temp=MathDiv(num1,num2.substr(1),_accuracy); }
-        catch(std::exception){ throw; }
-        return temp=="0"?temp:'-'+temp;
+    if(num_1[0]!='-' && num_2[0]=='-'){
+        try{
+            result=MathDiv(num_1,num_2.substr(1),_accuracy);
+        }
+        catch(std::exception){
+            throw;
+        }
+        int check_num=MaxNumber(result,"0");
+        if(check_num==0) return result;
+        return '-'+result;
     }
-    size_t lenNum1=num1.length(), lenNum2=num2.length();
-    size_t dot1P=num1.find(','), dot2P=num2.find(',');
-    if(dot1P!=std::string::npos){
-        for(int i=0;i<(lenNum1-1-dot1P);i++) num2+='0';
-        num1.erase(dot1P,1);
-        while(num1.length() && num1[0]=='0') num1.erase(0,1);
-        if(num1=="") return "0";
+
+    // find dot in nums
+    size_t dot_position_num_1=num_1.find(','), dot_position_num_2=num_2.find(',');
+
+    // special situations with dot
+    if(dot_position_num_1!=std::string::npos && dot_position_num_2!=std::string::npos){
+        int count_nums_after_dot_1=(length_num_1-1)-dot_position_num_1, count_nums_after_dot_2=(length_num_2-1)-dot_position_num_2;
+
+        if(count_nums_after_dot_1==count_nums_after_dot_2){
+            num_1.erase(dot_position_num_1,1);
+            num_2.erase(dot_position_num_2,1);
+        }
+        else if(count_nums_after_dot_1>count_nums_after_dot_2){
+            int need_skep_nums=count_nums_after_dot_1-count_nums_after_dot_2;
+            num_1.append(dot_position_num_1+need_skep_nums,',');
+            num_1.erase(dot_position_num_1,1);
+            num_2.erase(dot_position_num_2,1);
+        }
+        else if(count_nums_after_dot_1<count_nums_after_dot_2){
+            int need_add_nums=count_nums_after_dot_2-count_nums_after_dot_1;
+
+            num_1.erase(dot_position_num_1,1);
+            num_2.erase(dot_position_num_2,1);
+
+            for(int i=0;i<need_add_nums;i++) num_1+='0';
+        }
+
+        // update nums length
+        length_num_1=num_1.length();
+        length_num_2=num_2.length();
+
+        // check no need nuls
+        while(length_num_1>0 && num_1[0]=='0'){
+            num_1.erase(0,1);
+            length_num_1-=1;
+        }
+        if(length_num_1==0 || num_1[0]==','){
+            num_1='0'+num_1;
+            length_num_1+=1;
+        }
+
+        while(length_num_2>0 && num_2[0]=='0'){
+            num_2.erase(0,1);
+            length_num_2-=1;
+        }
+        if(length_num_2==0 || num_2[0]==','){
+            num_2='0'+num_2;
+            length_num_2+=1;
+        }
     }
-    if(dot2P!=std::string::npos){
-        for(int i=0;i<(lenNum2-1-dot2P);i++) num1+='0';
-        num2.erase(dot2P,1);
-        while(num2.length() && num2[0]=='0') num2.erase(0,1);
-        if(num2=="") throw std::invalid_argument("Error div 0");
+    if(dot_position_num_1==std::string::npos && dot_position_num_2!=std::string::npos){
+        int count_nums_after_dot=(length_num_2-1)-dot_position_num_2;
+        // delete dot
+        num_2.erase(dot_position_num_2,1);
+        // mull first num
+        for(int i=0;i<count_nums_after_dot;i++) num_1+='0';
+
+        // update nums length
+        length_num_1=num_1.length();
+        length_num_2=num_2.length();
+
+        // check no need nuls
+        while(length_num_2>0 && num_2[0]=='0'){
+            num_2.erase(0,1);
+            length_num_2-=1;
+        }
+        if(length_num_2==0 || num_2[0]==','){
+            num_2='0'+num_2;
+            length_num_2+=1;
+        }
     }
-    std::string curentNum="";
-    std::vector<char> tempResult;
-    size_t index=0;
-    for(const char& x:num1){
-        curentNum+=x;
-        while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
-        if(MaxNumber(curentNum,num2)==1){
-            if(index) index++;
+
+    std::string temp_num="", mul_temp="";
+    int check_max=0, multiplier=0;
+    size_t length_temp_num=0, length_result=0, last_position=0;
+
+    // start div num without dot part
+    for(size_t i=0;i<num_1.length();i++){
+        // stop calculate if find div part
+        if(num_1[i]==','){
+            last_position=i+1;
+            break;
+        }
+
+        // collect nums
+        temp_num+=num_1[i];
+        length_temp_num+=1;
+
+        // delete no need nuls
+        while(length_temp_num>0 && temp_num[0]=='0'){
+            temp_num.erase(0,1);
+            length_temp_num-=1;
+        }
+        if(length_temp_num==0){
+            temp_num+='0';
+            length_temp_num+=1;
+        }
+
+        // check curent temp num and divide num
+        check_max=MaxNumber(temp_num,num_2);
+        if(check_max==1){
+            if(length_result!=0){
+                result+='0';
+                length_result+=1;
+            }
+
             continue;
         }
-        if(index==0){
-            size_t temp=curentNum.length();
-            tempResult=std::vector<char>((1+(num1.length()-temp)),'0');
+        if(check_max==0){
+            result+='1';
+            length_result+=1;
+
+            temp_num="0";
+            length_temp_num=1;
+
+            continue;
         }
-        int carry=FindMultiplier(curentNum,num2);
-        tempResult[index++]='0'+carry;
-        curentNum=MathNeg(curentNum,MathMul(num2,std::to_string(carry)));
+
+        // div curent num
+        multiplier=FindMultiplier(temp_num,num_2);
+        result+='0'+multiplier;
+        length_result+=1;
+        mul_temp=MathMul(num_2,std::to_string(multiplier));
+        temp_num=MathNeg(temp_num,mul_temp);
+        length_temp_num=temp_num.length();
     }
-    if(index==0) tempResult.push_back('0');
-    while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
-    if(curentNum!=""){
-        tempResult.push_back(',');
-        std::string tempNum="";
-        int countNums=_accuracy+1;
-        while(countNums){
-            curentNum+='0';
-            while(curentNum.length() && curentNum[0]=='0') curentNum.erase(0,1);
-            if(curentNum=="") break;
-            if(MaxNumber(curentNum,num2)==1){
-                if(countNums>1) tempResult.push_back('0');
-                else tempNum+=('0');
-                countNums--;
-                continue;
-            }
-            int carry=FindMultiplier(curentNum,num2);
-            if(countNums>1) tempResult.push_back('0'+carry);
-            else tempNum+=('0'+carry);
-            curentNum=MathNeg(curentNum,MathMul(num2,std::to_string(carry)));
-            countNums--;
+
+    std::string dot_result="";
+    size_t length_dot_result=0, count_add=0;
+
+    // added zero to num
+    temp_num+='0';
+    length_temp_num+=1;
+    count_add+=1;
+
+    // add one to accuracy for correct round dot num
+    if(_accuracy!=0) _accuracy+=1;
+
+    // start create dot part
+    while(_accuracy>0){
+        // delete no need nuls
+        while(length_temp_num>0 && temp_num[0]=='0'){
+            temp_num.erase(0,1);
+            length_temp_num-=1;
         }
-        if(curentNum!=""){
-            if((tempNum[0]-'0')>4){
-                int point=tempResult.size()-1;
-                while(point){
-                    int carry=(tempResult[point]-'0')+1;
-                    tempResult[point--]='0'+(carry%10);
-                    carry/=10;
-                    if(carry==0) break;
-                }
-            }
+        if(length_temp_num==0){
+            temp_num+='0';
+            length_temp_num+=1;
         }
+
+        // check what div nums can have dot result
+        if(length_temp_num==0 || (length_temp_num==1 && temp_num[0]=='0')) break;
+
+        // check numbers
+        check_max=MaxNumber(temp_num,num_2);
+        if(check_max==1){
+            if(last_position!=0 && last_position<length_num_1){
+                temp_num+=num_1[last_position];
+                last_position+=1;
+            }
+            else temp_num+='0';
+            length_temp_num+=1;
+            count_add+=1;
+
+            if(count_add>1){
+                dot_result+='0';
+                length_dot_result+=1;
+                _accuracy-=1;
+            }
+
+            continue;
+        }
+        if(check_max==0){
+            dot_result+='1';
+            length_dot_result+=1;
+            _accuracy-=1;
+
+            temp_num="0";
+            length_temp_num=1;
+
+            count_add=0;
+
+            continue;
+        }
+
+        multiplier=FindMultiplier(temp_num,num_2);
+        dot_result+='0'+multiplier;
+        length_dot_result+=1;
+        mul_temp=MathMul(num_2,std::to_string(multiplier));
+        temp_num=MathNeg(temp_num,mul_temp);
+        length_temp_num=temp_num.length();
+        count_add=0;
+
+        _accuracy-=1;
     }
-    curentNum="";
-    for(const char& x:tempResult) curentNum+=x;
-    if(curentNum.length()==0 || (curentNum.length()>2 && curentNum[0]=='0' && curentNum[1]!=',')) return "0";
-    return curentNum;
+
+    // round dot num
+    if(_accuracy==0 && length_dot_result!=0){
+        int last_num=dot_result.back()-'0';
+        dot_result.pop_back();
+        if(last_num>=5) dot_result=MathSum(dot_result,"1");
+    }
+
+    // check all results and collect in one result
+    if(length_result==0) result+='0';
+    if(length_dot_result!=0) result+=','+dot_result;
+
+    return result;
 }
 
 std::string MathPow(std::string num, std::string pow, int accuracy){
