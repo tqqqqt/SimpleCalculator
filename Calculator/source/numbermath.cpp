@@ -733,75 +733,133 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     return result;
 }
 
+// function calculate pow of num
 std::string MathPow(std::string num, std::string pow, int accuracy){
+    size_t length_num=num.length(), length_pow=pow.length();
+    size_t dot_position_pow=pow.find(',');
+
+    // exceptions
+    if(length_num==0 || length_pow==0) throw std::invalid_argument("incorect num, no symbols");
+    if(dot_position_pow!=std::string::npos) throw std::invalid_argument("incorect pow num"); // while not create sqrt
+    if(accuracy<0) throw std::invalid_argument("incorect accuracy value");
+
+    std::string result=num;
+
+    // special situations
     if(pow=="0") return "1";
     if(pow=="1") return num;
-    if(pow.find(',')!=std::string::npos) throw std::invalid_argument("incorect pow num");
-    if(pow[0]=='-') return MathDiv("1",MathPow(num,pow.substr(1)),accuracy);
-    std::string result=num;
+    if(pow[0]=='-'){
+        result=MathDiv("1",MathPow(num,pow.substr(1)),accuracy);
+        return result;
+    }
+
+    // calculate pow
     while(MaxNumber("1",pow)!=0){
         result=MathMul(result,num);
         pow=MathNeg(pow,"1");
     }
+
     return result;
 }
 
+// function convert degree value to radian
 std::string MathConvertDegreeToRadian(std::string degree, int div_acuracy){
+    // check what degree in bound
     while(MaxNumber(degree,"360")==-1){
         degree=MathNeg(degree,"360");
     }
     while(MaxNumber(degree,"-360")==1){
         degree=MathSum(degree,"360");
     }
+    // calculate result
     std::string temp_mul=MathMul(degree,"3,141592653589793"), radian=MathDiv(temp_mul,"180",div_acuracy);
     return radian;
 }
 
+// function check radian value to valid
 std::string MathCheckRadian(std::string radian){
+    // get maximum valid value
     std::string max_num=MathMul("2","3,141592653589793");
+    // check what num in bound
     while(MaxNumber(radian,max_num)==-1){
         radian=MathNeg(radian,max_num);
     }
+
+    // get minimum value
     std::string min_num=MathMul(max_num,"-1");
+    // check what num in bound
     while(MaxNumber(radian,min_num)==1){
         radian=MathSum(radian,max_num);
     }
+
     return radian;
 }
 
+// function calculate sin of input num
 std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
+    size_t length_degree=degree.length();
+
+    // exceptions
+    if(length_degree==0) throw std::invalid_argument("incorect input num, no symbols");
+    if(div_acuracy<0) throw std::invalid_argument("incorect div acuracy");
+    if(function_acuracy<0) throw std::invalid_argument("incorect function acuracy");
+
+    // convert or check input num
     std::string radian="0";
     if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
     else radian=MathCheckRadian(degree);
+
+    // prapair values
     std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
     std::string up_fraction_num="", fraction_num="";
+
+    // calculate sin
     for(int i=0;i<function_acuracy;i++){
         up_fraction_num=MathMul(one_num,pow_num);
         fraction_num=MathDiv(up_fraction_num,factorial_res,div_acuracy);
+
         result=MathSum(result,fraction_num);
+
         one_num=MathMul(one_num,"-1");
         pow_num=MathMul(MathMul(pow_num,radian),radian);
         factorial_res=MathMul(MathMul(factorial_res,factorial_num),MathSum(factorial_num,"1"));
         factorial_num=MathSum(factorial_num,"2");
     }
+
     return result;
 }
 
+// function calculate cos of input num
 std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
+    size_t length_input=degree.length();
+
+    // exceptions
+    if(length_input==0) throw std::invalid_argument("incorect num, no symbols");
+    if(div_acuracy<0) throw std::invalid_argument("incorect div acuracy");
+    if(function_acuracy<0) throw std::invalid_argument("incorect function acuracy");
+
+    // convert or check input num
     std::string radian="0";
     if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
     else radian=MathCheckRadian(degree);
+
+    // prepair values
     std::string result="1", one_num="-1", pow_num=MathMul(radian,radian), factorial_num="3", factorial_res="2";
     std::string up_fraction_num="", fraction_num="";
+
+    // calculate cos
     for(int i=0;i<function_acuracy;i++){
         up_fraction_num=MathMul(one_num,pow_num);
         fraction_num=MathDiv(up_fraction_num,factorial_res,div_acuracy);
+
         result=MathSum(result,fraction_num);
+
         one_num=MathMul(one_num,"-1");
         pow_num=MathMul(MathMul(pow_num,radian),radian);
         factorial_res=MathMul(MathMul(factorial_res,factorial_num),MathSum(factorial_num,"1"));
         factorial_num=MathSum(factorial_num,"2");
     }
+
     return result;
 }
 
