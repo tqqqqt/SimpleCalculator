@@ -598,6 +598,7 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
         multiplier=FindMultiplier(temp_num,num_2);
         result+='0'+multiplier;
         length_result+=1;
+
         mul_temp=MathMul(num_2,std::to_string(multiplier));
         temp_num=MathNeg(temp_num,mul_temp);
         length_temp_num=temp_num.length();
@@ -665,14 +666,16 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
             continue;
         }
 
+        // div curent num
         multiplier=FindMultiplier(temp_num,num_2);
         dot_result+='0'+multiplier;
         length_dot_result+=1;
+
         mul_temp=MathMul(num_2,std::to_string(multiplier));
         temp_num=MathNeg(temp_num,mul_temp);
         length_temp_num=temp_num.length();
-        count_add=0;
 
+        count_add=0;
         _accuracy-=1;
     }
 
