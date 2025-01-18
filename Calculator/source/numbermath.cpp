@@ -102,7 +102,7 @@ std::string MathSum(std::string num_1, std::string num_2){
     if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, no symbols in num");
 
     std::string result="";
-    // special situations
+    // special situations with minus
     if(num_1[0]=='-' && num_2[0]!='-'){
         result=MathNeg(num_2,num_1.substr(1));
         return result;
@@ -115,6 +115,10 @@ std::string MathSum(std::string num_1, std::string num_2){
         result=MathNeg(num_1,num_2.substr(1));
         return result;
     }
+
+    // special situations with null
+    if(length_num_1==0 && num_1[0]=='0') return num_2;
+    if(length_num_2==0 && num_2[0]=='0') return num_1;
 
     // find dot in nums
     size_t dot_position_num_1=num_1.find(','), dot_position_num_2=num_2.find(',');
@@ -194,7 +198,7 @@ std::string MathNeg(std::string num_1, std::string num_2){
     if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, dont have symbols");
 
     std::string result="";
-    // special situation
+    // special situation with minus
     if(num_1[0]=='-' && num_2[0]!='-'){
         result=MathSum(num_1.substr(1),num_2);
         return '-'+result;
@@ -318,7 +322,7 @@ std::string MathMul(std::string num_1, std::string num_2){
     if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, dont have symbols");
 
     std::string result="";
-    // special situations
+    // special situations with minus
     if(num_1[0]=='-' && num_2[0]!='-'){
         result=MathMul(num_1.substr(1),num_2);
         int check_num=MaxNumber(result,"0");
@@ -335,6 +339,10 @@ std::string MathMul(std::string num_1, std::string num_2){
         if(check_num==0) return result;
         return '-'+result;
     }
+
+    // special situation with null
+    if(length_num_1==1 && num_1[0]=='0') return "0";
+    if(length_num_2==1 && num_2[0]=='0') return "0";
 
     // find dot in nums
     size_t dot_position_num_1=num_1.find(','), dot_position_num_2=num_2.find(',');
@@ -426,10 +434,12 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     if(length_num_2==1 && num_2[0]=='0') throw std::invalid_argument("Error div 0");
 
     std::string result="";
+
+    // special situation with null and one
     if(length_num_1==1 && num_1[0]=='0') return "0";
     if(length_num_2==1 && num_2[0]=='1') return num_1;
 
-    // special situatios
+    // special situatios with minus
     if(num_1[0]=='-' && num_2[0]!='-'){
         try {
             result=MathDiv(num_1.substr(1),num_2,_accuracy);
