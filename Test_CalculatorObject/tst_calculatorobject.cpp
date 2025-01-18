@@ -32,6 +32,9 @@ private slots:
     void test_addSpecialFunction_data();
     void test_addSpecialFunction();
 
+    void test_addVariable_1();
+    void test_addVariable_2();
+
     void test_deleteLastSymbol_data();
     void test_deleteLastSymbol();
 
@@ -276,6 +279,41 @@ void calculatorobject::test_addSpecialFunction(){
     catch(std::exception &exp){
         QCOMPARE(exp.what(),result.toStdString());
     }
+}
+
+void calculatorobject::test_addVariable_1(){
+    CalculatorObject object;
+    std::string curent_str="", result_str="x";
+    size_t curent_size=0, result_size=1;
+    CalculatorObject::ObjectsTypes curent_type=CalculatorObject::ObjectsTypes::None, result_type=CalculatorObject::ObjectsTypes::X_variable;
+
+    object.addVariable();
+
+    curent_str=object.toString();
+    curent_size=object.getLength();
+    curent_type=object.getObjectType();
+
+    QCOMPARE(curent_str,result_str);
+    QCOMPARE(curent_size,result_size);
+    QCOMPARE(curent_type,result_type);
+}
+
+void calculatorobject::test_addVariable_2(){
+    CalculatorObject object;
+    std::string curent_str="", result_str="1";
+    size_t curent_size=0, result_size=1;
+    CalculatorObject::ObjectsTypes curent_type=CalculatorObject::ObjectsTypes::None, result_type=CalculatorObject::ObjectsTypes::Num;
+
+    object.addNum('1');
+    object.addVariable();
+
+    curent_str=object.toString();
+    curent_size=object.getLength();
+    curent_type=object.getObjectType();
+
+    QCOMPARE(curent_str,result_str);
+    QCOMPARE(curent_size,result_size);
+    QCOMPARE(curent_type,result_type);
 }
 
 void calculatorobject::test_deleteLastSymbol_data(){
