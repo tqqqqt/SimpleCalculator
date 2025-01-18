@@ -596,7 +596,7 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     std::string dot_result="";
     size_t length_dot_result=0, count_add=0;
 
-    // added zero to num
+    // added symbol to num after dot part
     if(last_position!=0 && last_position<length_num_1){
         temp_num+=num_1[last_position];
         last_position+=1;
@@ -605,7 +605,7 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     length_temp_num+=1;
     count_add+=1;
 
-    // add one to accuracy for correct round dot num
+    // add one symbol to accuracy for correct round dot num
     if(_accuracy!=0) _accuracy+=1;
 
     // start create dot part
@@ -668,18 +668,41 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
 
     // round dot num
     if(_accuracy==0 && length_dot_result!=0){
+        // get last num from dot part
         int last_num=dot_result.back()-'0';
         dot_result.pop_back();
         length_dot_result-=1;
+        // check this last num
         if(last_num>=5){
             int temp=0, carry=1;
+            // try add one to dot part
             for(int i=length_dot_result-1;i>=0;i--){
                 if(carry==0) break;
+
                 temp=dot_result[i]-'0';
                 temp+=carry;
                 carry=temp/10;
                 temp%=10;
                 dot_result[i]='0'+temp;
+            }
+
+            // if carry exist try add one to result part
+            if(carry!=0){
+                for(int i=length_result-1;i>=0;i--){
+                    if(carry==0) break;
+
+                    temp=result[i]-'0';
+                    temp+=carry;
+                    carry=temp/10;
+                    temp%=10;
+                    result='0'+temp;
+                }
+            }
+
+            // if carry exist after all add one to start of result
+            if(carry!=0){
+                result='1'+result;
+                length_result+=1;
             }
         }
     }
