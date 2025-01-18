@@ -474,8 +474,9 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
             num_2.erase(dot_position_num_2,1);
         }
         else if(count_nums_after_dot_1>count_nums_after_dot_2){
-            int need_skep_nums=count_nums_after_dot_1-count_nums_after_dot_2;
-            num_1.append(dot_position_num_1+need_skep_nums,',');
+            // move dot in first num like mull on 10^
+            num_1.insert(dot_position_num_1+count_nums_after_dot_2+1,1,',');
+
             num_1.erase(dot_position_num_1,1);
             num_2.erase(dot_position_num_2,1);
         }
