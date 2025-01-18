@@ -29,6 +29,9 @@ private slots:
     void test_addFunction_data();
     void test_addFunction();
 
+    void test_addSpecialFunction_data();
+    void test_addSpecialFunction();
+
     void test_deleteLastSymbol_data();
     void test_deleteLastSymbol();
 
@@ -207,8 +210,8 @@ void calculatorobject::test_addFunction_data(){
     QTest::newRow("test_2")<<"Cos("<<"Cos(";
     QTest::newRow("test_3")<<"Tng("<<"Tng(";
     QTest::newRow("test_4")<<"Ctng("<<"Ctng(";
-    QTest::newRow("test_5")<<"mod"<<"mod";
-    QTest::newRow("test_6")<<"!"<<"!";
+    QTest::newRow("test_5")<<"mod"<<"input not a function";
+    QTest::newRow("test_6")<<"!"<<"input not a function";
     QTest::newRow("test_7")<<"Module("<<"Module(";
     QTest::newRow("test_8")<<"RoundUp("<<"RoundUp(";
     QTest::newRow("test_9")<<"RoundDown("<<"RoundDown(";
@@ -229,6 +232,44 @@ void calculatorobject::test_addFunction(){
 
     try{
         object.addFunction(input.toStdString());
+        curent_result=object.toString();
+        QCOMPARE(curent_result,result.toStdString());
+    }
+    catch(std::exception &exp){
+        QCOMPARE(exp.what(),result.toStdString());
+    }
+}
+
+void calculatorobject::test_addSpecialFunction_data(){
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("test_1")<<"Sin("<<"input not a function";
+    QTest::newRow("test_2")<<"Cos("<<"input not a function";
+    QTest::newRow("test_3")<<"Tng("<<"input not a function";
+    QTest::newRow("test_4")<<"Ctng("<<"input not a function";
+    QTest::newRow("test_5")<<"mod"<<"mod";
+    QTest::newRow("test_6")<<"!"<<"!";
+    QTest::newRow("test_7")<<"Module("<<"input not a function";
+    QTest::newRow("test_8")<<"RoundUp("<<"input not a function";
+    QTest::newRow("test_9")<<"RoundDown("<<"input not a function";
+    QTest::newRow("test_10")<<"("<<"input not a function";
+    QTest::newRow("test_11")<<"+"<<"input not a function";
+    QTest::newRow("test_12")<<"-"<<"input not a function";
+    QTest::newRow("test_13")<<"1"<<"input not a function";
+    QTest::newRow("test_14")<<","<<"input not a function";
+    QTest::newRow("test_15")<<"0"<<"input not a function";
+}
+
+void calculatorobject::test_addSpecialFunction(){
+    QFETCH(QString,input);
+    QFETCH(QString,result);
+
+    CalculatorObject object;
+    std::string curent_result="";
+
+    try{
+        object.addSpecialFunction(input.toStdString());
         curent_result=object.toString();
         QCOMPARE(curent_result,result.toStdString());
     }
