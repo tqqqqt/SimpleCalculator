@@ -899,64 +899,117 @@ std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy, 
     return result;
 }
 
+// calculate factorial of input num
 std::string MathFactorial(std::string num){
-    if(num.find(',')!=std::string::npos || num.find('-')!=std::string::npos) throw std::invalid_argument("incorect factorial num");
-    if(MaxNumber(num,"1")>=0) return "1";
-    std::string result="1", curent_num="2";
+    size_t length_num=num.length(), dot_position=num.find(','), minus_position=num.find('-');
+
+    // exceptions
+    if(length_num==0) throw std::invalid_argument("incorect input num, no symbols");
+    if(dot_position!=std::string::npos || minus_position!=std::string::npos) throw std::invalid_argument("incorect factorial num");
+
     int check_end=0;
+    check_end=MaxNumber(num,"1");
+    // special situation
+    if(check_end>=0) return "1";
+
+    std::string result="1", curent_num="2";
+    // calculate result
     while(true){
         check_end=MaxNumber(num,curent_num);
         if(check_end==1) break;
+
         result=MathMul(result,curent_num);
         curent_num=MathSum(curent_num,"1");
     }
+
     return result;
 }
 
+// calculate mod input num by mod num
 std::string MathMod(std::string num, std::string mod_num){
-    if(MaxNumber(mod_num,"0")==0) return num;
+    size_t length_num=num.length(), length_mod_num=mod_num.length();
+
+    // exceptions
+    if(length_num==0 || length_mod_num==0) throw std::invalid_argument("incorect num, no symbols");
+
+    // special situations
     if(mod_num[0]=='-') mod_num=mod_num.substr(1);
+    if(MaxNumber(mod_num,"0")==0) return num;
     if(MaxNumber(mod_num,"1")==0) return "0";
+
     std::string module_num=MathModule(num), div_result=MathDiv(module_num,mod_num,10);
     std::string temp_result=MathRoundDown(div_result), result=MathNeg(module_num,MathMul(mod_num,temp_result));
+
     if(num[0]!='-') return result;
     result=MathNeg(mod_num,result);
+
     return result;
 }
 
+// calculate module of num
 std::string MathModule(std::string num){
-    if(num.find('-')==std::string::npos) return num;
-    if(num.find('-')!=0) throw std::invalid_argument("incorect num or incorect minus position");
+    size_t length_num=num.length(), minus_position=num.find('-');
+
+    // exceptions
+    if(length_num==0) throw std::invalid_argument("incorect num, no symbols");
+    if(minus_position!=std::string::npos && minus_position!=0) throw std::invalid_argument("incorect num or incorect minus position");
+
+    // special situation
+    if(minus_position==std::string::npos) return num;
+
     std::string result=num.substr(1);
     return result;
 }
 
+// rount input num up
 std::string MathRoundUp(std::string num){
-    if(num.find(',')==std::string::npos) return num;
-    size_t size=num.length(), i=0;
+    size_t length_num=num.length(), dot_position=num.find(',');
+
+    // exceptions
+    if(length_num==0) throw std::invalid_argument("incorect num, no symbols");
+
+    // special situation
+    if(dot_position==std::string::npos) return num;
+
+    size_t i=0;
     std::string result="";
-    while(i<size){
+    // collect before dot num
+    while(i<length_num){
         if(num[i]==',') break;
         result+=num[i];
         i++;
     }
+
+    // check num after dot
     std::string temp_num='0'+num.substr(i);
     if(MaxNumber(temp_num,"0,5")<=0){
         if(result[0]!='-') result=MathSum(result,"1");
         else result=MathNeg(result,"1");
     }
+
     return result;
 }
 
+// round input num down
 std::string MathRoundDown(std::string num){
-    if(num.find(',')==std::string::npos) return num;
+    size_t length_num=num.length(), dot_position=num.find(',');
+
+    // exceptions
+    if(length_num==0) throw std::invalid_argument("incorect num, no symbols");
+
+    // special situation
+    if(dot_position==std::string::npos) return num;
+
     std::string result="";
-    size_t i=0, size=num.length();
-    while(i<size){
+    size_t i=0;
+    // collect num after dot
+    while(i<length_num){
         if(num[i]==',') break;
         result+=num[i];
         i++;
     }
+
+    // check result
     if(result.length()==2 && result[0]=='-' && result[1]=='0') return "0";
     return result;
 }
