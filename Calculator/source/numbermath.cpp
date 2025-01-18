@@ -863,27 +863,39 @@ std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, b
     return result;
 }
 
+// calculate tng of input value
 std::string MathTng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
-    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy,radian_flag), result_cos=MathCos(degree,div_acuracy,function_acuracy,radian_flag);
-    std::string result="0";
+    std::string result_sin="", result_cos="", result="0";
+
+    // try calculate sin and cos, after tng
     try{
+        result_sin=MathSin(degree,div_acuracy,function_acuracy,radian_flag);
+        result_cos=MathCos(degree,div_acuracy,function_acuracy,radian_flag);
+
         result=MathDiv(result_sin,result_cos,div_acuracy);
     }
     catch(std::exception){
         return "value is not defined";
     }
+
     return result;
 }
 
+// calculate ctng of input value
 std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag){
-    std::string result_sin=MathSin(degree,div_acuracy,function_acuracy,radian_flag), result_cos=MathCos(degree,div_acuracy,function_acuracy,radian_flag);
-    std::string result="0";
+    std::string result_sin="", result_cos="", result="0";
+
+    // try calculate sin and cos, after ctng
     try{
+        result_sin=MathSin(degree,div_acuracy,function_acuracy,radian_flag);
+        result_cos=MathCos(degree,div_acuracy,function_acuracy,radian_flag);
+
         result=MathDiv(result_cos,result_sin,div_acuracy);
     }
     catch(std::exception){
         return "value is not defined";
     }
+
     return result;
 }
 
