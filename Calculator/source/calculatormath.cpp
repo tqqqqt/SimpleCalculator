@@ -259,8 +259,7 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
 
 // get polish entry from object
 std::vector<CalculatorObject> CalculatorMath::getPolishEntry(){
-    std::vector<CalculatorObject> result=polishEntry;
-    return result;
+    return polishEntry;
 }
 
 // set polish entry to curent object
