@@ -5,6 +5,7 @@ GraphicsInfoObject::GraphicsInfoObject()
     display_text="";
     graphic_enable=false;
     color_enable=false;
+    graphics_color=Qt::black;
 }
 
 // set text what display in list

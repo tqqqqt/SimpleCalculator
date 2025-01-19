@@ -187,11 +187,13 @@ void CalculatorMath::simplifyExpression(){
         if(delete_mode==0){
             polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
             i-=2;
+            count_nums+=1;
         }
         // functions use 1 objects
         else if(delete_mode==1){
             polishEntry.erase(polishEntry.begin()+i);
             i-=1;
+            count_nums+=1;
         }
     }
 }
