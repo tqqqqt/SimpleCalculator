@@ -77,10 +77,7 @@ void ValueInfo::createTime(){
 
 // get avalible mains
 std::vector<std::string> ValueInfo::getMain(){
-    std::vector<std::string> result;
-    // collect all mains
-    for(auto x:mains) result.push_back(x);
-    return result;
+    return mains;
 }
 
 // get child topics when change main topic
@@ -96,9 +93,8 @@ std::vector<std::string> ValueInfo::getSecond(std::string _main){
     else if(_main==mains[DATA_INDEX]) index=DATA_INDEX;
     else if(_main==mains[SPEED_INDEX]) index=SPEED_INDEX;
     else if(_main==mains[TIME_INDEX]) index=TIME_INDEX;
-    // collect all child types
-    for(auto x:seconds[index]) result.push_back(x);
-    return result;
+
+    return seconds[index];
 }
 
 // get result from translate value
