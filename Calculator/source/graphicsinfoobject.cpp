@@ -15,8 +15,7 @@ void GraphicsInfoObject::setDisplayText(std::string _text){
 
 // get text what display in list
 std::string GraphicsInfoObject::getDisplayText(){
-    std::string result="y = "+display_text;
-    return result;
+    return "y = "+display_text;
 }
 
 // set simplify polish entry in object
@@ -26,8 +25,7 @@ void GraphicsInfoObject::setPolishEntry(std::vector<CalculatorObject> _polish_en
 
 // get simplify polish entry from object
 std::vector<CalculatorObject> GraphicsInfoObject::getPolishEntry(){
-    std::vector<CalculatorObject> result=polish_entry;
-    return result;
+    return polish_entry;
 }
 
 // save graphics in object
@@ -38,8 +36,7 @@ void GraphicsInfoObject::setGraphic(QPixmap _graphic){
 
 // get graphics from object
 QPixmap GraphicsInfoObject::getGraphic(){
-    QPixmap result=graphic;
-    return result;
+    return graphic;
 }
 
 // set flag to false what show need write new graphics to this object
@@ -55,18 +52,15 @@ void GraphicsInfoObject::setGraphicsColor(Qt::GlobalColor _color){
 
 // get color graphics from this object
 Qt::GlobalColor GraphicsInfoObject::getGraphicsColor(){
-    Qt::GlobalColor result=graphics_color;
-    return result;
+    return graphics_color;
 }
 
 // get flag what show what object have done graphic or not
 bool GraphicsInfoObject::getGraphicFlag(){
-    bool result=graphic_enable;
-    return result;
+    return graphic_enable;
 }
 
 // get flag what show what object have color for graphic or not
 bool GraphicsInfoObject::getColorFlag(){
-    bool result=color_enable;
-    return result;
+    return color_enable;
 }
