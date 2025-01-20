@@ -11,5 +11,7 @@
         <file>Programmist/programmist_curent_system.css</file>
         <file>Programmist/programmist_style.css</file>
         <file>Graphics/GraphicsInfo/enter-icon.png</file>
+        <file>Graphics/GraphicsPainter/style.css</file>
+        <file>Graphics/GraphicsInfo/style.css</file>
     </qresource>
 </RCC>
