@@ -7,6 +7,7 @@ CalculatorObject::CalculatorObject()
     object_type=ObjectsTypes::None;
     count_dot=1;
     count_null=1;
+    check_num_complete=false;
 }
 
 CalculatorObject::~CalculatorObject(){ }
@@ -34,6 +35,7 @@ void CalculatorObject::addNum(char _num){
     if(object_type>ObjectsTypes::MinusBrackets) return;
 
     object_type=ObjectsTypes::Num;
+    check_num_complete=false;
     // dont add more one null in front of num
     if(length==1 && count_null==0 && count_dot==1 && _num=='0') return;
     // change first null in num to another symbol
@@ -130,6 +132,7 @@ void CalculatorObject::deleteLastSymbol(){
         return;
     }
     // check for special states
+    if(object_type==ObjectsTypes::Num) check_num_complete=false;
     if(text.back()==',') count_dot++;
     if(length==1 && count_dot==1 && text.back()=='0') count_null++;
 
@@ -164,6 +167,7 @@ void CalculatorObject::setFullNum(std::string _num){
     // set num
     text=_num;
     length=text.length();
+    check_num_complete=false;
     if(length==2 && (_num[0]=='(' && _num[1]=='-')) object_type=ObjectsTypes::MinusBrackets;
     else object_type=ObjectsTypes::Num;
     if(_num.find(',')!=std::string::npos) count_dot=0;
@@ -176,6 +180,7 @@ void CalculatorObject::clear(){
     object_type=ObjectsTypes::None;
     count_dot=1;
     count_null=1;
+    check_num_complete=false;
 }
 
 // get only object with clear num, need in math
@@ -187,4 +192,48 @@ CalculatorObject CalculatorObject::getOnlyNum(){
     if(result.text.back()==')') result.text.pop_back();
 
     return result;
+}
+
+// check num and delete no need symbols in nums
+void CalculatorObject::checkNum(){
+    if(object_type!=ObjectsTypes::Num) return;
+    if(check_num_complete==true) return;
+
+    // calculate length to save work
+    length=text.length();
+    if(length==0) return;
+
+    // delete no need first null
+    while(length>0 && text[0]=='0'){
+        text.erase(0,1);
+        length-=1;
+    }
+
+    if(length==0 || (length>0 && text[0]==',')){
+        text='0'+text;
+        length+=1;
+    }
+
+    // check dot part
+    size_t dot_position=text.find(',');
+    if(dot_position==std::string::npos){
+        check_num_complete=true;
+        return;
+    }
+
+    // check count symbols not equal null
+    int count_no_null=0;
+    for(size_t i=dot_position+1;i<length;i++){
+        if(text[i]!='0') count_no_null++;
+    }
+
+    if(count_no_null!=0){
+        check_num_complete=true;
+        return;
+    }
+
+    // delete dot part cause don't have symbols > 0
+    text.erase(dot_position,length-dot_position);
+    length=text.length();
+    check_num_complete=true;
 }

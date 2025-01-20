@@ -213,11 +213,15 @@ void ValueWindow::updateResult(){
     if(curent_field==1){
         temp=QString::fromStdString(value_info->getMullNum(main,left,right,value));
         bottom_object.setFullNum(temp.toStdString());
+        bottom_object.checkNum();
+        temp=QString::fromStdString(bottom_object.toString());
         ui->textEdit_right->setText(temp);
     }
     else{
         temp=QString::fromStdString(value_info->getMullNum(main,right,left,value));
         up_object.setFullNum(temp.toStdString());
+        up_object.checkNum();
+        temp=QString::fromStdString(up_object.toString());
         ui->textEdit_left->setText(temp);
     }
 }

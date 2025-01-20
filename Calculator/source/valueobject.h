@@ -13,6 +13,7 @@ private:
     std::string text;
     size_t length;
     int count_dot, count_null;
+    bool check_num_complete;
 
 public:
     ValueObject();
@@ -25,6 +26,8 @@ public:
     void deleteLastSymbol();
     void setFullNum(std::string);
     void clear();
+
+    void checkNum();
 };
 
 #endif // VALUEOBJECT_H
