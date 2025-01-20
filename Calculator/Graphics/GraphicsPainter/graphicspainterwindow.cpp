@@ -32,6 +32,9 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
     ui->label->setPixmap(curent_ord);
     paintGraphics();
 
+    // set minimum size to move graphics size
+    ui->label->setMinimumSize(1,1);
+
     // pluss and minus buttons
     this->connect(ui->pushButton_pluss,SIGNAL(clicked()),this,SLOT(addScale()));
     this->connect(ui->pushButton_minus,SIGNAL(clicked()),this,SLOT(minusScale()));
@@ -66,6 +69,7 @@ void GraphicsPainterWindow::resizeEvent(QResizeEvent *event){
     // rewrite clear ord
     clear_ord=paintMainOrd();
     // add points and draw graphics
+    emit needClearGraphics();
     emit needUpdatePicture();
 }
 
