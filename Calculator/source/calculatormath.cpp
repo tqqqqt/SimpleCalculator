@@ -276,8 +276,8 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
         CalculatorObject::ObjectsTypes object_type=_arr[i].getObjectType();
 
         // brackets and none objects cant stand in polish entry
-        if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets || object_type==CalculatorObject::ObjectsTypes::CloseBrackets) throw std::invalid_argument("incorect polish entry, no brackets");
-        if(object_type==CalculatorObject::ObjectsTypes::None) throw std::invalid_argument("incorect polysh entry, no none objects");
+        if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets || object_type==CalculatorObject::ObjectsTypes::CloseBrackets) throw incorect_polish_entry("find brackets");
+        if(object_type==CalculatorObject::ObjectsTypes::None) throw incorect_polish_entry("none type objects");
 
         // skip nums and variable
         if(object_type==CalculatorObject::ObjectsTypes::Num){
@@ -290,7 +290,7 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
         // operator
         if(object_type==CalculatorObject::ObjectsTypes::Mod || object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator){
             // check curent position
-            if((i-2)<0) throw std::invalid_argument("incorect polish entry, no nums before operator");
+            if((i-2)<0) throw incorect_polish_entry("no objects before operator");
 
             // count nums or variable
             int count_calculate_object=0;
@@ -298,20 +298,20 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
             if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
             if(before_before_object==CalculatorObject::ObjectsTypes::Num || before_before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
 
-            if(count_calculate_object!=2) throw std::invalid_argument("incorect polish entry, not have much nums");
+            if(count_calculate_object!=2) throw incorect_polish_entry("not have much nums to operator");
         }
 
         // function
         if(object_type==CalculatorObject::ObjectsTypes::Functins || object_type==CalculatorObject::ObjectsTypes::Factorial || object_type==CalculatorObject::ObjectsTypes::MinusBrackets){
             // check curent position
-            if((i-1)<0) throw std::invalid_argument("incorect polish entry, no nums before function");
+            if((i-1)<0) throw incorect_polish_entry("no nums before function");
 
             // count nums or variable
             int count_calculate_object=0;
             CalculatorObject::ObjectsTypes before_object=polishEntry[i-1].getObjectType();
             if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
 
-            if(count_calculate_object!=1) throw std::invalid_argument("incorect polish entry, not have much nums");
+            if(count_calculate_object!=1) throw incorect_polish_entry("not have much nums to function");
         }
     }
 
