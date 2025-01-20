@@ -80,7 +80,13 @@ void GraphicsInfoWindow::loadIcons(){
 
 // load styles use in window
 void GraphicsInfoWindow::loadStyles(){
+    QFile file(":/Graphics/GraphicsInfo/style.css");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str(&file);
+    QString content=file_str.readAll();
+    file.close();
 
+    this->setStyleSheet(content);
 }
 
 // emit signal before close window
