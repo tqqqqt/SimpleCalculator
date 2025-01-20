@@ -28,6 +28,7 @@ void CalculatorMath::setVector(std::vector<CalculatorObject> _objects){
         object_type=element.getObjectType();
         // nums, x variable and factorial dont need do something
         if(object_type==CalculatorObject::ObjectsTypes::Num || object_type==CalculatorObject::ObjectsTypes::X_variable || object_type==CalculatorObject::ObjectsTypes::Factorial){
+            element.checkNum();
             polishEntry.push_back(element);
             continue;
         }
@@ -85,7 +86,10 @@ CalculatorObject CalculatorMath::GetResult(){
     // move while not find operators or functions
     for(size_t i=0;i<polishEntry.size();i++){
         // nums skip
-        if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num) continue;
+        if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){
+            polishEntry[i].checkNum();
+            continue;
+        }
         try {
             // check if it operator
             if(polishEntry[i].toString()=="-") polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
@@ -137,6 +141,7 @@ void CalculatorMath::simplifyExpression(){
         CalculatorObject::ObjectsTypes object_type=polishEntry[i].getObjectType();
         // count avalible nums
         if(object_type==CalculatorObject::ObjectsTypes::Num){
+            polishEntry[i].checkNum();
             count_nums+=1;
             continue;
         }
@@ -207,6 +212,7 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
     for(int i=0;i<polishEntry.size();i++){
         // added nums to stack
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){
+            polishEntry[i].checkNum();
             stack.push(polishEntry[i]);
             continue;
         }
