@@ -5,6 +5,7 @@
 #include <vector>
 #include <stack>
 #include <cmath>
+#include <exception>
 
 #include "./numbermath.h"
 #include "./calculatorobject.h"
@@ -31,6 +32,15 @@ public:
     std::vector<CalculatorObject> getPolishEntry();
     void setPolishEntry(std::vector<CalculatorObject>);
     void setFunctionRadianFlag(bool);
+
+    class incorect_polish_entry: public std::exception{
+    private:
+        std::string m_error{};
+
+    public:
+        incorect_polish_entry(std::string mes): m_error(mes){ }
+        const char* what() const noexcept override { return m_error.c_str(); }
+    };
 };
 
 #endif // CALCULATORMATH_H
