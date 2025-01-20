@@ -1,0 +1,53 @@
+QMainWindow{
+	background: #fff;
+}
+
+QPushButton{
+	border: none;
+	background: rgba(237, 236, 235, 0.3);
+	color: #000;
+	padding: 10px 10px;
+	font-size: 25px;
+	outline: none;
+	border-radius: 14px;
+}
+
+QPushButton:hover{
+	background: rgba(204, 203, 202, 0.6);
+	font-size: 19px;
+}
+
+QPushButton:pressed{
+	background: rgba(58, 207, 4, 0.3);
+}
+
+#pushButton_del_element{
+	padding: 0px 0px;
+}
+
+#pushButton_clear{
+	color: #ff290d;
+}
+
+#pushButton_open, #pushButton_close, 
+#pushButton_devide, #pushButton_mull,
+#pushButton_pluss, #pushButton_minus,
+#pushButton_delLast{
+	color: #3acf04;
+}
+
+#pushButton_add{
+	background: #3acf04;
+	color: #fff;
+}
+
+#pushButton_add:pressed{
+	background: rgba(48, 153, 9, 0.6);
+}
+
+QTextEdit{
+	border: none;
+	outline: none;
+	font-size: 24px;
+	border-radius: 14px;
+}
