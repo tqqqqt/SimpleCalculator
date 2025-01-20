@@ -12,6 +12,7 @@ GraphicsPainterWindow::GraphicsPainterWindow(QVector<GraphicsInfoObject> *_arr, 
     QMainWindow(parent),
     ui(new Ui::GraphicsPainterWindow)
 {
+    loadStyle();
     ui->setupUi(this);
 
     curent_new_color=0;
@@ -71,6 +72,17 @@ void GraphicsPainterWindow::resizeEvent(QResizeEvent *event){
     // add points and draw graphics
     emit needClearGraphics();
     emit needUpdatePicture();
+}
+
+// load window style
+void GraphicsPainterWindow::loadStyle(){
+    QFile file(":/Graphics/GraphicsPainter/style.css");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str(&file);
+    QString content=file_str.readAll();
+    file.close();
+
+    this->setStyleSheet(content);
 }
 
 // paint X and Y ord without points num

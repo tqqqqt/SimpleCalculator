@@ -5,6 +5,7 @@
 #include <QCloseEvent>
 #include <QPixmap>
 #include <QPainter>
+#include <QTextStream>
 
 #include "./../../source/graphicsinfoobject.h"
 #include "./../../source/calculatormath.h"
@@ -34,6 +35,7 @@ private:
     void closeEvent(QCloseEvent*);
     void resizeEvent(QResizeEvent*);
     Qt::GlobalColor getNewColor();
+    void loadStyle();
 
 public slots:
     void paintGraphics();
