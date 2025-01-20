@@ -250,7 +250,7 @@ std::string ProgrammistObject::convertTo10(std::string _num, int _system){
     std::vector<std::string> nums_16={"10","11","12","13","14","15"};
     size_t size=_num.length();
 
-    for(int i=size-1;i>=0;i--){
+    for(int i=static_cast<int>(size)-1;i>=0;i--){
         if(_num[i]!='-'){
             if(_num[i]>='A') temp=nums_16[_num[i]-'A'];
             else temp=_num[i];
@@ -273,7 +273,7 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
 
     // add 1 to curent num in 2 system
     int cary=1;
-    for(int i=size-1;i>=0;i--){
+    for(int i=static_cast<int>(size)-1;i>=0;i--){
         if(_num[i]=='0'){
             _num[i]='1';
             cary=0;
@@ -296,6 +296,9 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
 // convert num in 10 system to _system
 std::string ProgrammistObject::convert10To(int _system){
     if(_system!=2 && _system!=8 && _system!=16) throw std::invalid_argument("incorect system");
+
+    size_t length_num_10=text_10.length();
+    if(length_num_10==0) return "";
 
     std::string result="", num=text_10, system=std::to_string(_system), mul_num="", neg_num="", temp="";
     if(num[0]=='-') num=num.substr(1);
