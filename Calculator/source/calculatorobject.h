@@ -17,6 +17,7 @@ private:
     size_t length;
     int count_dot, count_null;
     ObjectsTypes object_type;
+    bool check_num_complete;
 
 public:
     CalculatorObject();
@@ -36,6 +37,7 @@ public:
     void setFullNum(std::string);
     void clear();
     CalculatorObject getOnlyNum();
+    void checkNum();
 };
 
 #endif // CALCULATOROBJECT_H
