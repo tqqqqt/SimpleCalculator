@@ -12,6 +12,15 @@ CalculatorObject::CalculatorObject()
 
 CalculatorObject::~CalculatorObject(){ }
 
+CalculatorObject::CalculatorObject(const CalculatorObject& _object){
+    text=_object.text;
+    length=_object.length;
+    object_type=_object.object_type;
+    count_dot=_object.count_dot;
+    count_null=_object.count_null;
+    check_num_complete=_object.check_num_complete;
+}
+
 // get curent text
 std::string CalculatorObject::toString(){
     return text;
@@ -30,7 +39,7 @@ CalculatorObject::ObjectsTypes CalculatorObject::getObjectType(){
 // add num to text in object
 void CalculatorObject::addNum(char _num){
     // check input symbol
-    if(!(_num>='0' && _num<='9') && _num!=',') throw std::invalid_argument("input not a num");
+    if(!(_num>='0' && _num<='9') && _num!=',') throw incorect_add_num("input not in [0-9] and ','");
     // check what curent object None type
     if(object_type>ObjectsTypes::MinusBrackets) return;
 
@@ -56,7 +65,7 @@ void CalculatorObject::addNum(char _num){
 // add operators to object
 void CalculatorObject::addSymbol(std::string _symbol){
     // check input
-    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/" && _symbol!="^(") throw std::invalid_argument("input not a oper or bracket");
+    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/" && _symbol!="^(") throw incorect_add_symbol("input not a {+, -, *, /, (-, (, ), ^( }");
     // change object type to another and change text in object
     if(object_type==ObjectsTypes::OpenBrackets && _symbol=="-"){
         text="(-";
@@ -80,7 +89,7 @@ void CalculatorObject::addSymbol(std::string _symbol){
 // add fucntion in object
 void CalculatorObject::addFunction(std::string _function){
     // check input
-    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(") throw std::invalid_argument("input not a function");
+    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(") throw incorect_add_function("input not a {Sin, Cos, Tan, Ctan, Module, Round }");
     // check object type to none
     if(object_type!=ObjectsTypes::None) return;
 
@@ -92,7 +101,7 @@ void CalculatorObject::addFunction(std::string _function){
 // add special function in object
 void CalculatorObject::addSpecialFunction(std::string _special_function){
     // check input
-    if(_special_function!="mod" && _special_function!="!") throw std::invalid_argument("input not a function");
+    if(_special_function!="mod" && _special_function!="!") throw incorect_add_special_function("input not a mod or !");
     // check object type
     if(object_type!=ObjectsTypes::None) return;
     // set new object type
@@ -146,17 +155,17 @@ void CalculatorObject::deleteLastSymbol(){
 // set full complete num in object
 void CalculatorObject::setFullNum(std::string _num){
     // check input num
-    if(_num.length()==0) throw std::invalid_argument("incorect num");
-    if(_num[0]=='-' && _num.length()==1) throw std::invalid_argument("incorect num");
+    if(_num.length()==0) throw incorect_full_num("length == 0");
+    if(_num[0]=='-' && _num.length()==1) throw incorect_full_num("only minus in num");
 
     // check all symbols in num
     int start_point=0, end_point=static_cast<int>(_num.length());
     if(_num[0]=='-') start_point=1;
 
     for(int i=start_point, find_dot=0;i<end_point;i++){
-        if(!(_num[i]>='0' && _num[i]<='9') && _num[i]!=',') throw std::invalid_argument("incorect num");
+        if(!(_num[i]>='0' && _num[i]<='9') && _num[i]!=',') throw incorect_full_num("incorect symbol in num");
         if(_num[i]==',') find_dot++;
-        if(find_dot>1) throw std::invalid_argument("incorect num");
+        if(find_dot>1) throw incorect_full_num("count dot in num more then one");
     }
     // set num
     text=_num;
@@ -179,9 +188,10 @@ void CalculatorObject::clear(){
 
 // get only object with clear num, need in math
 CalculatorObject CalculatorObject::getOnlyNum(){
-    if(object_type!=ObjectsTypes::Num) throw std::invalid_argument("object is not num");
+    if(object_type!=ObjectsTypes::Num) throw incorect_get_only_num("object is not num");
 
     CalculatorObject result=*this;
+
     if(result.text[0]=='(') result.text=result.text.substr(1);
     if(result.text.back()==')') result.text.pop_back();
 
@@ -230,4 +240,34 @@ void CalculatorObject::checkNum(){
     text.erase(dot_position,length-dot_position);
     length=text.length();
     check_num_complete=true;
+}
+
+/*
+ *
+ * Exceptions
+ *
+ */
+
+const char* CalculatorObject::incorect_add_num::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* CalculatorObject::incorect_add_symbol::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* CalculatorObject::incorect_add_function::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* CalculatorObject::incorect_add_special_function::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* CalculatorObject::incorect_full_num::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* CalculatorObject::incorect_get_only_num::what() const noexcept{
+    return m_error.c_str();
 }
