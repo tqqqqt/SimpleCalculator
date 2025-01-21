@@ -126,8 +126,10 @@ CalculatorObject CalculatorMath::GetResult(){
             delete_mode=0;
         }
     }
-    // add bracket to calculator display
-    if(polishEntry[0].toString()[0]=='-') polishEntry[0].setFullNum('('+polishEntry[0].toString()+')');
+
+    // check count nums in end
+    if(polishEntry.size()!=1) throw incorect_polish_entry("nums after calculate more then 1");
+
     return polishEntry[0];
 }
 
@@ -259,6 +261,10 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
         // add result in stack
         stack.push(temp_result);
     }
+
+    // check count elements in stack
+    if(stack.size()>1) throw incorect_polish_entry("nums after calculate more then 1");
+
     // always only one element stay in stack in result
     return stack.top();
 }
