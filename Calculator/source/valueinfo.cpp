@@ -2,6 +2,10 @@
 
 ValueInfo::ValueInfo()
 {
+    TEMPERATURE_INDEX=0;
+    DATA_INDEX=0;
+    SPEED_INDEX=0;
+
     // create all topics
     createArea();
     createLength();
@@ -33,6 +37,8 @@ void ValueInfo::createLength(){
 void ValueInfo::createTemperature(){
     mains.push_back("Температура");
     seconds.push_back({"Градус Цельсия (C)","Градус Фарингейта (F)","Градус Кельвина (K)"});
+
+    TEMPERATURE_INDEX=mains.size()-1;
 }
 
 // added volume topics
@@ -57,6 +63,8 @@ void ValueInfo::createData(){
     seconds.push_back({"Биты (bit)","Байты (B)","Килобайты (KB)","Мегабайты (MB)","Гигабайты (GB)","Терабайты (TB)"});
     std::vector<std::string> data={"8589934592","1073741824","1048576","1024","1","0,0009765625"};
     for(size_t i=0;i<data.size();i++) info[seconds.back()[i]]=data[i];
+
+    DATA_INDEX=mains.size()-1;
 }
 
 // added speed topics
@@ -65,6 +73,8 @@ void ValueInfo::createSpeed(){
     seconds.push_back({"Метры в секунду (m/s)","Метры в час (m/h)","Километры в секунду (km/s)","Километры в час (km/h)","Дюймы в секунду (in/s)","Дюймы в час (in/h)","Футы в секунду (ft/s)","Футы в час (ft/h)","Мили в секунду (mi/s)","Мили в час (mi/h)","Узлы (kn)"});
     std::vector<std::string> data={"1","3600","0,001","3,6","39,3700787402","141732,28346457","3,280839895","11811,023622047","0,0006213712","2,2369362921","1,9438444924"};
     for(size_t i=0;i<data.size();i++) info[seconds.back()[i]]=data[i];
+
+    SPEED_INDEX=mains.size()-1;
 }
 
 // added time topics

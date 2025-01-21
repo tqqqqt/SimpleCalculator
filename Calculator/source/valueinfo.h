@@ -10,6 +10,8 @@
 class ValueInfo
 {
 private:
+    size_t TEMPERATURE_INDEX, DATA_INDEX, SPEED_INDEX;
+
     std::vector<std::string> mains;
     std::vector<std::vector<std::string>> seconds;
     std::unordered_map<std::string,std::string> info;
