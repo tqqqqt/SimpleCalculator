@@ -70,7 +70,7 @@ size_t ProgrammistObject::getLength(){
 // added symbol to num in 2 system
 void ProgrammistObject::addSymbolTo2(char _num){
     // rules to add symbol in 2 system
-    if(_num!='0' && _num!='1') throw std::invalid_argument("incorect num to 2 system");
+    if(_num!='0' && _num!='1') throw incorect_add_symbol("incorect symbol to 2 system");
 
     if(length_2==1 && text_2[0]=='0') text_2[0]=_num;
     else text_2+=_num;
@@ -98,7 +98,7 @@ bool ProgrammistObject::updateTextOn2(){
 // add symbol to num in 8 system
 void ProgrammistObject::addSymbolTo8(char _num){
     // rules to add symbol
-    if(!(_num>='0' && _num<='7')) throw std::invalid_argument("incorect num to 8 system");
+    if(!(_num>='0' && _num<='7')) throw incorect_add_symbol("incorect symbol to 8 system");
 
     if(length_8==1 && text_8[0]=='0') text_8[0]=_num;
     else text_8+=_num;
@@ -125,7 +125,7 @@ bool ProgrammistObject::updateTextOn8(){
 // add symbol to num in 10 system
 void ProgrammistObject::addSymbolTo10(char _num){
     // rules to add symbol
-    if(!(_num>='0' && _num<='9')) throw std::invalid_argument("incorect num to 10 system");
+    if(!(_num>='0' && _num<='9')) throw incorect_add_symbol("incorect symbol to 10 system");
 
     if(length_10==1 && text_10[0]=='0') text_10[0]=_num;
     else text_10+=_num;
@@ -164,7 +164,7 @@ bool ProgrammistObject::updateTextOn10(){
 // add symbol to num in 16 system
 void ProgrammistObject::addSymbolTo16(char _num){
     // check symbol
-    if(!(_num>='0' && _num<='9') && !(_num>='A' && _num<='F')) throw std::invalid_argument("incorect num to 16 system");
+    if(!(_num>='0' && _num<='9') && !(_num>='A' && _num<='F')) throw incorect_add_symbol("incorect symbol to 16 system");
 
     if(length_16==1 && text_16[0]=='0') text_16[0]=_num;
     else text_16+=_num;
@@ -243,7 +243,7 @@ void ProgrammistObject::addNum(char _num){
 
 // function convert num frmo _system to 10 system
 std::string ProgrammistObject::convertTo10(std::string _num, int _system){
-    if(_system!=2 && _system!=8 && _system!=16) throw std::invalid_argument("incorect system");
+    if(_system!=2 && _system!=8 && _system!=16) throw incorect_convert("cant convert from unknown system to 10");
 
     std::string result="0", temp="", system=std::to_string(_system), pow_num="1";
     // special nums to 16 system
@@ -295,7 +295,7 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
 
 // convert num in 10 system to _system
 std::string ProgrammistObject::convert10To(int _system){
-    if(_system!=2 && _system!=8 && _system!=16) throw std::invalid_argument("incorect system");
+    if(_system!=2 && _system!=8 && _system!=16) throw incorect_convert("cant convert from 10 to unknown system");
 
     size_t length_num_10=text_10.length();
     if(length_num_10==0) return "";
@@ -359,7 +359,7 @@ void ProgrammistObject::deleteLastSymbol(){
 
 // change curent system to _system
 void ProgrammistObject::changeSystem(int _system){
-    if(_system!=2 && _system!=8 && _system!=10 && _system!=16) throw std::invalid_argument("incorect system");
+    if(_system!=2 && _system!=8 && _system!=10 && _system!=16) throw incorect_change_system("use only 2, 8, 10, 16 systems");
 
     curent_system=_system;
 }
@@ -417,4 +417,23 @@ void ProgrammistObject::clear(){
 // change maximum nums count
 void ProgrammistObject::setCount(int _count){
     count_nums=4*static_cast<size_t>(_count);
+}
+
+
+/*
+ *
+ * Exceptions
+ *
+ */
+
+const char* ProgrammistObject::incorect_add_symbol::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* ProgrammistObject::incorect_convert::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* ProgrammistObject::incorect_change_system::what() const noexcept{
+    return m_error.c_str();
 }
