@@ -138,13 +138,13 @@ void calculatorobject::test_addNum_data(){
     QTest::newRow("test_8")<<'7'<<"7";
     QTest::newRow("test_9")<<'8'<<"8";
     QTest::newRow("test_10")<<'9'<<"9";
-    QTest::newRow("test_11")<<'+'<<"input not a num";
-    QTest::newRow("test_12")<<'-'<<"input not a num";
-    QTest::newRow("test_13")<<'*'<<"input not a num";
-    QTest::newRow("test_14")<<'/'<<"input not a num";
-    QTest::newRow("test_15")<<'('<<"input not a num";
-    QTest::newRow("test_16")<<')'<<"input not a num";
-    QTest::newRow("test_17")<<' '<<"input not a num";
+    QTest::newRow("test_11")<<'+'<<"input not in [0-9] and ','";
+    QTest::newRow("test_12")<<'-'<<"input not in [0-9] and ','";
+    QTest::newRow("test_13")<<'*'<<"input not in [0-9] and ','";
+    QTest::newRow("test_14")<<'/'<<"input not in [0-9] and ','";
+    QTest::newRow("test_15")<<'('<<"input not in [0-9] and ','";
+    QTest::newRow("test_16")<<')'<<"input not in [0-9] and ','";
+    QTest::newRow("test_17")<<' '<<"input not in [0-9] and ','";
 }
 
 void calculatorobject::test_addNum(){
@@ -168,24 +168,24 @@ void calculatorobject::test_addSymbol_data(){
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("test_1")<<"0"<<"input not a oper or bracket";
-    QTest::newRow("test_2")<<"1"<<"input not a oper or bracket";
-    QTest::newRow("test_3")<<"2"<<"input not a oper or bracket";
-    QTest::newRow("test_4")<<"3"<<"input not a oper or bracket";
-    QTest::newRow("test_5")<<"4"<<"input not a oper or bracket";
-    QTest::newRow("test_6")<<"5"<<"input not a oper or bracket";
-    QTest::newRow("test_7")<<"6"<<"input not a oper or bracket";
-    QTest::newRow("test_8")<<"7"<<"input not a oper or bracket";
-    QTest::newRow("test_9")<<"8"<<"input not a oper or bracket";
-    QTest::newRow("test_10")<<"9"<<"input not a oper or bracket";
+    QTest::newRow("test_1")<<"0"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_2")<<"1"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_3")<<"2"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_4")<<"3"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_5")<<"4"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_6")<<"5"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_7")<<"6"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_8")<<"7"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_9")<<"8"<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_10")<<"9"<<"input not a {+, -, *, /, (-, (, ), ^( }";
     QTest::newRow("test_11")<<"+"<<"+";
     QTest::newRow("test_12")<<"-"<<"-";
     QTest::newRow("test_13")<<"*"<<"*";
     QTest::newRow("test_14")<<"/"<<"/";
     QTest::newRow("test_15")<<"("<<"(";
     QTest::newRow("test_16")<<")"<<")";
-    QTest::newRow("test_17")<<""<<"input not a oper or bracket";
-    QTest::newRow("test_18")<<" "<<"input not a oper or bracket";
+    QTest::newRow("test_17")<<""<<"input not a {+, -, *, /, (-, (, ), ^( }";
+    QTest::newRow("test_18")<<" "<<"input not a {+, -, *, /, (-, (, ), ^( }";
 }
 
 void calculatorobject::test_addSymbol(){
@@ -201,7 +201,7 @@ void calculatorobject::test_addSymbol(){
         QCOMPARE(curent_result,result.toStdString());
     }
     catch (std::exception &exp) {
-        QCOMPARE(exp.what(),result.toStdString());
+        QCOMPARE(exp.what(),result.toStdString().c_str());
     }
 }
 
@@ -213,17 +213,17 @@ void calculatorobject::test_addFunction_data(){
     QTest::newRow("test_2")<<"Cos("<<"Cos(";
     QTest::newRow("test_3")<<"Tng("<<"Tng(";
     QTest::newRow("test_4")<<"Ctng("<<"Ctng(";
-    QTest::newRow("test_5")<<"mod"<<"input not a function";
-    QTest::newRow("test_6")<<"!"<<"input not a function";
+    QTest::newRow("test_5")<<"mod"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+    QTest::newRow("test_6")<<"!"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
     QTest::newRow("test_7")<<"Module("<<"Module(";
     QTest::newRow("test_8")<<"RoundUp("<<"RoundUp(";
     QTest::newRow("test_9")<<"RoundDown("<<"RoundDown(";
-    QTest::newRow("test_10")<<"("<<"input not a function";
-    QTest::newRow("test_11")<<"+"<<"input not a function";
-    QTest::newRow("test_12")<<"-"<<"input not a function";
-    QTest::newRow("test_13")<<"1"<<"input not a function";
-    QTest::newRow("test_14")<<","<<"input not a function";
-    QTest::newRow("test_15")<<"0"<<"input not a function";
+    QTest::newRow("test_10")<<"("<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+    QTest::newRow("test_11")<<"+"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+    QTest::newRow("test_12")<<"-"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+    QTest::newRow("test_13")<<"1"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+    QTest::newRow("test_14")<<","<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+    QTest::newRow("test_15")<<"0"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
 }
 
 void calculatorobject::test_addFunction(){
@@ -247,21 +247,21 @@ void calculatorobject::test_addSpecialFunction_data(){
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("test_1")<<"Sin("<<"input not a function";
-    QTest::newRow("test_2")<<"Cos("<<"input not a function";
-    QTest::newRow("test_3")<<"Tng("<<"input not a function";
-    QTest::newRow("test_4")<<"Ctng("<<"input not a function";
+    QTest::newRow("test_1")<<"Sin("<<"input not a mod or !";
+    QTest::newRow("test_2")<<"Cos("<<"input not a mod or !";
+    QTest::newRow("test_3")<<"Tng("<<"input not a mod or !";
+    QTest::newRow("test_4")<<"Ctng("<<"input not a mod or !";
     QTest::newRow("test_5")<<"mod"<<"mod";
     QTest::newRow("test_6")<<"!"<<"!";
-    QTest::newRow("test_7")<<"Module("<<"input not a function";
-    QTest::newRow("test_8")<<"RoundUp("<<"input not a function";
-    QTest::newRow("test_9")<<"RoundDown("<<"input not a function";
-    QTest::newRow("test_10")<<"("<<"input not a function";
-    QTest::newRow("test_11")<<"+"<<"input not a function";
-    QTest::newRow("test_12")<<"-"<<"input not a function";
-    QTest::newRow("test_13")<<"1"<<"input not a function";
-    QTest::newRow("test_14")<<","<<"input not a function";
-    QTest::newRow("test_15")<<"0"<<"input not a function";
+    QTest::newRow("test_7")<<"Module("<<"input not a mod or !";
+    QTest::newRow("test_8")<<"RoundUp("<<"input not a mod or !";
+    QTest::newRow("test_9")<<"RoundDown("<<"input not a mod or !";
+    QTest::newRow("test_10")<<"("<<"input not a mod or !";
+    QTest::newRow("test_11")<<"+"<<"input not a mod or !";
+    QTest::newRow("test_12")<<"-"<<"input not a mod or !";
+    QTest::newRow("test_13")<<"1"<<"input not a mod or !";
+    QTest::newRow("test_14")<<","<<"input not a mod or !";
+    QTest::newRow("test_15")<<"0"<<"input not a mod or !";
 }
 
 void calculatorobject::test_addSpecialFunction(){
@@ -277,7 +277,7 @@ void calculatorobject::test_addSpecialFunction(){
         QCOMPARE(curent_result,result.toStdString());
     }
     catch(std::exception &exp){
-        QCOMPARE(exp.what(),result.toStdString());
+        QCOMPARE(exp.what(),result.toStdString().c_str());
     }
 }
 
@@ -367,11 +367,11 @@ void calculatorobject::test_setFullNum_data(){
     QTest::newRow("test_2")<<"-3435,01"<<"-3435,01";
     QTest::newRow("test_3")<<"1,0000000000001"<<"1,0000000000001";
     QTest::newRow("test_4")<<"-223"<<"-223";
-    QTest::newRow("test_5")<<"2+"<<"incorect num";
+    QTest::newRow("test_5")<<"2+"<<"incorect symbol in num";
     QTest::newRow("test_6")<<"-234"<<"-234";
-    QTest::newRow("test_7")<<"/*"<<"incorect num";
-    QTest::newRow("test_8")<<""<<"incorect num";
-    QTest::newRow("test_9")<<"2,2,2"<<"incorect num";
+    QTest::newRow("test_7")<<"/*"<<"incorect symbol in num";
+    QTest::newRow("test_8")<<""<<"length == 0";
+    QTest::newRow("test_9")<<"2,2,2"<<"count dot in num more then one";
 }
 
 void calculatorobject::test_setFullNum(){
