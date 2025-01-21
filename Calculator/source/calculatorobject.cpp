@@ -147,18 +147,12 @@ void CalculatorObject::deleteLastSymbol(){
 void CalculatorObject::setFullNum(std::string _num){
     // check input num
     if(_num.length()==0) throw std::invalid_argument("incorect num");
-    if(_num[0]=='(' && _num.length()==1) throw std::invalid_argument("incorect num");
-    if(_num[0]=='(' && ((_num[1]=='-' && _num.length()==2) || _num[1]!='-')) throw std::invalid_argument("incorect num");
-    if(_num[0]=='(' && _num.back()!=')') throw std::invalid_argument("incorect num");
     if(_num[0]=='-' && _num.length()==1) throw std::invalid_argument("incorect num");
 
     // check all symbols in num
     int start_point=0, end_point=static_cast<int>(_num.length());
-    if(_num[0]=='(' && _num[1]=='-'){
-        start_point=2;
-        end_point--;
-    }
-    else if(_num[0]=='-') start_point=1;
+    if(_num[0]=='-') start_point=1;
+
     for(int i=start_point, find_dot=0;i<end_point;i++){
         if(!(_num[i]>='0' && _num[i]<='9') && _num[i]!=',') throw std::invalid_argument("incorect num");
         if(_num[i]==',') find_dot++;
