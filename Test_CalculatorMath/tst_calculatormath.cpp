@@ -112,7 +112,7 @@ void calculatormath::test_getResult_3(){
     calculator.setVector(temp.toStdVector());
 
     CalculatorObject result_object;
-    QString curent_result, result="(-1)";
+    QString curent_result, result="-1";
     result_object=calculator.GetResult();
     curent_result=QString::fromStdString(result_object.toString());
     QCOMPARE(curent_result,result);
