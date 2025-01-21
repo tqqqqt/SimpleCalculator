@@ -7,8 +7,6 @@ CalculatorMath::CalculatorMath()
     function_radian_data=false;
 }
 
-CalculatorMath::~CalculatorMath(){ }
-
 // check prior of curent operator for polish entry
 int CalculatorMath::CheckPrior(std::string _oper){
     if(_oper=="+" || _oper=="-") return 1;
@@ -357,4 +355,14 @@ void CalculatorMath::setFunctionAccuracy(int _accuracy){
 // set flag what all nums to sin, cos, tang and ctang is radian or not
 void CalculatorMath::setFunctionRadianFlag(bool _flag){
     function_radian_data=_flag;
+}
+
+/*
+ *
+ * Exception
+ *
+ */
+
+const char* CalculatorMath::incorect_polish_entry::what() const noexcept{
+    return m_error.c_str();
 }

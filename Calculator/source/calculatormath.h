@@ -21,7 +21,6 @@ private:
 
 public:
     CalculatorMath();
-    ~CalculatorMath();
 
     void setVector(std::vector<CalculatorObject>);
     void SetDivAccuracy(int);
@@ -33,13 +32,19 @@ public:
     void setPolishEntry(std::vector<CalculatorObject>);
     void setFunctionRadianFlag(bool);
 
+    /*
+     *
+     * Exceptions
+     *
+     */
+
     class incorect_polish_entry: public std::exception{
     private:
         std::string m_error{};
 
     public:
         incorect_polish_entry(std::string mes): m_error(mes){ }
-        const char* what() const noexcept override { return m_error.c_str(); }
+        const char* what() const noexcept;
     };
 };
 
