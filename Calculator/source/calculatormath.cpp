@@ -276,7 +276,12 @@ std::vector<CalculatorObject> CalculatorMath::getPolishEntry(){
 
 // set polish entry to curent object
 void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
+    // need object to add in stack like result of calculations
+    CalculatorObject temp_num_object;
+    temp_num_object.addNum('1');
+
     // check new entry
+    std::stack<CalculatorObject> check_stack;
     size_t size_arr=_arr.size();
     for(int i=0;i<static_cast<int>(size_arr);i++){
         CalculatorObject::ObjectsTypes object_type=_arr[i].getObjectType();
@@ -288,9 +293,13 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
         // skip nums and variable
         if(object_type==CalculatorObject::ObjectsTypes::Num){
             _arr[i].checkNum();
+            check_stack.push(_arr[i]);
             continue;
         }
-        if(object_type==CalculatorObject::ObjectsTypes::X_variable) continue;
+        if(object_type==CalculatorObject::ObjectsTypes::X_variable){
+            check_stack.push(_arr[i]);
+            continue;
+        }
 
         // check how much nums have before
         // operator
@@ -298,13 +307,19 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
             // check curent position
             if((i-2)<0) throw incorect_polish_entry("no objects before operator");
 
-            // count nums or variable
-            int count_calculate_object=0;
-            CalculatorObject::ObjectsTypes before_object=polishEntry[i-1].getObjectType(), before_before_object=polishEntry[i-2].getObjectType();
-            if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
-            if(before_before_object==CalculatorObject::ObjectsTypes::Num || before_before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
+            // count nums and x_variable before operator
+            int count_nums_variable=0;
+            for(int i=0;i<2;i++){
+                CalculatorObject::ObjectsTypes temp_type=check_stack.top().getObjectType();
+                if(temp_type==CalculatorObject::ObjectsTypes::Num || temp_type==CalculatorObject::ObjectsTypes::X_variable) count_nums_variable+=1;
+                check_stack.pop();
+            }
 
-            if(count_calculate_object!=2) throw incorect_polish_entry("not have much nums to operator");
+            // check count
+            if(count_nums_variable<2) throw incorect_polish_entry("not have much nums to operator");
+
+            // add one num in stack like result
+            check_stack.push(temp_num_object);
         }
 
         // function
@@ -312,12 +327,16 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
             // check curent position
             if((i-1)<0) throw incorect_polish_entry("no nums before function");
 
-            // count nums or variable
-            int count_calculate_object=0;
-            CalculatorObject::ObjectsTypes before_object=polishEntry[i-1].getObjectType();
-            if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
+            // count nums or variable before function
+            int count_nums_variable=0;
+            CalculatorObject::ObjectsTypes before_object=check_stack.top().getObjectType();
+            check_stack.pop();
+            if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_nums_variable+=1;
 
-            if(count_calculate_object!=1) throw incorect_polish_entry("not have much nums to function");
+            // check count
+            if(count_nums_variable!=1) throw incorect_polish_entry("not have much nums to function");
+
+            check_stack.push(temp_num_object);
         }
     }
 
