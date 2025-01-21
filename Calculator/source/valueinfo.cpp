@@ -83,16 +83,14 @@ std::vector<std::string> ValueInfo::getMain(){
 // get child topics when change main topic
 std::vector<std::string> ValueInfo::getSecond(std::string _main){
     std::vector<std::string> result;
-    size_t index=0;
+    size_t index=0, size=mains.size();
+
     // find need index
-    if(_main==mains[AREA_INDEX]) index=AREA_INDEX;
-    else if(_main==mains[LENGTH_INDEX]) index=LENGTH_INDEX;
-    else if(_main==mains[TEMPERATURE_INDEX]) index=TEMPERATURE_INDEX;
-    else if(_main==mains[VOLUME_INDEX]) index=VOLUME_INDEX;
-    else if(_main==mains[MASS_INDEX]) index=MASS_INDEX;
-    else if(_main==mains[DATA_INDEX]) index=DATA_INDEX;
-    else if(_main==mains[SPEED_INDEX]) index=SPEED_INDEX;
-    else if(_main==mains[TIME_INDEX]) index=TIME_INDEX;
+    for(size_t i=0;i<size;i++){
+        if(mains[i]!=_main) continue;
+        index=i;
+        break;
+    }
 
     return seconds[index];
 }

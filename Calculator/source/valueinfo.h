@@ -7,15 +7,6 @@
 
 #include "./numbermath.h"
 
-#define AREA_INDEX 0
-#define LENGTH_INDEX 1
-#define TEMPERATURE_INDEX 2
-#define VOLUME_INDEX 3
-#define MASS_INDEX 4
-#define DATA_INDEX 5
-#define SPEED_INDEX 6
-#define TIME_INDEX 7
-
 class ValueInfo
 {
 private:
