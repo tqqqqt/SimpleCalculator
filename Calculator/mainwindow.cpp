@@ -294,11 +294,10 @@ void MainWindow::ButtonResult(){
         objects.clear();
         curent_object=calculatorMathObject->GetResult();
         // get brackets from object and make 3 different objects in vector
-        if(curent_object.toString()[0]=='('){
+        if(curent_object.toString()[0]=='-'){
             // save num from result
             std::string temp_num=curent_object.toString();
-            temp_num.pop_back();
-            temp_num=temp_num.substr(2);
+            temp_num=temp_num.erase(0,1);
             // add minus bracket
             curent_object.clear();
             curent_object.addSymbol("(-");
