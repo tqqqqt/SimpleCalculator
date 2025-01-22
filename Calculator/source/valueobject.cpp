@@ -128,3 +128,18 @@ void ValueObject::clear(){
     count_null=1;
     check_num_complete=false;
 }
+
+
+/*
+ *
+ * Exceptions
+ *
+ */
+
+const char* ValueObject::incorect_add_num::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* ValueObject::incorect_set_full_num::what() const noexcept{
+    return m_error.c_str();
+}

@@ -334,6 +334,7 @@ void GraphicsInfoWindow::buttonAdd(){
         curent_text="";
         curent_object.clear();
         ui->label->setText(exp.what());
+        return;
     }
 
     // create new info object

@@ -7,8 +7,6 @@ CalculatorMath::CalculatorMath()
     function_radian_data=false;
 }
 
-CalculatorMath::~CalculatorMath(){ }
-
 // check prior of curent operator for polish entry
 int CalculatorMath::CheckPrior(std::string _oper){
     if(_oper=="+" || _oper=="-") return 1;
@@ -90,44 +88,50 @@ CalculatorObject CalculatorMath::GetResult(){
             polishEntry[i].checkNum();
             continue;
         }
+
+        std::string math_result="";
         try {
             // check if it operator
-            if(polishEntry[i].toString()=="-") polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="+") polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="*") polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="/") polishEntry[i-2].setFullNum(MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy));
-            else if(polishEntry[i].toString()=="^(") polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="mod") polishEntry[i-2].setFullNum(MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            if(polishEntry[i].toString()=="-") math_result=MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="+") math_result=MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="*") math_result=MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="/") math_result=MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy);
+            else if(polishEntry[i].toString()=="^(") math_result=MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="mod") math_result=MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString());
             else{
                 // check if it function
                 delete_mode=1;
-                if(polishEntry[i].toString()=="(-") polishEntry[i-1].setFullNum(MathMul(polishEntry[i-1].toString(),"-1"));
-                else if(polishEntry[i].toString()=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Cos(") polishEntry[i-1].setFullNum(MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Tng(") polishEntry[i-1].setFullNum(MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Ctng(") polishEntry[i-1].setFullNum(MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="!") polishEntry[i-1].setFullNum(MathFactorial(polishEntry[i-1].toString()));
-                else if(polishEntry[i].toString()=="Module(") polishEntry[i-1].setFullNum(MathModule(polishEntry[i-1].toString()));
-                else if(polishEntry[i].toString()=="RoundUp(") polishEntry[i-1].setFullNum(MathRoundUp(polishEntry[i-1].toString()));
-                else if(polishEntry[i].toString()=="RoundDown(") polishEntry[i-1].setFullNum(MathRoundDown(polishEntry[i-1].toString()));
+                if(polishEntry[i].toString()=="(-") math_result=MathMul(polishEntry[i-1].toString(),"-1");
+                else if(polishEntry[i].toString()=="Sin(") math_result=MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Cos(") math_result=MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Tng(") math_result=MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Ctng(") math_result=MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="!") math_result=MathFactorial(polishEntry[i-1].toString());
+                else if(polishEntry[i].toString()=="Module(") math_result=MathModule(polishEntry[i-1].toString());
+                else if(polishEntry[i].toString()=="RoundUp(") math_result=MathRoundUp(polishEntry[i-1].toString());
+                else if(polishEntry[i].toString()=="RoundDown(") math_result=MathRoundDown(polishEntry[i-1].toString());
             }
         } catch (std::exception) {
             throw;
         }
         // delete two nums becouse operators use two nums
         if(delete_mode==0){
+            polishEntry[i-2].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
             i-=2;
         }
         // delete only one num becose function use only one num
         else{
+            polishEntry[i-1].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+i);
             i-=1;
             delete_mode=0;
         }
     }
-    // add bracket to calculator display
-    if(polishEntry[0].toString()[0]=='-') polishEntry[0].setFullNum('('+polishEntry[0].toString()+')');
+
+    // check count nums in end
+    if(polishEntry.size()!=1) throw incorect_polish_entry("nums after calculate more then 1");
+
     return polishEntry[0];
 }
 
@@ -150,6 +154,8 @@ void CalculatorMath::simplifyExpression(){
             count_nums=0;
             continue;
         }
+
+        std::string math_result="";
         try {
             // if no nums continue
             if(count_nums==0) continue;
@@ -159,12 +165,12 @@ void CalculatorMath::simplifyExpression(){
                     count_nums=0;
                     continue;
                 }
-                if(object_string=="-") polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="+") polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="*") polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="/") polishEntry[i-2].setFullNum(MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy));
-                else if(object_string=="^(") polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="mod") polishEntry[i-2].setFullNum(MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+                if(object_string=="-") math_result=MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="+") math_result=MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="*") math_result=MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="/") math_result=MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy);
+                else if(object_string=="^(") math_result=MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="mod") math_result=MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString());
                 count_nums-=2;
                 delete_mode=0;
             }
@@ -173,15 +179,15 @@ void CalculatorMath::simplifyExpression(){
                     count_nums=0;
                     continue;
                 }
-                if(object_string=="(-") polishEntry[i-1].setFullNum(MathMul(polishEntry[i-1].toString(),"-1"));
-                else if(object_string=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="Cos(") polishEntry[i-1].setFullNum(MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="Tng(") polishEntry[i-1].setFullNum(MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="Ctng(") polishEntry[i-1].setFullNum(MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="!") polishEntry[i-1].setFullNum(MathFactorial(polishEntry[i-1].toString()));
-                else if(object_string=="Module(") polishEntry[i-1].setFullNum(MathModule(polishEntry[i-1].toString()));
-                else if(object_string=="RoundUp(") polishEntry[i-1].setFullNum(MathRoundUp(polishEntry[i-1].toString()));
-                else if(object_string=="RoundDown(") polishEntry[i-1].setFullNum(MathRoundDown(polishEntry[i-1].toString()));
+                if(object_string=="(-") math_result=MathMul(polishEntry[i-1].toString(),"-1");
+                else if(object_string=="Sin(") math_result=MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="Cos(") math_result=MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="Tng(") math_result=MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="Ctng(") math_result=MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="!") math_result=MathFactorial(polishEntry[i-1].toString());
+                else if(object_string=="Module(") math_result=MathModule(polishEntry[i-1].toString());
+                else if(object_string=="RoundUp(") math_result=MathRoundUp(polishEntry[i-1].toString());
+                else if(object_string=="RoundDown(") math_result=MathRoundDown(polishEntry[i-1].toString());
                 count_nums-=1;
                 delete_mode=1;
             }
@@ -190,12 +196,14 @@ void CalculatorMath::simplifyExpression(){
         }
         // operators use 2 objects
         if(delete_mode==0){
+            polishEntry[i-2].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
             i-=2;
             count_nums+=1;
         }
         // functions use 1 objects
         else if(delete_mode==1){
+            polishEntry[i-1].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+i);
             i-=1;
             count_nums+=1;
@@ -221,6 +229,8 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
             stack.push(x_object);
             continue;
         }
+
+        std::string math_result="";
         try {
             // calculate operators, pow and mode, use to nums
             CalculatorObject::ObjectsTypes object_type=polishEntry[i].getObjectType();
@@ -230,35 +240,40 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
                 stack.pop();
                 num_1=stack.top();
                 stack.pop();
-                if(polishEntry[i].toString()=="-") temp_result.setFullNum(MathNeg(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="+") temp_result.setFullNum(MathSum(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="*") temp_result.setFullNum(MathMul(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="/") temp_result.setFullNum(MathDiv(num_1.toString(),num_2.toString(),div_accuracy));
-                else if(polishEntry[i].toString()=="^(") temp_result.setFullNum(MathPow(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="mod") temp_result.setFullNum(MathMod(num_1.toString(),num_2.toString()));
+                if(polishEntry[i].toString()=="-") math_result=MathNeg(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="+") math_result=MathSum(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="*") math_result=MathMul(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="/") math_result=MathDiv(num_1.toString(),num_2.toString(),div_accuracy);
+                else if(polishEntry[i].toString()=="^(") math_result=MathPow(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="mod") math_result=MathMod(num_1.toString(),num_2.toString());
             }
             else{
                 // calculate functions, use only one num
                 CalculatorObject num;
                 num=stack.top();
                 stack.pop();
-                if(polishEntry[i].toString()=="(-") temp_result.setFullNum(MathMul(num.toString(),"-1"));
-                else if(polishEntry[i].toString()=="Sin(") temp_result.setFullNum(MathSin(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Cos(") temp_result.setFullNum(MathCos(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Tng(") temp_result.setFullNum(MathTng(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Ctng(") temp_result.setFullNum(MathCtng(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="!") temp_result.setFullNum(MathFactorial(num.toString()));
-                else if(polishEntry[i].toString()=="Module(") temp_result.setFullNum(MathModule(num.toString()));
-                else if(polishEntry[i].toString()=="RoundUp(") temp_result.setFullNum(MathRoundUp(num.toString()));
-                else if(polishEntry[i].toString()=="RoundDown(") temp_result.setFullNum(MathRoundDown(num.toString()));
+                if(polishEntry[i].toString()=="(-") math_result=MathMul(num.toString(),"-1");
+                else if(polishEntry[i].toString()=="Sin(") math_result=MathSin(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Cos(") math_result=MathCos(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Tng(") math_result=MathTng(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Ctng(") math_result=MathCtng(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="!") math_result=MathFactorial(num.toString());
+                else if(polishEntry[i].toString()=="Module(") math_result=MathModule(num.toString());
+                else if(polishEntry[i].toString()=="RoundUp(") math_result=MathRoundUp(num.toString());
+                else if(polishEntry[i].toString()=="RoundDown(") math_result=MathRoundDown(num.toString());
             }
         }
         catch (std::exception) {
             throw;
         }
         // add result in stack
+        temp_result.setFullNum(math_result);
         stack.push(temp_result);
     }
+
+    // check count elements in stack
+    if(stack.size()!=1) throw incorect_polish_entry("nums after calculate more then 1");
+
     // always only one element stay in stack in result
     return stack.top();
 }
@@ -270,48 +285,67 @@ std::vector<CalculatorObject> CalculatorMath::getPolishEntry(){
 
 // set polish entry to curent object
 void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
+    // need object to add in stack like result of calculations
+    CalculatorObject temp_num_object;
+    temp_num_object.addNum('1');
+
     // check new entry
+    std::stack<CalculatorObject> check_stack;
     size_t size_arr=_arr.size();
     for(int i=0;i<static_cast<int>(size_arr);i++){
         CalculatorObject::ObjectsTypes object_type=_arr[i].getObjectType();
 
         // brackets and none objects cant stand in polish entry
-        if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets || object_type==CalculatorObject::ObjectsTypes::CloseBrackets) throw std::invalid_argument("incorect polish entry, no brackets");
-        if(object_type==CalculatorObject::ObjectsTypes::None) throw std::invalid_argument("incorect polysh entry, no none objects");
+        if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets || object_type==CalculatorObject::ObjectsTypes::CloseBrackets) throw incorect_polish_entry("find brackets");
+        if(object_type==CalculatorObject::ObjectsTypes::None) throw incorect_polish_entry("none type objects");
 
         // skip nums and variable
         if(object_type==CalculatorObject::ObjectsTypes::Num){
             _arr[i].checkNum();
+            check_stack.push(_arr[i]);
             continue;
         }
-        if(object_type==CalculatorObject::ObjectsTypes::X_variable) continue;
+        if(object_type==CalculatorObject::ObjectsTypes::X_variable){
+            check_stack.push(_arr[i]);
+            continue;
+        }
 
         // check how much nums have before
         // operator
         if(object_type==CalculatorObject::ObjectsTypes::Mod || object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator){
             // check curent position
-            if((i-2)<0) throw std::invalid_argument("incorect polish entry, no nums before operator");
+            if((i-2)<0) throw incorect_polish_entry("no objects before operator");
 
-            // count nums or variable
-            int count_calculate_object=0;
-            CalculatorObject::ObjectsTypes before_object=polishEntry[i-1].getObjectType(), before_before_object=polishEntry[i-2].getObjectType();
-            if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
-            if(before_before_object==CalculatorObject::ObjectsTypes::Num || before_before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
+            // count nums and x_variable before operator
+            int count_nums_variable=0;
+            for(int i=0;i<2;i++){
+                CalculatorObject::ObjectsTypes temp_type=check_stack.top().getObjectType();
+                if(temp_type==CalculatorObject::ObjectsTypes::Num || temp_type==CalculatorObject::ObjectsTypes::X_variable) count_nums_variable+=1;
+                check_stack.pop();
+            }
 
-            if(count_calculate_object!=2) throw std::invalid_argument("incorect polish entry, not have much nums");
+            // check count
+            if(count_nums_variable<2) throw incorect_polish_entry("not have much nums to operator");
+
+            // add one num in stack like result
+            check_stack.push(temp_num_object);
         }
 
         // function
         if(object_type==CalculatorObject::ObjectsTypes::Functins || object_type==CalculatorObject::ObjectsTypes::Factorial || object_type==CalculatorObject::ObjectsTypes::MinusBrackets){
             // check curent position
-            if((i-1)<0) throw std::invalid_argument("incorect polish entry, no nums before function");
+            if((i-1)<0) throw incorect_polish_entry("no nums before function");
 
-            // count nums or variable
-            int count_calculate_object=0;
-            CalculatorObject::ObjectsTypes before_object=polishEntry[i-1].getObjectType();
-            if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_calculate_object+=1;
+            // count nums or variable before function
+            int count_nums_variable=0;
+            CalculatorObject::ObjectsTypes before_object=check_stack.top().getObjectType();
+            check_stack.pop();
+            if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_nums_variable+=1;
 
-            if(count_calculate_object!=1) throw std::invalid_argument("incorect polish entry, not have much nums");
+            // check count
+            if(count_nums_variable!=1) throw incorect_polish_entry("not have much nums to function");
+
+            check_stack.push(temp_num_object);
         }
     }
 
@@ -332,4 +366,14 @@ void CalculatorMath::setFunctionAccuracy(int _accuracy){
 // set flag what all nums to sin, cos, tang and ctang is radian or not
 void CalculatorMath::setFunctionRadianFlag(bool _flag){
     function_radian_data=_flag;
+}
+
+/*
+ *
+ * Exception
+ *
+ */
+
+const char* CalculatorMath::incorect_polish_entry::what() const noexcept{
+    return m_error.c_str();
 }

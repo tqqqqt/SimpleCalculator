@@ -190,26 +190,26 @@ void programmistobject::test_addNum_data(){
 
     QTest::newRow("test_1")<<2<<'0'<<"0";
     QTest::newRow("test_2")<<2<<'1'<<"1";
-    QTest::newRow("test_3")<<2<<'2'<<"incorect num to 2 system";
-    QTest::newRow("test_4")<<2<<'A'<<"incorect num to 2 system";
+    QTest::newRow("test_3")<<2<<'2'<<"incorect symbol to 2 system";
+    QTest::newRow("test_4")<<2<<'A'<<"incorect symbol to 2 system";
     QTest::newRow("test_5")<<8<<'1'<<"1";
     QTest::newRow("test_6")<<8<<'4'<<"4";
     QTest::newRow("test_7")<<8<<'7'<<"7";
-    QTest::newRow("test_8")<<8<<'8'<<"incorect num to 8 system";
-    QTest::newRow("test_9")<<8<<'9'<<"incorect num to 8 system";
-    QTest::newRow("test_10")<<8<<'A'<<"incorect num to 8 system";
+    QTest::newRow("test_8")<<8<<'8'<<"incorect symbol to 8 system";
+    QTest::newRow("test_9")<<8<<'9'<<"incorect symbol to 8 system";
+    QTest::newRow("test_10")<<8<<'A'<<"incorect symbol to 8 system";
     QTest::newRow("test_11")<<10<<'1'<<"1";
     QTest::newRow("test_12")<<10<<'6'<<"6";
     QTest::newRow("test_13")<<10<<'9'<<"9";
     QTest::newRow("test_14")<<10<<'0'<<"0";
-    QTest::newRow("test_15")<<10<<'B'<<"incorect num to 10 system";
-    QTest::newRow("test_16")<<10<<'E'<<"incorect num to 10 system";
+    QTest::newRow("test_15")<<10<<'B'<<"incorect symbol to 10 system";
+    QTest::newRow("test_16")<<10<<'E'<<"incorect symbol to 10 system";
     QTest::newRow("test_17")<<16<<'0'<<"0";
     QTest::newRow("test_18")<<16<<'4'<<"4";
     QTest::newRow("test_19")<<16<<'8'<<"8";
     QTest::newRow("test_20")<<16<<'A'<<"A";
     QTest::newRow("test_21")<<16<<'E'<<"E";
-    QTest::newRow("test_22")<<16<<'z'<<"incorect num to 16 system";
+    QTest::newRow("test_22")<<16<<'z'<<"incorect symbol to 16 system";
 }
 
 void programmistobject::test_addNum(){
@@ -306,8 +306,8 @@ void programmistobject::test_changeSystem_data(){
     QTest::newRow("test_2")<<8<<"";
     QTest::newRow("test_3")<<10<<"";
     QTest::newRow("test_4")<<16<<"";
-    QTest::newRow("test_5")<<3<<"incorect system";
-    QTest::newRow("test_6")<<99<<"incorect system";
+    QTest::newRow("test_5")<<3<<"use only 2, 8, 10, 16 systems";
+    QTest::newRow("test_6")<<99<<"use only 2, 8, 10, 16 systems";
 }
 
 void programmistobject::test_changeSystem(){

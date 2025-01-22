@@ -51,6 +51,36 @@ public:
     void moveRight();
 
     void setCount(int);
+
+    /*
+     *
+     * Exceptions
+     *
+     */
+
+    class incorect_add_symbol: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_add_symbol(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
+
+    class incorect_convert: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_convert(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
+
+    class incorect_change_system: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_change_system(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
 };
 
 #endif // PROGRAMMISTOBJECT_H

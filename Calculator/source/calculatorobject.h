@@ -22,6 +22,7 @@ private:
 public:
     CalculatorObject();
     ~CalculatorObject();
+    CalculatorObject(const CalculatorObject&);
 
     std::string toString();
     size_t getLength();
@@ -38,6 +39,63 @@ public:
     void clear();
     CalculatorObject getOnlyNum();
     void checkNum();
+
+    /*
+     * Exceptions
+     */
+
+    class incorect_add_num: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_add_num(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
+
+
+    class incorect_add_symbol: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_add_symbol(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
+
+
+    class incorect_add_function: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_add_function(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
+
+
+    class incorect_add_special_function: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_add_special_function(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
+
+
+    class incorect_full_num: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_full_num(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
+
+
+    class incorect_get_only_num: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_get_only_num(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
 };
 
 #endif // CALCULATOROBJECT_H

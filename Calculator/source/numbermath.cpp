@@ -4,7 +4,7 @@
 int MaxNumber(std::string num_1, std::string num_2){
     size_t len_num_1=num_1.length(), len_num_2=num_2.length();
     // exceptions
-    if(len_num_1==0 || len_num_2==0) throw std::invalid_argument("incorect num: no symbols in num");
+    if(len_num_1==0 || len_num_2==0) throw incorect_num("no symbols in num");
     // special situation
     if(num_1[0]=='-' && num_2[0]!='-') return 1;
     if(num_1[0]!='-' && num_2[0]=='-') return -1;
@@ -66,7 +66,7 @@ int MaxNumber(std::string num_1, std::string num_2){
 int FindMultiplier(std::string num_1, std::string num_2){
     size_t len_num_1=num_1.length(), len_num_2=num_2.length();
     // exceptions
-    if(len_num_1==0 || len_num_2==0) throw std::invalid_argument("incorect num, num don't have symbols");
+    if(len_num_1==0 || len_num_2==0) throw incorect_num("no symbols in num");
     // special situations
     int result=1;
     if(num_1[0]=='-' && num_2[0]!='-'){
@@ -99,7 +99,7 @@ std::string MathSum(std::string num_1, std::string num_2){
     size_t length_num_1=num_1.length(), length_num_2=num_2.length();
 
     // exceptions
-    if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, no symbols in num");
+    if(length_num_1==0 || length_num_2==0) throw incorect_num("no symbols in num");
 
     std::string result="";
     // special situations with minus
@@ -195,7 +195,7 @@ std::string MathNeg(std::string num_1, std::string num_2){
     size_t length_num_1=num_1.length(), length_num_2=num_2.length();
 
     // exceptions
-    if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, dont have symbols");
+    if(length_num_1==0 || length_num_2==0) throw incorect_num("no symbols in num");
 
     std::string result="";
     // special situation with minus
@@ -319,7 +319,7 @@ std::string MathMul(std::string num_1, std::string num_2){
     size_t length_num_1=num_1.length(), length_num_2=num_2.length();
 
     // exceptions
-    if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect num, dont have symbols");
+    if(length_num_1==0 || length_num_2==0) throw incorect_num("no symbols in num");
 
     std::string result="";
     // special situations with minus
@@ -429,9 +429,9 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
     size_t length_num_1=num_1.length(), length_num_2=num_2.length();
 
     // exceptions
-    if(length_num_1==0 || length_num_2==0) throw std::invalid_argument("incorect nums, no symbols in num");
-    if(_accuracy<0) throw std::invalid_argument("incorect accuracy value");
-    if(length_num_2==1 && num_2[0]=='0') throw std::invalid_argument("Error div 0");
+    if(length_num_1==0 || length_num_2==0) throw incorect_num("no symbols in num");
+    if(_accuracy<0) throw incorect_accuracy("accuracy < 0");
+    if(length_num_2==1 && num_2[0]=='0') throw div_zero("div 0");
 
     std::string result="";
 
@@ -739,9 +739,9 @@ std::string MathPow(std::string num, std::string pow, int accuracy){
     size_t dot_position_pow=pow.find(',');
 
     // exceptions
-    if(length_num==0 || length_pow==0) throw std::invalid_argument("incorect num, no symbols");
-    if(dot_position_pow!=std::string::npos) throw std::invalid_argument("incorect pow num"); // while not create sqrt
-    if(accuracy<0) throw std::invalid_argument("incorect accuracy value");
+    if(length_num==0 || length_pow==0) throw incorect_num("no symbols in num");
+    if(dot_position_pow!=std::string::npos) throw incorect_num("cant have dot"); // while not create sqrt
+    if(accuracy<0) throw incorect_accuracy("accuracy < 0");
 
     std::string result=num;
 
@@ -800,9 +800,9 @@ std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, b
     size_t length_degree=degree.length();
 
     // exceptions
-    if(length_degree==0) throw std::invalid_argument("incorect input num, no symbols");
-    if(div_acuracy<0) throw std::invalid_argument("incorect div acuracy");
-    if(function_acuracy<0) throw std::invalid_argument("incorect function acuracy");
+    if(length_degree==0) throw incorect_num("no symbols in num");
+    if(div_acuracy<0) throw incorect_accuracy("div acuracy < 0");
+    if(function_acuracy<0) throw incorect_accuracy("function acuracy < 0");
 
     // convert or check input num
     std::string radian="0";
@@ -834,9 +834,9 @@ std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, b
     size_t length_input=degree.length();
 
     // exceptions
-    if(length_input==0) throw std::invalid_argument("incorect num, no symbols");
-    if(div_acuracy<0) throw std::invalid_argument("incorect div acuracy");
-    if(function_acuracy<0) throw std::invalid_argument("incorect function acuracy");
+    if(length_input==0) throw incorect_num("no symbols in num");
+    if(div_acuracy<0) throw incorect_accuracy("div acuracy < 0");
+    if(function_acuracy<0) throw incorect_accuracy("function acuracy < 0");
 
     // convert or check input num
     std::string radian="0";
@@ -874,8 +874,11 @@ std::string MathTng(std::string degree, int div_acuracy, int function_acuracy, b
 
         result=MathDiv(result_sin,result_cos,div_acuracy);
     }
+    catch(div_zero){
+        throw math_exception("Tng value not define");
+    }
     catch(std::exception){
-        return "value is not defined";
+        throw;
     }
 
     return result;
@@ -892,8 +895,11 @@ std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy, 
 
         result=MathDiv(result_cos,result_sin,div_acuracy);
     }
+    catch(div_zero){
+        throw math_exception("Ctng value not define");
+    }
     catch(std::exception){
-        return "value is not defined";
+        throw;
     }
 
     return result;
@@ -904,8 +910,8 @@ std::string MathFactorial(std::string num){
     size_t length_num=num.length(), dot_position=num.find(','), minus_position=num.find('-');
 
     // exceptions
-    if(length_num==0) throw std::invalid_argument("incorect input num, no symbols");
-    if(dot_position!=std::string::npos || minus_position!=std::string::npos) throw std::invalid_argument("incorect factorial num");
+    if(length_num==0) throw incorect_num("no symbols in num");
+    if(dot_position!=std::string::npos || minus_position!=std::string::npos) throw incorect_num("dot or minus in num");
 
     int check_end=0;
     check_end=MaxNumber(num,"1");
@@ -930,7 +936,7 @@ std::string MathMod(std::string num, std::string mod_num){
     size_t length_num=num.length(), length_mod_num=mod_num.length();
 
     // exceptions
-    if(length_num==0 || length_mod_num==0) throw std::invalid_argument("incorect num, no symbols");
+    if(length_num==0 || length_mod_num==0) throw incorect_num("no symbols in num");
 
     // special situations
     if(mod_num[0]=='-') mod_num=mod_num.substr(1);
@@ -951,8 +957,8 @@ std::string MathModule(std::string num){
     size_t length_num=num.length(), minus_position=num.find('-');
 
     // exceptions
-    if(length_num==0) throw std::invalid_argument("incorect num, no symbols");
-    if(minus_position!=std::string::npos && minus_position!=0) throw std::invalid_argument("incorect num or incorect minus position");
+    if(length_num==0) throw incorect_num("no symbols in num");
+    if(minus_position!=std::string::npos && minus_position!=0) throw incorect_num("problem with minus in num");
 
     // special situation
     if(minus_position==std::string::npos) return num;
@@ -966,7 +972,7 @@ std::string MathRoundUp(std::string num){
     size_t length_num=num.length(), dot_position=num.find(',');
 
     // exceptions
-    if(length_num==0) throw std::invalid_argument("incorect num, no symbols");
+    if(length_num==0) throw incorect_num("no symbols in num");
 
     // special situation
     if(dot_position==std::string::npos) return num;
@@ -995,7 +1001,7 @@ std::string MathRoundDown(std::string num){
     size_t length_num=num.length(), dot_position=num.find(',');
 
     // exceptions
-    if(length_num==0) throw std::invalid_argument("incorect num, no symbols");
+    if(length_num==0) throw incorect_num("no symbols in num");
 
     // special situation
     if(dot_position==std::string::npos) return num;
@@ -1012,4 +1018,27 @@ std::string MathRoundDown(std::string num){
     // check result
     if(result.length()==2 && result[0]=='-' && result[1]=='0') return "0";
     return result;
+}
+
+
+/*
+ *
+ * Exception
+ *
+ */
+
+const char* incorect_num::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* incorect_accuracy::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* div_zero::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* math_exception::what() const noexcept{
+    return m_error.c_str();
 }

@@ -5,9 +5,10 @@
 #include <string>
 
 class ProgramObject{
-public:
+protected:
     virtual ~ProgramObject(){ }
 
+public:
     virtual std::string toString()=0;
     virtual size_t getLength()=0;
 
