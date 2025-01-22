@@ -14,6 +14,7 @@ HistoryWindow::HistoryWindow(QVector<QString>* _history, QWidget* parent):
 {
     ui->setupUi(this);
 
+    // save address of vector to show in window
     memory=_history;
 
     ui->listView->setModel(new QStringListModel(QList<QString>::fromVector(*memory)));
@@ -36,6 +37,8 @@ void HistoryWindow::needCloseWindow(){
 
 // Send signal to calculator for change state and close window
 void HistoryWindow::closeEvent(QCloseEvent *event){
+    // emit signal to main window to change window state
     emit updateWindowState();
+
     event->accept();
 }

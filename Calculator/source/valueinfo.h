@@ -7,18 +7,11 @@
 
 #include "./numbermath.h"
 
-#define AREA_INDEX 0
-#define LENGTH_INDEX 1
-#define TEMPERATURE_INDEX 2
-#define VOLUME_INDEX 3
-#define MASS_INDEX 4
-#define DATA_INDEX 5
-#define SPEED_INDEX 6
-#define TIME_INDEX 7
-
 class ValueInfo
 {
 private:
+    size_t TEMPERATURE_INDEX, DATA_INDEX, SPEED_INDEX;
+
     std::vector<std::string> mains;
     std::vector<std::vector<std::string>> seconds;
     std::unordered_map<std::string,std::string> info;
