@@ -21,4 +21,4 @@ The calculator also has a saved input history, which is dynamically updated as y
 # Future big plans:
 - [x] Value mode
 - [x] Programmist mode
-- [ ] Graphics mode
+- [x] Graphics mode
