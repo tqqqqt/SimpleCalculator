@@ -88,37 +88,41 @@ CalculatorObject CalculatorMath::GetResult(){
             polishEntry[i].checkNum();
             continue;
         }
+
+        std::string math_result="";
         try {
             // check if it operator
-            if(polishEntry[i].toString()=="-") polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="+") polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="*") polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="/") polishEntry[i-2].setFullNum(MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy));
-            else if(polishEntry[i].toString()=="^(") polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-            else if(polishEntry[i].toString()=="mod") polishEntry[i-2].setFullNum(MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+            if(polishEntry[i].toString()=="-") math_result=MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="+") math_result=MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="*") math_result=MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="/") math_result=MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy);
+            else if(polishEntry[i].toString()=="^(") math_result=MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+            else if(polishEntry[i].toString()=="mod") math_result=MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString());
             else{
                 // check if it function
                 delete_mode=1;
-                if(polishEntry[i].toString()=="(-") polishEntry[i-1].setFullNum(MathMul(polishEntry[i-1].toString(),"-1"));
-                else if(polishEntry[i].toString()=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Cos(") polishEntry[i-1].setFullNum(MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Tng(") polishEntry[i-1].setFullNum(MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Ctng(") polishEntry[i-1].setFullNum(MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="!") polishEntry[i-1].setFullNum(MathFactorial(polishEntry[i-1].toString()));
-                else if(polishEntry[i].toString()=="Module(") polishEntry[i-1].setFullNum(MathModule(polishEntry[i-1].toString()));
-                else if(polishEntry[i].toString()=="RoundUp(") polishEntry[i-1].setFullNum(MathRoundUp(polishEntry[i-1].toString()));
-                else if(polishEntry[i].toString()=="RoundDown(") polishEntry[i-1].setFullNum(MathRoundDown(polishEntry[i-1].toString()));
+                if(polishEntry[i].toString()=="(-") math_result=MathMul(polishEntry[i-1].toString(),"-1");
+                else if(polishEntry[i].toString()=="Sin(") math_result=MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Cos(") math_result=MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Tng(") math_result=MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Ctng(") math_result=MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="!") math_result=MathFactorial(polishEntry[i-1].toString());
+                else if(polishEntry[i].toString()=="Module(") math_result=MathModule(polishEntry[i-1].toString());
+                else if(polishEntry[i].toString()=="RoundUp(") math_result=MathRoundUp(polishEntry[i-1].toString());
+                else if(polishEntry[i].toString()=="RoundDown(") math_result=MathRoundDown(polishEntry[i-1].toString());
             }
         } catch (std::exception) {
             throw;
         }
         // delete two nums becouse operators use two nums
         if(delete_mode==0){
+            polishEntry[i-2].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
             i-=2;
         }
         // delete only one num becose function use only one num
         else{
+            polishEntry[i-1].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+i);
             i-=1;
             delete_mode=0;
@@ -150,6 +154,8 @@ void CalculatorMath::simplifyExpression(){
             count_nums=0;
             continue;
         }
+
+        std::string math_result="";
         try {
             // if no nums continue
             if(count_nums==0) continue;
@@ -159,12 +165,12 @@ void CalculatorMath::simplifyExpression(){
                     count_nums=0;
                     continue;
                 }
-                if(object_string=="-") polishEntry[i-2].setFullNum(MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="+") polishEntry[i-2].setFullNum(MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="*") polishEntry[i-2].setFullNum(MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="/") polishEntry[i-2].setFullNum(MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy));
-                else if(object_string=="^(") polishEntry[i-2].setFullNum(MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
-                else if(object_string=="mod") polishEntry[i-2].setFullNum(MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString()));
+                if(object_string=="-") math_result=MathNeg(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="+") math_result=MathSum(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="*") math_result=MathMul(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="/") math_result=MathDiv(polishEntry[i-2].toString(),polishEntry[i-1].toString(),div_accuracy);
+                else if(object_string=="^(") math_result=MathPow(polishEntry[i-2].toString(),polishEntry[i-1].toString());
+                else if(object_string=="mod") math_result=MathMod(polishEntry[i-2].toString(),polishEntry[i-1].toString());
                 count_nums-=2;
                 delete_mode=0;
             }
@@ -173,15 +179,15 @@ void CalculatorMath::simplifyExpression(){
                     count_nums=0;
                     continue;
                 }
-                if(object_string=="(-") polishEntry[i-1].setFullNum(MathMul(polishEntry[i-1].toString(),"-1"));
-                else if(object_string=="Sin(") polishEntry[i-1].setFullNum(MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="Cos(") polishEntry[i-1].setFullNum(MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="Tng(") polishEntry[i-1].setFullNum(MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="Ctng(") polishEntry[i-1].setFullNum(MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(object_string=="!") polishEntry[i-1].setFullNum(MathFactorial(polishEntry[i-1].toString()));
-                else if(object_string=="Module(") polishEntry[i-1].setFullNum(MathModule(polishEntry[i-1].toString()));
-                else if(object_string=="RoundUp(") polishEntry[i-1].setFullNum(MathRoundUp(polishEntry[i-1].toString()));
-                else if(object_string=="RoundDown(") polishEntry[i-1].setFullNum(MathRoundDown(polishEntry[i-1].toString()));
+                if(object_string=="(-") math_result=MathMul(polishEntry[i-1].toString(),"-1");
+                else if(object_string=="Sin(") math_result=MathSin(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="Cos(") math_result=MathCos(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="Tng(") math_result=MathTng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="Ctng(") math_result=MathCtng(polishEntry[i-1].toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(object_string=="!") math_result=MathFactorial(polishEntry[i-1].toString());
+                else if(object_string=="Module(") math_result=MathModule(polishEntry[i-1].toString());
+                else if(object_string=="RoundUp(") math_result=MathRoundUp(polishEntry[i-1].toString());
+                else if(object_string=="RoundDown(") math_result=MathRoundDown(polishEntry[i-1].toString());
                 count_nums-=1;
                 delete_mode=1;
             }
@@ -190,12 +196,14 @@ void CalculatorMath::simplifyExpression(){
         }
         // operators use 2 objects
         if(delete_mode==0){
+            polishEntry[i-2].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
             i-=2;
             count_nums+=1;
         }
         // functions use 1 objects
         else if(delete_mode==1){
+            polishEntry[i-1].setFullNum(math_result);
             polishEntry.erase(polishEntry.begin()+i);
             i-=1;
             count_nums+=1;
@@ -221,6 +229,8 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
             stack.push(x_object);
             continue;
         }
+
+        std::string math_result="";
         try {
             // calculate operators, pow and mode, use to nums
             CalculatorObject::ObjectsTypes object_type=polishEntry[i].getObjectType();
@@ -230,38 +240,39 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
                 stack.pop();
                 num_1=stack.top();
                 stack.pop();
-                if(polishEntry[i].toString()=="-") temp_result.setFullNum(MathNeg(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="+") temp_result.setFullNum(MathSum(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="*") temp_result.setFullNum(MathMul(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="/") temp_result.setFullNum(MathDiv(num_1.toString(),num_2.toString(),div_accuracy));
-                else if(polishEntry[i].toString()=="^(") temp_result.setFullNum(MathPow(num_1.toString(),num_2.toString()));
-                else if(polishEntry[i].toString()=="mod") temp_result.setFullNum(MathMod(num_1.toString(),num_2.toString()));
+                if(polishEntry[i].toString()=="-") math_result=MathNeg(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="+") math_result=MathSum(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="*") math_result=MathMul(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="/") math_result=MathDiv(num_1.toString(),num_2.toString(),div_accuracy);
+                else if(polishEntry[i].toString()=="^(") math_result=MathPow(num_1.toString(),num_2.toString());
+                else if(polishEntry[i].toString()=="mod") math_result=MathMod(num_1.toString(),num_2.toString());
             }
             else{
                 // calculate functions, use only one num
                 CalculatorObject num;
                 num=stack.top();
                 stack.pop();
-                if(polishEntry[i].toString()=="(-") temp_result.setFullNum(MathMul(num.toString(),"-1"));
-                else if(polishEntry[i].toString()=="Sin(") temp_result.setFullNum(MathSin(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Cos(") temp_result.setFullNum(MathCos(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Tng(") temp_result.setFullNum(MathTng(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="Ctng(") temp_result.setFullNum(MathCtng(num.toString(),div_accuracy,function_accuracy,function_radian_data));
-                else if(polishEntry[i].toString()=="!") temp_result.setFullNum(MathFactorial(num.toString()));
-                else if(polishEntry[i].toString()=="Module(") temp_result.setFullNum(MathModule(num.toString()));
-                else if(polishEntry[i].toString()=="RoundUp(") temp_result.setFullNum(MathRoundUp(num.toString()));
-                else if(polishEntry[i].toString()=="RoundDown(") temp_result.setFullNum(MathRoundDown(num.toString()));
+                if(polishEntry[i].toString()=="(-") math_result=MathMul(num.toString(),"-1");
+                else if(polishEntry[i].toString()=="Sin(") math_result=MathSin(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Cos(") math_result=MathCos(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Tng(") math_result=MathTng(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="Ctng(") math_result=MathCtng(num.toString(),div_accuracy,function_accuracy,function_radian_data);
+                else if(polishEntry[i].toString()=="!") math_result=MathFactorial(num.toString());
+                else if(polishEntry[i].toString()=="Module(") math_result=MathModule(num.toString());
+                else if(polishEntry[i].toString()=="RoundUp(") math_result=MathRoundUp(num.toString());
+                else if(polishEntry[i].toString()=="RoundDown(") math_result=MathRoundDown(num.toString());
             }
         }
         catch (std::exception) {
             throw;
         }
         // add result in stack
+        temp_result.setFullNum(math_result);
         stack.push(temp_result);
     }
 
     // check count elements in stack
-    if(stack.size()>1) throw incorect_polish_entry("nums after calculate more then 1");
+    if(stack.size()!=1) throw incorect_polish_entry("nums after calculate more then 1");
 
     // always only one element stay in stack in result
     return stack.top();
