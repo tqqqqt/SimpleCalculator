@@ -257,7 +257,7 @@ void numbermath::test_mathDiv_data(){
     QTest::addColumn<int>("div_acuracy");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("test_1")<<"2"<<"0"<<10<<"Error div 0";
+    QTest::newRow("test_1")<<"2"<<"0"<<10<<"div 0";
     QTest::newRow("test_2")<<"0"<<"2"<<10<<"0";
     QTest::newRow("test_3")<<"8"<<"2"<<10<<"4";
     QTest::newRow("test_4")<<"8"<<"4"<<10<<"2";
@@ -272,7 +272,7 @@ void numbermath::test_mathDiv_data(){
     QTest::newRow("test_13")<<"5252683697925751630154898"<<"42546738"<<10<<"123456789987654321";
     QTest::newRow("test_14")<<"137174211083676268890260631"<<"1111111111"<<10<<"123456789987654321";
     QTest::newRow("test_15")<<"15241578994055784200731595789971041"<<"123456789987654321"<<10<<"123456789987654321";
-    QTest::newRow("test_16")<<"0,2"<<"0"<<10<<"Error div 0";
+    QTest::newRow("test_16")<<"0,2"<<"0"<<10<<"div 0";
     QTest::newRow("test_17")<<"0"<<"0,2"<<10<<"0";
     QTest::newRow("test_18")<<"1"<<"10"<<10<<"0,1";
     QTest::newRow("test_19")<<"123456789"<<"345"<<10<<"357845,7652173913";
@@ -455,8 +455,8 @@ void numbermath::test_mathFactorial_data(){
     QTest::newRow("test_2")<<"12"<<"479001600";
     QTest::newRow("test_3")<<"20"<<"2432902008176640000";
     QTest::newRow("test_4")<<"6"<<"720";
-    QTest::newRow("test_5")<<"-15"<<"incorect factorial num";
-    QTest::newRow("test_6")<<"4,23"<<"incorect factorial num";
+    QTest::newRow("test_5")<<"-15"<<"dot or minus in num";
+    QTest::newRow("test_6")<<"4,23"<<"dot or minus in num";
 }
 
 void numbermath::test_mathFactorial(){
@@ -470,7 +470,7 @@ void numbermath::test_mathFactorial(){
         QCOMPARE(curent_result,result.toStdString());
     }
     catch(std::exception &exp){
-        QCOMPARE(exp.what(),result.toStdString());
+        QCOMPARE(exp.what(),result.toStdString().c_str());
     }
 }
 
