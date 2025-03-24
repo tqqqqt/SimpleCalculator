@@ -5,6 +5,7 @@ FunctionsWindow::FunctionsWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FunctionsWindow)
 {
+    loadStyle();
     ui->setupUi(this);
 
     // buttons connects
@@ -22,6 +23,18 @@ FunctionsWindow::FunctionsWindow(QWidget *parent) :
 FunctionsWindow::~FunctionsWindow()
 {
     delete ui;
+}
+
+// Load css style from main_style.css file
+void FunctionsWindow::loadStyle(){
+    // main style for window
+    QFile file(":/Functions/functions_style.css");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream file_str(&file);
+    QString content=file_str.readAll();
+    file.close();
+
+    this->setStyleSheet(content);
 }
 
 // Send to calculator what function selected

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QCloseEvent>
+#include <QTextStream>
 
 namespace Ui {
 class FunctionsWindow;
@@ -21,6 +22,7 @@ private:
 
 private:
     void closeEvent(QCloseEvent*);
+    void loadStyle();
 
 private slots:
     void pressButtons(QString);
