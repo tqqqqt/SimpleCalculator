@@ -99,26 +99,27 @@ void numbermath::test_maxNum(){
 void numbermath::test_findMultiplier_data(){
     QTest::addColumn<QString>("firstNum");
     QTest::addColumn<QString>("secondNum");
-    QTest::addColumn<int>("result");
+    QTest::addColumn<QString>("result");
 
-    QTest::newRow("test_1")<<"1"<<"1"<<1;
-    QTest::newRow("test_2")<<"4"<<"2"<<2;
-    QTest::newRow("test_3")<<"13"<<"2"<<6;
-    QTest::newRow("test_4")<<"14"<<"13"<<1;
-    QTest::newRow("test_5")<<"81"<<"9"<<9;
-    QTest::newRow("test_6")<<"4"<<"-2"<<-2;
-    QTest::newRow("test_7")<<"-4"<<"2"<<-2;
-    QTest::newRow("test_8")<<"-81"<<"-9"<<9;
+    QTest::newRow("test_1")<<"1"<<"1"<<"1";
+    QTest::newRow("test_2")<<"4"<<"2"<<"2";
+    QTest::newRow("test_3")<<"13"<<"2"<<"6";
+    QTest::newRow("test_4")<<"14"<<"13"<<"1";
+    QTest::newRow("test_5")<<"81"<<"9"<<"9";
+    QTest::newRow("test_6")<<"4"<<"-2"<<"-2";
+    QTest::newRow("test_7")<<"-4"<<"2"<<"-2";
+    QTest::newRow("test_8")<<"-81"<<"-9"<<"9";
+    QTest::newRow("test_9")<<"5"<<"2"<<"2";
 }
 
 void numbermath::test_findMultiplier(){
     QFETCH(QString,firstNum);
     QFETCH(QString,secondNum);
-    QFETCH(int,result);
+    QFETCH(QString,result);
 
-    int curent_result=FindMultiplier(firstNum.toStdString(),secondNum.toStdString());
+    std::string curent_result=FindMultiplier(firstNum.toStdString(),secondNum.toStdString());
 
-    QCOMPARE(curent_result,result);
+    QCOMPARE(curent_result,result.toStdString());
 }
 
 void numbermath::test_mathSum_data(){
