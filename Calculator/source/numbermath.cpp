@@ -63,19 +63,19 @@ int MaxNumber(std::string num_1, std::string num_2){
 }
 
 // find multiplier for nums
-int FindMultiplier(std::string num_1, std::string num_2){
+std::string FindMultiplier(std::string num_1, std::string num_2){
     size_t len_num_1=num_1.length(), len_num_2=num_2.length();
     // exceptions
     if(len_num_1==0 || len_num_2==0) throw incorect_num("no symbols in num");
     // special situations
-    int result=1;
+    std::string result="0";
     if(num_1[0]=='-' && num_2[0]!='-'){
         result=FindMultiplier(num_1.substr(1),num_2);
-        return result*-1;
+        return '-'+result;
     }
     if(num_1[0]!='-' && num_2[0]=='-'){
         result=FindMultiplier(num_1,num_2.substr(1));
-        return result*-1;
+        return '-'+result;
     }
     if(num_1[0]=='-' && num_2[0]=='-'){
         result=FindMultiplier(num_1.substr(1),num_2.substr(1));
@@ -85,11 +85,13 @@ int FindMultiplier(std::string num_1, std::string num_2){
     int max_check_result=0;
     std::string mul_result="";
     // try find maximum num
-    for(int i=2;i<10;i++){
-        mul_result=MathMul(num_2,std::to_string(i));
+    for(int i=0;i<9;i++){
+        result[0]+=1;
+        mul_result=MathMul(num_2,result);
         max_check_result=MaxNumber(mul_result,num_1);
-        if(max_check_result>=0) result=i;
-        else break;
+        if(max_check_result>0) continue;
+        if(max_check_result<0) result[0]-=1;
+        break;
     }
     return result;
 }
@@ -544,8 +546,8 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
         }
     }
 
-    std::string temp_num="", mul_temp="";
-    int check_max=0, multiplier=0;
+    std::string temp_num="", mul_temp="", multiplier="";
+    int check_max=0;
     size_t length_temp_num=0, length_result=0, last_position=0;
 
     // set flag what num_1 have dot part
@@ -596,10 +598,10 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
 
         // div curent num
         multiplier=FindMultiplier(temp_num,num_2);
-        result+='0'+multiplier;
+        result+=multiplier;
         length_result+=1;
 
-        mul_temp=MathMul(num_2,std::to_string(multiplier));
+        mul_temp=MathMul(num_2,multiplier);
         temp_num=MathNeg(temp_num,mul_temp);
         length_temp_num=temp_num.length();
     }
@@ -668,10 +670,10 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
 
         // div curent num
         multiplier=FindMultiplier(temp_num,num_2);
-        dot_result+='0'+multiplier;
+        dot_result+=multiplier;
         length_dot_result+=1;
 
-        mul_temp=MathMul(num_2,std::to_string(multiplier));
+        mul_temp=MathMul(num_2,multiplier);
         temp_num=MathNeg(temp_num,mul_temp);
         length_temp_num=temp_num.length();
 
