@@ -313,19 +313,12 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
         // check how much nums have before
         // operator
         if(object_type==CalculatorObject::ObjectsTypes::Mod || object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator){
-            // check curent position
-            if((i-2)<0) throw incorect_polish_entry("no objects before operator");
+            // check curent position and count nums
+            if((i-2)<0 || check_stack.size()<2) throw incorect_polish_entry("no objects before operator");
 
-            // count nums and x_variable before operator
-            int count_nums_variable=0;
-            for(int i=0;i<2;i++){
-                CalculatorObject::ObjectsTypes temp_type=check_stack.top().getObjectType();
-                if(temp_type==CalculatorObject::ObjectsTypes::Num || temp_type==CalculatorObject::ObjectsTypes::X_variable) count_nums_variable+=1;
-                check_stack.pop();
-            }
-
-            // check count
-            if(count_nums_variable<2) throw incorect_polish_entry("not have much nums to operator");
+            // delete nums from stack
+            check_stack.pop();
+            check_stack.pop();
 
             // add one num in stack like result
             check_stack.push(temp_num_object);
@@ -334,17 +327,12 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
         // function
         if(object_type==CalculatorObject::ObjectsTypes::Functins || object_type==CalculatorObject::ObjectsTypes::Factorial || object_type==CalculatorObject::ObjectsTypes::MinusBrackets){
             // check curent position
-            if((i-1)<0) throw incorect_polish_entry("no nums before function");
+            if((i-1)<0 || check_stack.size()<1) throw incorect_polish_entry("no nums before function");
 
-            // count nums or variable before function
-            int count_nums_variable=0;
-            CalculatorObject::ObjectsTypes before_object=check_stack.top().getObjectType();
+            // delete nums from stack
             check_stack.pop();
-            if(before_object==CalculatorObject::ObjectsTypes::Num || before_object==CalculatorObject::ObjectsTypes::X_variable) count_nums_variable+=1;
 
-            // check count
-            if(count_nums_variable!=1) throw incorect_polish_entry("not have much nums to function");
-
+            // add one num like result
             check_stack.push(temp_num_object);
         }
     }
