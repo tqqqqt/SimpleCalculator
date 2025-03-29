@@ -416,6 +416,7 @@ void ProgrammistObject::clear(){
 
 // change maximum nums count
 void ProgrammistObject::setCount(int _count){
+    if(_count<=0) throw incorect_set_count("count <= 0");
     count_nums=4*static_cast<size_t>(_count);
 }
 
@@ -435,5 +436,9 @@ const char* ProgrammistObject::incorect_convert::what() const noexcept{
 }
 
 const char* ProgrammistObject::incorect_change_system::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* ProgrammistObject::incorect_set_count::what() const noexcept{
     return m_error.c_str();
 }
