@@ -81,6 +81,14 @@ public:
         incorect_change_system(std::string mes): m_error(mes){ }
         const char* what() const noexcept;
     };
+
+    class incorect_set_count: public std::exception{
+    private:
+        std::string m_error{};
+    public:
+        incorect_set_count(std::string mes): m_error(mes){ }
+        const char* what() const noexcept;
+    };
 };
 
 #endif // PROGRAMMISTOBJECT_H
