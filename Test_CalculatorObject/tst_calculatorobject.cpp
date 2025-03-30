@@ -13,8 +13,8 @@ public:
 private slots:
     void test_addNum_exception_input();
     void test_addNum_no_add_object_type();
-    void test_addNum_no_change_null();
-    void test_addNum_cange_null();
+    void test_addNum_no_change_zero();
+    void test_addNum_cange_zero();
     void test_addNum_no_add_dot();
 
     void test_addSymbol_exception_input();
@@ -49,7 +49,7 @@ private slots:
 
     void test_checkNum_incorect_type();
     void test_checkNum_already_check();
-    void test_checkNum_delete_first_nulls();
+    void test_checkNum_delete_first_zeros();
     void test_checkNum_save_nums_after_dot();
     void test_checkNum_delete_nums_after_dot();
 
@@ -88,7 +88,7 @@ void calculatorobject::test_addNum_no_add_object_type(){
     QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_addNum_no_change_null(){
+void calculatorobject::test_addNum_no_change_zero(){
     CalculatorObject object;
     QString result="0", curent_result="";
 
@@ -99,7 +99,7 @@ void calculatorobject::test_addNum_no_change_null(){
     QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_addNum_cange_null(){
+void calculatorobject::test_addNum_cange_zero(){
     CalculatorObject object;
     QString result="2", curent_result="";
 
@@ -420,7 +420,7 @@ void calculatorobject::test_checkNum_already_check(){
     QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_checkNum_delete_first_nulls(){
+void calculatorobject::test_checkNum_delete_first_zeros(){
     CalculatorObject object;
     QString result="21", curent_result="";
 

@@ -21,7 +21,7 @@ private slots:
     void test_addNum_16_out_of_count_symbols();
 
     void test_addMinus_empty_num();
-    void test_addMinus_null_num();
+    void test_addMinus_zero_in_num();
     void test_addMinus_correct();
     void test_addMinus_from_negative_to_positive();
 
@@ -162,7 +162,7 @@ void programmistobject::test_addMinus_empty_num(){
     QCOMPARE(curent_result,result);
 }
 
-void programmistobject::test_addMinus_null_num(){
+void programmistobject::test_addMinus_zero_in_num(){
     ProgrammistObject object;
     QString result="0", curent_result="";
 
