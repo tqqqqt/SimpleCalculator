@@ -160,10 +160,10 @@ void CalculatorObject::setFullNum(std::string _num){
     if(_num[0]=='-' && _num.length()==1) throw incorect_full_num("only minus in num");
 
     // check all symbols in num
-    int start_point=0, end_point=static_cast<int>(_num.length());
+    size_t start_point=0, end_point=_num.length(), find_dot=0;
     if(_num[0]=='-') start_point=1;
 
-    for(int i=start_point, find_dot=0;i<end_point;i++){
+    for(size_t i=start_point;i<end_point;i++){
         if(!(_num[i]>='0' && _num[i]<='9') && _num[i]!=',') throw incorect_full_num("incorect symbol in num");
         if(_num[i]==',') find_dot++;
         if(find_dot>1) throw incorect_full_num("count dot in num more then one");
@@ -175,7 +175,7 @@ void CalculatorObject::setFullNum(std::string _num){
     //if(length==2 && (_num[0]=='(' && _num[1]=='-')) object_type=ObjectsTypes::MinusBrackets;
     //else
     object_type=ObjectsTypes::Num;
-    if(_num.find(',')!=std::string::npos) count_dot=0;
+    if(find_dot!=0) count_dot=0;
 }
 
 // clear all states

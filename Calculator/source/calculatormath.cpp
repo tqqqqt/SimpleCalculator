@@ -117,13 +117,13 @@ CalculatorObject CalculatorMath::GetResult(){
         // delete two nums becouse operators use two nums
         if(delete_mode==0){
             polishEntry[i-2].setFullNum(math_result);
-            polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
+            polishEntry.erase(polishEntry.begin()+static_cast<int>(i-1),polishEntry.begin()+static_cast<int>(i+1));
             i-=2;
         }
         // delete only one num becose function use only one num
         else{
             polishEntry[i-1].setFullNum(math_result);
-            polishEntry.erase(polishEntry.begin()+i);
+            polishEntry.erase(polishEntry.begin()+static_cast<int>(i));
             i-=1;
             delete_mode=0;
         }
@@ -197,14 +197,14 @@ void CalculatorMath::simplifyExpression(){
         // operators use 2 objects
         if(delete_mode==0){
             polishEntry[i-2].setFullNum(math_result);
-            polishEntry.erase(polishEntry.begin()+(i-1),polishEntry.begin()+(i+1));
+            polishEntry.erase(polishEntry.begin()+static_cast<int>(i-1),polishEntry.begin()+static_cast<int>(i+1));
             i-=2;
             count_nums+=1;
         }
         // functions use 1 objects
         else if(delete_mode==1){
             polishEntry[i-1].setFullNum(math_result);
-            polishEntry.erase(polishEntry.begin()+i);
+            polishEntry.erase(polishEntry.begin()+static_cast<int>(i));
             i-=1;
             count_nums+=1;
         }
@@ -217,7 +217,7 @@ CalculatorObject CalculatorMath::getResultWithVariable(std::string _point){
     std::stack<CalculatorObject> stack;
     CalculatorObject x_object, temp_result;
     x_object.setFullNum(_point);
-    for(int i=0;i<polishEntry.size();i++){
+    for(size_t i=0;i<polishEntry.size();i++){
         // added nums to stack
         if(polishEntry[i].getObjectType()==CalculatorObject::ObjectsTypes::Num){
             polishEntry[i].checkNum();
@@ -292,7 +292,7 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
     // check new entry
     std::stack<CalculatorObject> check_stack;
     size_t size_arr=_arr.size();
-    for(int i=0;i<static_cast<int>(size_arr);i++){
+    for(size_t i=0;i<size_arr;i++){
         CalculatorObject::ObjectsTypes object_type=_arr[i].getObjectType();
 
         // brackets and none objects cant stand in polish entry
@@ -314,7 +314,7 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
         // operator
         if(object_type==CalculatorObject::ObjectsTypes::Mod || object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator){
             // check curent position and count nums
-            if((i-2)<0 || check_stack.size()<2) throw incorect_polish_entry("no objects before operator");
+            if(static_cast<int>(i-2)<0 || check_stack.size()<2) throw incorect_polish_entry("no objects before operator");
 
             // delete nums from stack
             check_stack.pop();
@@ -327,7 +327,7 @@ void CalculatorMath::setPolishEntry(std::vector<CalculatorObject> _arr){
         // function
         if(object_type==CalculatorObject::ObjectsTypes::Functins || object_type==CalculatorObject::ObjectsTypes::Factorial || object_type==CalculatorObject::ObjectsTypes::MinusBrackets){
             // check curent position
-            if((i-1)<0 || check_stack.size()<1) throw incorect_polish_entry("no nums before function");
+            if(static_cast<int>(i-1)<0 || check_stack.size()<1) throw incorect_polish_entry("no nums before function");
 
             // delete nums from stack
             check_stack.pop();

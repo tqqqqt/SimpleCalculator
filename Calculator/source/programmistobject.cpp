@@ -251,9 +251,9 @@ std::string ProgrammistObject::convertTo10(std::string _num, int _system){
     size_t size=_num.length();
 
     for(int i=static_cast<int>(size)-1;i>=0;i--){
-        if(_num[i]!='-'){
-            if(_num[i]>='A') temp=nums_16[_num[i]-'A'];
-            else temp=_num[i];
+        if(_num[static_cast<size_t>(i)]!='-'){
+            if(_num[static_cast<size_t>(i)]>='A') temp=nums_16[static_cast<size_t>(_num[static_cast<size_t>(i)])-static_cast<size_t>('A')];
+            else temp=_num[static_cast<size_t>(i)];
             result=MathSum(result,MathMul(temp,pow_num));
         }
         pow_num=MathMul(pow_num,system);
@@ -274,12 +274,12 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
     // add 1 to curent num in 2 system
     int cary=1;
     for(int i=static_cast<int>(size)-1;i>=0;i--){
-        if(_num[i]=='0'){
-            _num[i]='1';
+        if(_num[static_cast<size_t>(i)]=='0'){
+            _num[static_cast<size_t>(i)]='1';
             cary=0;
             break;
         }
-        _num[i]='0';
+        _num[static_cast<size_t>(i)]='0';
     }
     if(cary==1) _num='1'+_num;
 
