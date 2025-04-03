@@ -17,8 +17,8 @@ std::string MathMul(std::string num1, std::string num2);
 
 std::string MathPow(std::string num, std::string pow, int accuracy=10);
 
-std::string MathConvertDegreeToRadian(std::string degree, int div_acuracy);
-std::string MathCheckRadian(std::string radian);
+std::string MathTrigonometricConvertDegreeToRadian(std::string degree, int div_acuracy);
+std::string MathTrigonometricCheckRadian(std::string radian);
 
 std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
 std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
