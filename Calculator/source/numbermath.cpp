@@ -67,6 +67,7 @@ std::string FindMultiplier(std::string num_1, std::string num_2){
     size_t len_num_1=num_1.length(), len_num_2=num_2.length();
     // exceptions
     if(len_num_1==0 || len_num_2==0) throw incorect_num("no symbols in num");
+    if(num_1.find(',')!=std::string::npos || num_2.find(',')!=std::string::npos) throw incorect_num("find dot in num");
     // special situations
     std::string result="0";
     if(num_1[0]=='-' && num_2[0]!='-'){
@@ -81,6 +82,7 @@ std::string FindMultiplier(std::string num_1, std::string num_2){
         result=FindMultiplier(num_1.substr(1),num_2.substr(1));
         return result;
     }
+    if(MaxNumber(num_1,num_2)==1) throw incorect_num("first num < second num");
 
     int max_check_result=0;
     std::string mul_result="";
@@ -546,6 +548,9 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
         }
     }
 
+    // check div zero again
+    if(length_num_2==1 && num_2[0]=='0') throw div_zero("div 0");
+
     std::string temp_num="", mul_temp="", multiplier="";
     int check_max=0;
     size_t length_temp_num=0, length_result=0, last_position=0;
@@ -710,7 +715,7 @@ std::string MathDiv(std::string num_1, std::string num_2, int _accuracy){
                     temp+=carry;
                     carry=temp/10;
                     temp%=10;
-                    result='0'+temp;
+                    result[i]='0'+temp;
                 }
             }
 
@@ -765,7 +770,7 @@ std::string MathPow(std::string num, std::string pow, int accuracy){
 }
 
 // function convert degree value to radian
-std::string MathConvertDegreeToRadian(std::string degree, int div_acuracy){
+std::string MathTrigonometricConvertDegreeToRadian(std::string degree, int div_acuracy){
     // check what degree in bound
     while(MaxNumber(degree,"360")==-1){
         degree=MathNeg(degree,"360");
@@ -779,7 +784,7 @@ std::string MathConvertDegreeToRadian(std::string degree, int div_acuracy){
 }
 
 // function check radian value to valid
-std::string MathCheckRadian(std::string radian){
+std::string MathTrigonometricCheckRadian(std::string radian){
     // get maximum valid value
     std::string max_num=MathMul("2","3,141592653589793");
     // check what num in bound
@@ -808,8 +813,8 @@ std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, b
 
     // convert or check input num
     std::string radian="0";
-    if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
-    else radian=MathCheckRadian(degree);
+    if(radian_flag==false) radian=MathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
+    else radian=MathTrigonometricCheckRadian(degree);
 
     // prapair values
     std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
@@ -842,8 +847,8 @@ std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, b
 
     // convert or check input num
     std::string radian="0";
-    if(radian_flag==false) radian=MathConvertDegreeToRadian(degree,div_acuracy);
-    else radian=MathCheckRadian(degree);
+    if(radian_flag==false) radian=MathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
+    else radian=MathTrigonometricCheckRadian(degree);
 
     // prepair values
     std::string result="1", one_num="-1", pow_num=MathMul(radian,radian), factorial_num="3", factorial_res="2";
