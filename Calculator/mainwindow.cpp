@@ -10,11 +10,11 @@ MainWindow::MainWindow(QWidget *parent) :
     loadIcons();
 
     settings=new QSettings("tqqqqt","calculator");
-    calculatorMathObject=new CalculatorMath();
-    curentText="";
-    flagAfterResult=false;
-    countOpenBracket=0;
-    countOper=0;
+    calculator_math_object=CalculatorMath();
+    curent_text="";
+    flag_after_result=false;
+    count_open_bracket=0;
+    count_oper=0;
     function_window_show=false;
     history_window_show=false;
 
@@ -25,56 +25,57 @@ MainWindow::MainWindow(QWidget *parent) :
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
     function_acuracy=settings->value("calc/func_acuracy",10).toInt();
     // set settings in calculator object
-    calculatorMathObject->SetDivAccuracy(curent_acuracy);
-    calculatorMathObject->setFunctionAccuracy(function_acuracy);
-    ui->label->setText(curentText);
+    calculator_math_object.setDivAccuracy(curent_acuracy);
+    calculator_math_object.setFunctionAccuracy(function_acuracy);
+    ui->label->setText(curent_text);
 
     //nums buttons
-    this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ PressNumberButton('0'); });
-    this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ PressNumberButton('1'); });
-    this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ PressNumberButton('2'); });
-    this->connect(ui->pushButton_n3,&QPushButton::clicked,[this]{ PressNumberButton('3'); });
-    this->connect(ui->pushButton_n4,&QPushButton::clicked,[this]{ PressNumberButton('4'); });
-    this->connect(ui->pushButton_n5,&QPushButton::clicked,[this]{ PressNumberButton('5'); });
-    this->connect(ui->pushButton_n6,&QPushButton::clicked,[this]{ PressNumberButton('6'); });
-    this->connect(ui->pushButton_n7,&QPushButton::clicked,[this]{ PressNumberButton('7'); });
-    this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ PressNumberButton('8'); });
-    this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ PressNumberButton('9'); });
+    this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
+    this->connect(ui->pushButton_n1,&QPushButton::clicked,[this]{ pressNumberButton('1'); });
+    this->connect(ui->pushButton_n2,&QPushButton::clicked,[this]{ pressNumberButton('2'); });
+    this->connect(ui->pushButton_n3,&QPushButton::clicked,[this]{ pressNumberButton('3'); });
+    this->connect(ui->pushButton_n4,&QPushButton::clicked,[this]{ pressNumberButton('4'); });
+    this->connect(ui->pushButton_n5,&QPushButton::clicked,[this]{ pressNumberButton('5'); });
+    this->connect(ui->pushButton_n6,&QPushButton::clicked,[this]{ pressNumberButton('6'); });
+    this->connect(ui->pushButton_n7,&QPushButton::clicked,[this]{ pressNumberButton('7'); });
+    this->connect(ui->pushButton_n8,&QPushButton::clicked,[this]{ pressNumberButton('8'); });
+    this->connect(ui->pushButton_n9,&QPushButton::clicked,[this]{ pressNumberButton('9'); });
 
     //dot and minus buttons
-    this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(ButtonDot()));
-    this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(ButtonZnak()));
+    this->connect(ui->pushButton_dot,SIGNAL(clicked()),this,SLOT(buttonDot()));
+    this->connect(ui->pushButton_znak,SIGNAL(clicked()),this,SLOT(buttonZnak()));
 
     //operator buttons
-    this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ PressOperButton("+"); });
-    this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ PressOperButton("-"); });
-    this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ PressOperButton("*"); });
-    this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ PressOperButton("/"); });
-    this->connect(ui->pushButton_pow,&QPushButton::clicked,[this]{ PressOperButton("^("); });
+    this->connect(ui->pushButton_pluss,&QPushButton::clicked,[this]{ pressOperButton("+"); });
+    this->connect(ui->pushButton_minus,&QPushButton::clicked,[this]{ pressOperButton("-"); });
+    this->connect(ui->pushButton_mull,&QPushButton::clicked,[this]{ pressOperButton("*"); });
+    this->connect(ui->pushButton_devide,&QPushButton::clicked,[this]{ pressOperButton("/"); });
+    this->connect(ui->pushButton_pow,&QPushButton::clicked,[this]{ pressOperButton("^("); });
 
     // result button
-    this->connect(ui->pushButton_res,SIGNAL(clicked()),this,SLOT(ButtonResult()));
+    this->connect(ui->pushButton_res,SIGNAL(clicked()),this,SLOT(buttonResult()));
 
     //button clear and delete last
-    this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(ButtonClear()));
-    this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(ButtonDeleteLast()));
+    this->connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(buttonClear()));
+    this->connect(ui->pushButton_delLast,SIGNAL(clicked()),this,SLOT(buttonDeleteLast()));
 
     //bracket buttons
-    this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(ButtonOpenBrackets()));
-    this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(ButtonCloseBrackets()));
+    this->connect(ui->pushButton_open,SIGNAL(clicked()),this,SLOT(buttonOpenBrackets()));
+    this->connect(ui->pushButton_close,SIGNAL(clicked()),this,SLOT(buttonCloseBrackets()));
 
     //history, mode and fucntions buttons
-    this->connect(ui->pushButton_history,SIGNAL(clicked()),this,SLOT(ButtonHistory()));
-    this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(ButtonChangeMode()));
+    this->connect(ui->pushButton_history,SIGNAL(clicked()),this,SLOT(buttonHistory()));
+    this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
     this->connect(ui->pushButton_functions,SIGNAL(clicked()),this,SLOT(pressFunctionsButton()));
 
     //options
-    this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(ButtonSettings()));
+    this->connect(ui->action_settings,SIGNAL(triggered()),this,SLOT(buttonSettings()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete settings;
 }
 
 // Close all windows before close calculator window
@@ -112,42 +113,42 @@ void MainWindow::loadIcons(){
 
 // Collect text from all objects and display it on the screen
 void MainWindow::setFullText(){
-    curentText="";
+    curent_text="";
     // collect all text from objects
     for(auto element:objects){
-        curentText+=QString::fromStdString(element.toString());
+        curent_text+=QString::fromStdString(element.toString());
     }
-    curentText+=QString::fromStdString(curent_object.toString());
+    curent_text+=QString::fromStdString(curent_object.toString());
 
-    ui->label->setText(curentText);
+    ui->label->setText(curent_text);
 }
 
 // Added num in the object
-void MainWindow::PressNumberButton(QChar buttonNum){
+void MainWindow::pressNumberButton(QChar button_num){
     // rules to use number button
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
         curent_object.clear();
     }
     // clear text if it calculator result
-    if(flagAfterResult==true){
+    if(flag_after_result==true){
         curent_object.clear();
-        flagAfterResult=false;
+        flag_after_result=false;
     }
 
-    curent_object.addNum(buttonNum.toLatin1());
+    curent_object.addNum(button_num.toLatin1());
     // update display text
     setFullText();
 }
 
 // Added operator in the object
-void MainWindow::PressOperButton(QString buttonOper){
+void MainWindow::pressOperButton(QString button_oper){
     // rules for use operators button
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial) return;
     // change curent object type on minus bracket
-    if(buttonOper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets){
+    if(button_oper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets){
         curent_object.addSymbol("-");
-        if(flagAfterResult==true) flagAfterResult=false;
+        if(flag_after_result==true) flag_after_result=false;
         // update display text
         setFullText();
         return;
@@ -158,11 +159,11 @@ void MainWindow::PressOperButton(QString buttonOper){
         curent_object.clear();
     }
 
-    curent_object.addSymbol(buttonOper.toStdString());
-    countOper+=1;
-    if(buttonOper=="^(") countOpenBracket+=1;
+    curent_object.addSymbol(button_oper.toStdString());
+    count_oper+=1;
+    if(button_oper=="^(") count_open_bracket+=1;
     // change flag after result
-    if(flagAfterResult==true) flagAfterResult=false;
+    if(flag_after_result==true) flag_after_result=false;
     // update display text
     setFullText();
 }
@@ -185,7 +186,7 @@ void MainWindow::pressFunctionsButton(){
 // Added function in the object
 void MainWindow::addedFunction(QString _function){
     // rules for use functions
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || flagAfterResult==true) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || flag_after_result==true) return;
     // drop curent object in vector if his no none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
@@ -193,8 +194,8 @@ void MainWindow::addedFunction(QString _function){
     }
 
     curent_object.addFunction(_function.toStdString());
-    countOper+=1;
-    countOpenBracket+=1;
+    count_oper+=1;
+    count_open_bracket+=1;
     // update display text after changes
     setFullText();
 }
@@ -207,36 +208,36 @@ void MainWindow::addedSpecialFunction(QString _function){
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSpecialFunction(_function.toStdString());
-    countOper+=1;
+    count_oper+=1;
     // update display text after changes
     setFullText();
 }
 
 // Added dot in the object
-void MainWindow::ButtonDot(){
+void MainWindow::buttonDot(){
     // rules for use dot button
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num) return;
     curent_object.addNum(',');
     // change flag
-    if(flagAfterResult==true) flagAfterResult=false;
+    if(flag_after_result==true) flag_after_result=false;
     // update display text after changes
     setFullText();
 }
 
 // Clear all states
-void MainWindow::ButtonClear(){
-    curentText="";
+void MainWindow::buttonClear(){
+    curent_text="";
     objects.clear();
     curent_object.clear();
-    countOper=0;
-    countOpenBracket=0;
-    flagAfterResult=false;
+    count_oper=0;
+    count_open_bracket=0;
+    flag_after_result=false;
     // update dispaly text after changes
     setFullText();
 }
 
 // Added open brackets in the object
-void MainWindow::ButtonOpenBrackets(){
+void MainWindow::buttonOpenBrackets(){
     // rules for use open bracket
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
     // drop curent object in vector if his not none
@@ -246,53 +247,53 @@ void MainWindow::ButtonOpenBrackets(){
     }
 
     curent_object.addSymbol("(");
-    countOpenBracket++;
+    count_open_bracket++;
     // update display text after changes
     setFullText();
 }
 
 // Added close brackets in the object
-void MainWindow::ButtonCloseBrackets(){
+void MainWindow::buttonCloseBrackets(){
     // no need close bracket if no have open bracket
-    if(countOpenBracket==0) return;
+    if(count_open_bracket==0) return;
     // rules for use close bracket
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
     // always drop curent object in vector
     objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol(")");
-    countOpenBracket--;
+    count_open_bracket--;
     // update display text after changes
     setFullText();
 }
 
 // Added minus oper after num to negative num
-void MainWindow::ButtonZnak(){
+void MainWindow::buttonZnak(){
     // rules for use minus button
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets) return;
     // drop curent object in vector if his not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
     curent_object.clear();
     curent_object.addSymbol("(-");
-    countOpenBracket++;
+    count_open_bracket++;
     // change flag
-    if(flagAfterResult==true) flagAfterResult=false;
+    if(flag_after_result==true) flag_after_result=false;
     // update display text after changes
     setFullText();
 }
 
 // Calculate result and display on the screen
-void MainWindow::ButtonResult(){
+void MainWindow::buttonResult(){
     // rules for get result
-    if(curentText.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial)) return;
-    if(countOpenBracket || countOper==0) return;
+    if(curent_text.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial)) return;
+    if(count_open_bracket || count_oper==0) return;
     // save display text to set in history
-    QString save_calculator_text=curentText;
+    QString save_calculator_text=curent_text;
     try {
         objects.push_back(curent_object);
-        calculatorMathObject->setVector(objects.toStdVector());
+        calculator_math_object.setVector(objects.toStdVector());
         objects.clear();
-        curent_object=calculatorMathObject->GetResult();
+        curent_object=calculator_math_object.getResult();
         // get brackets from object and make 3 different objects in vector
         if(curent_object.toString()[0]=='-'){
             // save num from result
@@ -312,30 +313,30 @@ void MainWindow::ButtonResult(){
         }
         // update display text
         setFullText();
-        flagAfterResult=true;
+        flag_after_result=true;
     }
     catch (std::exception &exp) {
-        curentText="";
+        curent_text="";
         curent_object.clear();
         ui->label->setText(exp.what());
-        flagAfterResult=false;
+        flag_after_result=false;
     }
     // make hostory string
-    historyArr.push_back(save_calculator_text+'='+ui->label->toPlainText());
+    history_arr.push_back(save_calculator_text+'='+ui->label->toPlainText());
     // emit signal to update history list in history window if his open
-    emit PressResult();
+    emit pressResult();
 
-    countOpenBracket=0;
-    countOper=0;
+    count_open_bracket=0;
+    count_oper=0;
 }
 
 // Open history window
-void MainWindow::ButtonHistory(){
+void MainWindow::buttonHistory(){
     // no open window if hi already open
     if(history_window_show==true) return;
 
-    HistoryWindow* historyWindow=new HistoryWindow(&historyArr);
-    connect(this,SIGNAL(PressResult()),historyWindow,SLOT(UpdateHis()));
+    HistoryWindow* historyWindow=new HistoryWindow(&history_arr);
+    connect(this,SIGNAL(pressResult()),historyWindow,SLOT(updateHis()));
     connect(this,SIGNAL(closeWindow()),historyWindow,SLOT(needCloseWindow()));
     connect(historyWindow,SIGNAL(updateWindowState()),this,SLOT(updateHistoryWindowState()));
 
@@ -344,7 +345,7 @@ void MainWindow::ButtonHistory(){
 }
 
 // Open options window
-void MainWindow::ButtonSettings(){
+void MainWindow::buttonSettings(){
     SettingsWindow* settings_window=new SettingsWindow(this);
     this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(UpdateSettings()));
 
@@ -352,24 +353,24 @@ void MainWindow::ButtonSettings(){
 }
 
 // Update settings after pressed accept in settings window
-void MainWindow::UpdateSettings(){
+void MainWindow::updateSettings(){
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
     function_acuracy=settings->value("calc/func_acuracy",10).toInt();
 
-    calculatorMathObject->SetDivAccuracy(curent_acuracy);
-    calculatorMathObject->setFunctionAccuracy(function_acuracy);
+    calculator_math_object.setDivAccuracy(curent_acuracy);
+    calculator_math_object.setFunctionAccuracy(function_acuracy);
 }
 
 // Open mode window
-void MainWindow::ButtonChangeMode(){
+void MainWindow::buttonChangeMode(){
     ModeWindow* mode_window=new ModeWindow(this);
-    this->connect(mode_window,SIGNAL(changeMode(int)),this,SLOT(UpdateMode(int)));
+    this->connect(mode_window,SIGNAL(changeMode(int)),this,SLOT(updateMode(int)));
 
     mode_window->exec();
 }
 
 // Change window after change calculator mode
-void MainWindow::UpdateMode(int _mode){
+void MainWindow::updateMode(int _mode){
     // curent calculator is 1 mode, no need change
     if(_mode==1) return;
 
@@ -386,7 +387,7 @@ void MainWindow::UpdateMode(int _mode){
 }
 
 // Delete last symbol in object
-void MainWindow::ButtonDeleteLast(){
+void MainWindow::buttonDeleteLast(){
     // if curent object clear need find no clear object in vector
     if(curent_object.getLength()==0){
         int size=objects.size()-1;
@@ -410,9 +411,9 @@ void MainWindow::ButtonDeleteLast(){
         return;
     }
     // if curent object not null check type for special types
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators) countOper--;
-    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) countOpenBracket++;
-    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets) countOpenBracket--;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators) count_oper--;
+    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) count_open_bracket++;
+    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets) count_open_bracket--;
     curent_object.deleteLastSymbol();
     // check what curent object not null and change on no null object in vector
     if(curent_object.getLength()==0){
@@ -423,7 +424,7 @@ void MainWindow::ButtonDeleteLast(){
         }
     }
     // change result emit disable result flag
-    if(flagAfterResult==true) flagAfterResult=false;
+    if(flag_after_result==true) flag_after_result=false;
     // update dispaly text after changes
     setFullText();
 }

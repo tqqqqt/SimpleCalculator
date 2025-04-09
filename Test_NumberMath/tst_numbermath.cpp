@@ -144,7 +144,7 @@ void numbermath::test_maxNumber_empty_str(){
     int temp=0;
 
     try{
-        temp=MaxNumber("","");
+        temp=smath::maxNumber("","");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp){
@@ -156,7 +156,7 @@ void numbermath::test_maxNumber_first_negative(){
     std::string num_1="-1", num_2="1";
     int result=1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -165,7 +165,7 @@ void numbermath::test_maxNumber_second_negative(){
     std::string num_1="1", num_2="-1";
     int result=-1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -174,7 +174,7 @@ void numbermath::test_maxNumber_count_symbols_first(){
     std::string num_1="24", num_2="1";
     int result=-1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -183,7 +183,7 @@ void numbermath::test_maxNumber_count_symbols_second(){
     std::string num_1="25", num_2="102";
     int result=1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -192,7 +192,7 @@ void numbermath::test_maxNumber_bigger_symbol_in_first_num(){
     std::string num_1="13", num_2="12";
     int result=-1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -201,7 +201,7 @@ void numbermath::test_maxNumber_bigger_symbol_in_second_num(){
     std::string num_1="24", num_2="25";
     int result=1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -210,7 +210,7 @@ void numbermath::test_maxNumber_equal_nums(){
     std::string num_1="33", num_2="33";
     int result=0, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -219,7 +219,7 @@ void numbermath::test_maxNumber_two_negative_nums(){
     std::string num_1="-12,24", num_2="-12,25";
     int result=-1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -228,7 +228,7 @@ void numbermath::test_maxNumber_bigger_dot_part_in_first_num(){
     std::string num_1="2,22", num_2="2,2";
     int result=-1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -237,7 +237,7 @@ void numbermath::test_maxNumber_bigger_dot_part_in_second_num(){
     std::string num_1="2", num_2="2,2";
     int result=1, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -246,7 +246,7 @@ void numbermath::test_maxNumber_equal_float_nums(){
     std::string num_1="4,6", num_2="4,6";
     int result=0, curent_result=99;
 
-    curent_result=MaxNumber(num_1,num_2);
+    curent_result=smath::maxNumber(num_1,num_2);
 
     QCOMPARE(curent_result,result);
 }
@@ -256,7 +256,7 @@ void numbermath::test_findMultiplier_empty_num(){
     std::string temp="";
 
     try {
-        temp=FindMultiplier("","");
+        temp=smath::findMultiplier("","");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -269,7 +269,7 @@ void numbermath::test_findMultiplier_second_num_bigger(){
     std::string temp="";
 
     try {
-        temp=FindMultiplier("4","6");
+        temp=smath::findMultiplier("4","6");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -282,7 +282,7 @@ void numbermath::test_findMultiplier_dot_in_num(){
     std::string temp="";
 
     try {
-        temp=FindMultiplier("3","2,2");
+        temp=smath::findMultiplier("3","2,2");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -294,7 +294,7 @@ void numbermath::test_findMultiplier_first_negative(){
     QString result="-3", curent_result="";
     std::string first_num="-10", second_num="3";
 
-    curent_result=QString::fromStdString(FindMultiplier(first_num,second_num));
+    curent_result=QString::fromStdString(smath::findMultiplier(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -303,7 +303,7 @@ void numbermath::test_findMultiplier_second_negative(){
     QString result="-4", curent_result="";
     std::string first_num="8", second_num="-2";
 
-    curent_result=QString::fromStdString(FindMultiplier(first_num,second_num));
+    curent_result=QString::fromStdString(smath::findMultiplier(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -312,7 +312,7 @@ void numbermath::test_findMultiplier_two_negative_nums(){
     QString result="1", curent_result="";
     std::string first_num="-3", second_num="-2";
 
-    curent_result=QString::fromStdString(FindMultiplier(first_num,second_num));
+    curent_result=QString::fromStdString(smath::findMultiplier(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -322,7 +322,7 @@ void numbermath::test_mathSum_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathSum("","");
+        temp=smath::mathSum("","");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -334,7 +334,7 @@ void numbermath::test_mathSum_first_negative(){
     QString result="0", curent_result="";
     std::string first_num="-2", second_num="2";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -343,7 +343,7 @@ void numbermath::test_mathSum_second_negative(){
     QString result="0", curent_result="";
     std::string first_num="2", second_num="-2";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -352,7 +352,7 @@ void numbermath::test_mathSum_second_zero(){
     QString result="2", curent_result="";
     std::string first_num="2", second_num="0";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -361,7 +361,7 @@ void numbermath::test_mathSum_first_zero(){
     QString result="2", curent_result="";
     std::string first_num="0", second_num="2";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -370,7 +370,7 @@ void numbermath::test_mathSum_bigger_second_dot_part(){
     QString result="5,84", curent_result="";
     std::string first_num="2,2", second_num="3,64";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -379,7 +379,7 @@ void numbermath::test_mathSum_bigger_first_dot_part(){
     QString result="10,52", curent_result="";
     std::string first_num="5,22", second_num="5,3";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -388,7 +388,7 @@ void numbermath::test_mathSum_bigger_second_num_count(){
     QString result="34", curent_result="";
     std::string first_num="4", second_num="30";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -397,7 +397,7 @@ void numbermath::test_mathSum_bigger_first_num_count(){
     QString result="24", curent_result="";
     std::string first_num="22", second_num="2";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -406,7 +406,7 @@ void numbermath::test_mathSum_start_with_zero(){
     QString result="0,42", curent_result="";
     std::string first_num="0,02", second_num="0,4";
 
-    curent_result=QString::fromStdString(MathSum(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathSum(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -416,7 +416,7 @@ void numbermath::test_mathNeg_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathNeg("","");
+        temp=smath::mathNeg("","");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -428,7 +428,7 @@ void numbermath::test_mathNeg_first_negative(){
     QString result="-3", curent_result="";
     std::string first_num="-1", second_num="2";
 
-    curent_result=QString::fromStdString(MathNeg(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathNeg(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -437,7 +437,7 @@ void numbermath::test_mathNeg_second_negative(){
     QString result="3", curent_result="";
     std::string first_num="1", second_num="-2";
 
-    curent_result=QString::fromStdString(MathNeg(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathNeg(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -446,7 +446,7 @@ void numbermath::test_mathNeg_two_negative(){
     QString result="0", curent_result="";
     std::string first_num="-2", second_num="-2";
 
-    curent_result=QString::fromStdString(MathNeg(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathNeg(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -455,7 +455,7 @@ void numbermath::test_mathNeg_bigger_second_num(){
     QString result="-20,02", curent_result="";
     std::string first_num="2,2", second_num="22,22";
 
-    curent_result=QString::fromStdString(MathNeg(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathNeg(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -464,7 +464,7 @@ void numbermath::test_mathNeg_bigger_first_num(){
     QString result="30", curent_result="";
     std::string first_num="33", second_num="3";
 
-    curent_result=QString::fromStdString(MathNeg(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathNeg(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -473,7 +473,7 @@ void numbermath::test_mathNeg_zero_with_dot_part(){
     QString result="0,68", curent_result="";
     std::string first_num="0,8", second_num="0,12";
 
-    curent_result=QString::fromStdString(MathNeg(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathNeg(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -482,7 +482,7 @@ void numbermath::test_mathNeg_carry_check(){
     QString result="5", curent_result="";
     std::string first_num="21", second_num="16";
 
-    curent_result=QString::fromStdString(MathNeg(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathNeg(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -492,7 +492,7 @@ void numbermath::test_mathMul_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathMul("","");
+        temp=smath::mathMul("","");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -504,7 +504,7 @@ void numbermath::test_mathMul_first_negative_and_second_zero(){
     QString result="0", curent_result="";
     std::string first_num="-1", second_num="0";
 
-    curent_result=QString::fromStdString(MathMul(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathMul(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -513,7 +513,7 @@ void numbermath::test_mathMul_second_negative_and_first_zero(){
     QString result="0", curent_result="";
     std::string first_num="0", second_num="-1";
 
-    curent_result=QString::fromStdString(MathMul(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathMul(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -522,7 +522,7 @@ void numbermath::test_mathMul_first_negative(){
     QString result="-8", curent_result="";
     std::string first_num="-2", second_num="4";
 
-    curent_result=QString::fromStdString(MathMul(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathMul(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -531,7 +531,7 @@ void numbermath::test_mathMul_second_negative_with_round(){
     QString result="-100", curent_result="";
     std::string first_num="20", second_num="-5";
 
-    curent_result=QString::fromStdString(MathMul(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathMul(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -540,7 +540,7 @@ void numbermath::test_mathMul_equal_dot_nums_with_round(){
     QString result="0,04", curent_result="";
     std::string first_num="0,2", second_num="0,2";
 
-    curent_result=QString::fromStdString(MathMul(first_num,second_num));
+    curent_result=QString::fromStdString(smath::mathMul(first_num,second_num));
 
     QCOMPARE(curent_result,result);
 }
@@ -550,7 +550,7 @@ void numbermath::test_mathDiv_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathDiv("","",4);
+        temp=smath::mathDiv("","",4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -563,7 +563,7 @@ void numbermath::test_mathDiv_negative_accuracy(){
     std::string temp="";
 
     try {
-        temp=MathDiv("2","3",-1);
+        temp=smath::mathDiv("2","3",-1);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -576,7 +576,7 @@ void numbermath::test_mathDiv_div_on_zero(){
     std::string temp="", num_1="1", num_2="0";
 
     try {
-        temp=MathDiv(num_1,num_2,2);
+        temp=smath::mathDiv(num_1,num_2,2);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -589,7 +589,7 @@ void numbermath::test_mathDiv_zero_on_num(){
     std::string first_num="0", second_num="2";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -599,7 +599,7 @@ void numbermath::test_mathDiv_num_on_one(){
     std::string first_num="2", second_num="1";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -609,7 +609,7 @@ void numbermath::test_mathDiv_two_negative_with_round(){
     std::string first_num="-12", second_num="-2,02";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -619,7 +619,7 @@ void numbermath::test_mathDiv_second_negative(){
     std::string first_num="22,02", second_num="-1,03";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -629,7 +629,7 @@ void numbermath::test_mathDiv_first_negative(){
     std::string first_num="-2,020", second_num="2,02";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -639,7 +639,7 @@ void numbermath::test_mathDiv_bigger_second_dot_part(){
     std::string first_num="0,1", second_num="0,001";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -649,7 +649,7 @@ void numbermath::test_mathDiv_bigger_first_dot_part(){
     std::string first_num="0,00001", second_num="0,2";
     int accuracy=6;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -659,7 +659,7 @@ void numbermath::test_mathDiv_equal_num_in_int_part(){
     std::string first_num="6", second_num="0,0006";
     int accuracy=0;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -669,7 +669,7 @@ void numbermath::test_mathDiv_equal_num_in_dot_part(){
     std::string first_num="0,002", second_num="0,2";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -679,7 +679,7 @@ void numbermath::test_mathDiv_round_to_int_part(){
     std::string first_num="23,99", second_num="2";
     int accuracy=2;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -689,7 +689,7 @@ void numbermath::test_mathDiv_round_to_add_length(){
     std::string first_num="19,99", second_num="2";
     int accuracy=2;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -699,7 +699,7 @@ void numbermath::test_mathDiv_bigger_accuracy_then_can_div(){
     std::string first_num="231,65", second_num="2";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -709,7 +709,7 @@ void numbermath::test_mathDiv_negative_first_with_return_zero(){
     std::string first_num="-0,2", second_num="2";
     int accuracy=0;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -719,7 +719,7 @@ void numbermath::test_mathDiv_negative_second_with_return_zero(){
     std::string first_num="0,2", second_num="-2";
     int accuracy=0;
 
-    curent_result=QString::fromStdString(MathDiv(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathDiv(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -729,7 +729,7 @@ void numbermath::test_mathPow_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathPow("","",4);
+        temp=smath::mathPow("","",4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -742,7 +742,7 @@ void numbermath::test_mathPow_dot_in_num(){
     std::string temp="";
 
     try {
-        temp=MathPow("1","2,2",4);
+        temp=smath::mathPow("1","2,2",4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -755,7 +755,7 @@ void numbermath::test_mathPow_negative_accuracy(){
     std::string temp="";
 
     try {
-        temp=MathPow("1","3",-1);
+        temp=smath::mathPow("1","3",-1);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -768,7 +768,7 @@ void numbermath::test_mathPow_zero_pow(){
     std::string first_num="2", second_num="0";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathPow(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathPow(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -778,7 +778,7 @@ void numbermath::test_mathPow_minus_pow(){
     std::string first_num="4", second_num="-1";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathPow(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathPow(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -788,7 +788,7 @@ void numbermath::test_mathPow_simple(){
     std::string first_num="2", second_num="4";
     int accuracy=4;
 
-    curent_result=QString::fromStdString(MathPow(first_num,second_num,accuracy));
+    curent_result=QString::fromStdString(smath::mathPow(first_num,second_num,accuracy));
 
     QCOMPARE(curent_result,result);
 }
@@ -797,7 +797,7 @@ void numbermath::test_mathTrigonometricConvertDegreeToRadian_correct(){
     QString result="0,418879", curent_result="";
     std::string num="24";
 
-    curent_result=QString::fromStdString(MathTrigonometricConvertDegreeToRadian(num,6));
+    curent_result=QString::fromStdString(smath::mathTrigonometricConvertDegreeToRadian(num,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -806,7 +806,7 @@ void numbermath::test_mathTrigonometricConvertDegreeToRadian_bigger_normal(){
     QString result="1,04720", curent_result="";
     std::string num="420";
 
-    curent_result=QString::fromStdString(MathTrigonometricConvertDegreeToRadian(num,5));
+    curent_result=QString::fromStdString(smath::mathTrigonometricConvertDegreeToRadian(num,5));
 
     QCOMPARE(curent_result,result);
 }
@@ -815,7 +815,7 @@ void numbermath::test_mathTrigonometricConvertDegreeToRadian_smaller_normal(){
     QString result="-3,141593", curent_result="";
     std::string num="-540";
 
-    curent_result=QString::fromStdString(MathTrigonometricConvertDegreeToRadian(num,6));
+    curent_result=QString::fromStdString(smath::mathTrigonometricConvertDegreeToRadian(num,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -824,7 +824,7 @@ void numbermath::test_mathTrigonometricCheckRadian_bigger_normal(){
     QString result="0,716814692820414", curent_result="";
     std::string num="7";
 
-    curent_result=QString::fromStdString(MathTrigonometricCheckRadian(num));
+    curent_result=QString::fromStdString(smath::mathTrigonometricCheckRadian(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -833,7 +833,7 @@ void numbermath::test_mathTrigonometricCheckRadian_smaller_normal(){
     QString result="-1,716814692820414", curent_result="";
     std::string num="-8";
 
-    curent_result=QString::fromStdString(MathTrigonometricCheckRadian(num));
+    curent_result=QString::fromStdString(smath::mathTrigonometricCheckRadian(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -843,7 +843,7 @@ void numbermath::test_mathSin_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathSin("",4,4,false);
+        temp=smath::mathSin("",false,4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -856,7 +856,7 @@ void numbermath::test_mathSin_incorect_div_accuracy(){
     std::string temp="";
 
     try {
-        temp=MathSin("12",-2,4,false);
+        temp=smath::mathSin("12",false,4,-2);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -869,7 +869,7 @@ void numbermath::test_mathSin_incorect_function_accuracy(){
     std::string temp="";
 
     try {
-        temp=MathSin("12",4,-4,false);
+        temp=smath::mathSin("12",false,-4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -881,7 +881,7 @@ void numbermath::test_mathSin_degree(){
     QString result="0,866026", curent_result="";
     std::string num="420";
 
-    curent_result=QString::fromStdString(MathSin(num,6,6,false));
+    curent_result=QString::fromStdString(smath::mathSin(num,false,6,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -890,7 +890,7 @@ void numbermath::test_mathSin_radian(){
     QString result="-0,826830273852676", curent_result="";
     std::string num="420";
 
-    curent_result=QString::fromStdString(MathSin(num,4,10,true));
+    curent_result=QString::fromStdString(smath::mathSin(num,true,10,4));
 
     QCOMPARE(curent_result,result);
 }
@@ -900,7 +900,7 @@ void numbermath::test_mathCos_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathCos("",4,4,false);
+        temp=smath::mathCos("",false,4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -913,7 +913,7 @@ void numbermath::test_mathCos_incorect_div_accuracy(){
     std::string temp="";
 
     try {
-        temp=MathCos("12",-4,4,false);
+        temp=smath::mathCos("12",false,4,-4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -926,7 +926,7 @@ void numbermath::test_mathCos_incorect_function_accuracy(){
     std::string temp="";
 
     try {
-        temp=MathCos("12",4,-4,false);
+        temp=smath::mathCos("12",false,-4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -938,7 +938,7 @@ void numbermath::test_mathCos_degree(){
     QString result="0,342020", curent_result="";
     std::string num="430";
 
-    curent_result=QString::fromStdString(MathCos(num,6,6,false));
+    curent_result=QString::fromStdString(smath::mathCos(num,false,6,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -947,7 +947,7 @@ void numbermath::test_mathCos_radian(){
     QString result="-0,921748", curent_result="";
     std::string num="430";
 
-    curent_result=QString::fromStdString(MathCos(num,6,6,true));
+    curent_result=QString::fromStdString(smath::mathCos(num,true,6,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -957,7 +957,7 @@ void numbermath::test_mathTng_error(){
     std::string temp="";
 
     try {
-        temp=MathTng("90",4,10,false);
+        temp=smath::mathTng("90",false,10,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -969,7 +969,7 @@ void numbermath::test_mathTng_correct(){
     QString result="0,424476", curent_result="";
     std::string num="23";
 
-    curent_result=QString::fromStdString(MathTng(num,6,6,false));
+    curent_result=QString::fromStdString(smath::mathTng(num,false,6,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -979,7 +979,7 @@ void numbermath::test_mathCtng_error(){
     std::string temp="";
 
     try {
-        temp=MathCtng("0",4,10,false);
+        temp=smath::mathCtng("0",false,4,10);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -991,7 +991,7 @@ void numbermath::test_mathCtng_correct(){
     QString result="1,072368", curent_result="";
     std::string num="43";
 
-    curent_result=QString::fromStdString(MathCtng(num,6,6,false));
+    curent_result=QString::fromStdString(smath::mathCtng(num,false,6,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -1001,7 +1001,7 @@ void numbermath::test_mathFactorial_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathFactorial("");
+        temp=smath::mathFactorial("");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -1014,7 +1014,7 @@ void numbermath::test_mathFactorial_dot_in_num(){
     std::string temp="";
 
     try {
-        temp=MathFactorial("2,2");
+        temp=smath::mathFactorial("2,2");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -1026,7 +1026,7 @@ void numbermath::test_mathFactorial_one(){
     QString result="1", curent_result="";
     std::string num="1";
 
-    curent_result=QString::fromStdString(MathFactorial(num));
+    curent_result=QString::fromStdString(smath::mathFactorial(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1035,7 +1035,7 @@ void numbermath::test_mathFactorial_normal(){
     QString result="6", curent_result="";
     std::string num="3";
 
-    curent_result=QString::fromStdString(MathFactorial(num));
+    curent_result=QString::fromStdString(smath::mathFactorial(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1045,7 +1045,7 @@ void numbermath::test_mathMod_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathMod("","");
+        temp=smath::mathMod("","");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -1057,7 +1057,7 @@ void numbermath::test_mathMod_second_num_zero(){
     QString result="2", curent_result="";
     std::string num_1="2", num_2="0";
 
-    curent_result=QString::fromStdString(MathMod(num_1,num_2));
+    curent_result=QString::fromStdString(smath::mathMod(num_1,num_2));
 
     QCOMPARE(curent_result,result);
 }
@@ -1066,7 +1066,7 @@ void numbermath::test_mathMod_second_num_minus_one(){
     QString result="0", curent_result="";
     std::string num_1="3", num_2="-1";
 
-    curent_result=QString::fromStdString(MathMod(num_1,num_2));
+    curent_result=QString::fromStdString(smath::mathMod(num_1,num_2));
 
     QCOMPARE(curent_result,result);
 }
@@ -1075,7 +1075,7 @@ void numbermath::test_mathMod_normal(){
     QString result="2", curent_result="";
     std::string num_1="8", num_2="3";
 
-    curent_result=QString::fromStdString(MathMod(num_1,num_2));
+    curent_result=QString::fromStdString(smath::mathMod(num_1,num_2));
 
     QCOMPARE(curent_result,result);
 }
@@ -1084,7 +1084,7 @@ void numbermath::test_mathMod_first_num_negative(){
     QString result="1", curent_result="";
     std::string num_1="-5", num_2="3";
 
-    curent_result=QString::fromStdString(MathMod(num_1,num_2));
+    curent_result=QString::fromStdString(smath::mathMod(num_1,num_2));
 
     QCOMPARE(curent_result,result);
 }
@@ -1094,7 +1094,7 @@ void numbermath::test_mathModule_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathModule("");
+        temp=smath::mathModule("");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -1107,7 +1107,7 @@ void numbermath::test_mathModule_incorect_minus_position(){
     std::string temp="";
 
     try {
-        temp=MathModule("2-");
+        temp=smath::mathModule("2-");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -1119,7 +1119,7 @@ void numbermath::test_mathModule_positive_num(){
     QString result="24", curent_result="";
     std::string num="24";
 
-    curent_result=QString::fromStdString(MathModule(num));
+    curent_result=QString::fromStdString(smath::mathModule(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1128,7 +1128,7 @@ void numbermath::test_mathModule_negative_num(){
     QString result="48", curent_result="";
     std::string num="-48";
 
-    curent_result=QString::fromStdString(MathModule(num));
+    curent_result=QString::fromStdString(smath::mathModule(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1138,7 +1138,7 @@ void numbermath::test_mathRoundUp_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathRoundUp("");
+        temp=smath::mathRoundUp("");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -1150,7 +1150,7 @@ void numbermath::test_mathRoundUp_no_dot_part(){
     QString result="2", curent_result="";
     std::string num="2";
 
-    curent_result=QString::fromStdString(MathRoundUp(num));
+    curent_result=QString::fromStdString(smath::mathRoundUp(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1159,7 +1159,7 @@ void numbermath::test_mathRoundUp_no_round_num(){
     QString result="23", curent_result="";
     std::string num="23,2";
 
-    curent_result=QString::fromStdString(MathRoundUp(num));
+    curent_result=QString::fromStdString(smath::mathRoundUp(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1168,7 +1168,7 @@ void numbermath::test_mathRoundUp_round_num(){
     QString result="34", curent_result="";
     std::string num="33,6";
 
-    curent_result=QString::fromStdString(MathRoundUp(num));
+    curent_result=QString::fromStdString(smath::mathRoundUp(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1177,7 +1177,7 @@ void numbermath::test_mathRoundUp_negative_num(){
     QString result="-13", curent_result="";
     std::string num="-12,5";
 
-    curent_result=QString::fromStdString(MathRoundUp(num));
+    curent_result=QString::fromStdString(smath::mathRoundUp(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1187,7 +1187,7 @@ void numbermath::test_mathRoundDown_empty_string(){
     std::string temp="";
 
     try {
-        temp=MathRoundDown("");
+        temp=smath::mathRoundDown("");
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -1199,7 +1199,7 @@ void numbermath::test_mathRoundDown_no_dot_part(){
     QString result="23", curent_result="";
     std::string num="23";
 
-    curent_result=QString::fromStdString(MathRoundDown(num));
+    curent_result=QString::fromStdString(smath::mathRoundDown(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1208,7 +1208,7 @@ void numbermath::test_mathRoundDown_dot_part(){
     QString result="12", curent_result="";
     std::string num="12,24";
 
-    curent_result=QString::fromStdString(MathRoundDown(num));
+    curent_result=QString::fromStdString(smath::mathRoundDown(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -1217,7 +1217,7 @@ void numbermath::test_mathRoundDown_negative_num(){
     QString result="0", curent_result="";
     std::string num="-0,1";
 
-    curent_result=QString::fromStdString(MathRoundDown(num));
+    curent_result=QString::fromStdString(smath::mathRoundDown(num));
 
     QCOMPARE(curent_result,result);
 }

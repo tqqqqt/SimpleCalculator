@@ -111,7 +111,7 @@ void calculatormath::test_getResult_exception_result(){
 
     try{
         calculator.setVector(input_vector.toStdVector());
-        temp=calculator.GetResult();
+        temp=calculator.getResult();
         QCOMPARE(1,0);
     }
     catch(std::exception& exp){
@@ -135,7 +135,7 @@ void calculatormath::test_getResult_simple_operators(){
     input_vector[8]=input_vector[0];
 
     calculator.setVector(input_vector.toStdVector());
-    curent_result=calculator.GetResult();
+    curent_result=calculator.getResult();
 
     QCOMPARE(curent_result.toString(),result.toString());
 }
@@ -155,7 +155,7 @@ void calculatormath::test_getResult_special_operators(){
     input_vector[7]=input_vector[0];
 
     calculator.setVector(input_vector.toStdVector());
-    curent_result=calculator.GetResult();
+    curent_result=calculator.getResult();
 
     QCOMPARE(curent_result.toString(),result.toString());
 }
@@ -184,7 +184,7 @@ void calculatormath::test_getResult_functions(){
     calculator.setVector(input_vector.toStdVector());
     calculator.setFunctionAccuracy(5);
     calculator.setFunctionRadianFlag(true);
-    curent_result=calculator.GetResult();
+    curent_result=calculator.getResult();
 
     QCOMPARE(curent_result.toString(),result.toString());
 }
@@ -210,7 +210,7 @@ void calculatormath::test_getResult_other_operators(){
     input_vector[13].addSymbol(")");
 
     calculator.setVector(input_vector.toStdVector());
-    curent_result=calculator.GetResult();
+    curent_result=calculator.getResult();
 
     QCOMPARE(curent_result.toString(),result.toString());
 }

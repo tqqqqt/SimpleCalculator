@@ -254,9 +254,9 @@ std::string ProgrammistObject::convertTo10(std::string _num, int _system){
         if(_num[static_cast<size_t>(i)]!='-'){
             if(_num[static_cast<size_t>(i)]>='A') temp=nums_16[static_cast<size_t>(_num[static_cast<size_t>(i)])-static_cast<size_t>('A')];
             else temp=_num[static_cast<size_t>(i)];
-            result=MathSum(result,MathMul(temp,pow_num));
+            result=smath::mathSum(result,smath::mathMul(temp,pow_num));
         }
-        pow_num=MathMul(pow_num,system);
+        pow_num=smath::mathMul(pow_num,system);
     }
 
     return result;
@@ -302,20 +302,20 @@ std::string ProgrammistObject::convert10To(int _system){
 
     std::string result="", num=text_10, system=std::to_string(_system), mul_num="", neg_num="", temp="";
     if(num[0]=='-') num=num.substr(1);
-    while(MaxNumber(num,system)!=1){
+    while(smath::maxNumber(num,system)!=1){
         mul_num="";
         neg_num="";
-        temp=MathDiv(num,system,1);
+        temp=smath::mathDiv(num,system,1);
         for(size_t i=0;i<temp.length();i++){
             if(temp[i]==',') break;
             mul_num+=temp[i];
         }
-        neg_num=MathNeg(num,MathMul(system,mul_num));
-        if(MaxNumber(neg_num,"10")<=0) neg_num=numToSymbol(neg_num);
+        neg_num=smath::mathNeg(num,smath::mathMul(system,mul_num));
+        if(smath::maxNumber(neg_num,"10")<=0) neg_num=numToSymbol(neg_num);
         result=neg_num+result;
         num=mul_num;
     }
-    if(_system==16 && MaxNumber(num,"10")<=0) num=numToSymbol(num);
+    if(_system==16 && smath::maxNumber(num,"10")<=0) num=numToSymbol(num);
     result=num+result;
     return result;
 }

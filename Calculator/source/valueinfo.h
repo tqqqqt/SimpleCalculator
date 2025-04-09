@@ -29,6 +29,7 @@ private:
 
 public:
     ValueInfo();
+
     std::vector<std::string> getMain();
     std::vector<std::string> getSecond(std::string);
     std::string getMullNum(std::string, std::string, std::string, std::string);

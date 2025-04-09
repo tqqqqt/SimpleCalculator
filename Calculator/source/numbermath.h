@@ -7,30 +7,34 @@
 #include <iostream>
 #include <exception>
 
-int MaxNumber(std::string num1, std::string num2);
-std::string FindMultiplier(std::string num1, std::string num2);
+namespace smath{
+    const std::string S_PI="3,141592653589793";
 
-std::string MathSum(std::string num1, std::string num2);
-std::string MathNeg(std::string num1, std::string num2);
-std::string MathDiv(std::string num1, std::string num2, int accuracy);
-std::string MathMul(std::string num1, std::string num2);
+    int maxNumber(std::string num_1, std::string num_2);
+    std::string findMultiplier(std::string num_1, std::string num_2);
 
-std::string MathPow(std::string num, std::string pow, int accuracy=10);
+    std::string mathSum(std::string num_1, std::string num_2);
+    std::string mathNeg(std::string num_1, std::string num_2);
+    std::string mathDiv(std::string num_1, std::string num_2, int accuracy=10);
+    std::string mathMul(std::string num_1, std::string num_2);
 
-std::string MathTrigonometricConvertDegreeToRadian(std::string degree, int div_acuracy);
-std::string MathTrigonometricCheckRadian(std::string radian);
+    std::string mathPow(std::string num, std::string pow, int accuracy=10);
 
-std::string MathSin(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
-std::string MathCos(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
-std::string MathTng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
-std::string MathCtng(std::string degree, int div_acuracy, int function_acuracy, bool radian_flag);
+    std::string mathTrigonometricConvertDegreeToRadian(std::string degree, int div_acuracy=10);
+    std::string mathTrigonometricCheckRadian(std::string radian);
 
-std::string MathFactorial(std::string num);
-std::string MathMod(std::string num, std::string mod_num);
+    std::string mathSin(std::string degree, bool radian_flag, int function_acuracy=8, int div_acuracy=10);
+    std::string mathCos(std::string degree, bool radian_flag, int function_acuracy=8, int div_acuracy=10);
+    std::string mathTng(std::string degree, bool radian_flag, int function_acuracy=8, int div_acuracy=10);
+    std::string mathCtng(std::string degree, bool radian_flag, int function_acuracy=8, int div_acuracy=10);
 
-std::string MathModule(std::string num);
-std::string MathRoundUp(std::string num);
-std::string MathRoundDown(std::string num);
+    std::string mathFactorial(std::string num);
+    std::string mathMod(std::string num, std::string mod_num);
+
+    std::string mathModule(std::string num);
+    std::string mathRoundUp(std::string num);
+    std::string mathRoundDown(std::string num);
+}
 
 
 /*

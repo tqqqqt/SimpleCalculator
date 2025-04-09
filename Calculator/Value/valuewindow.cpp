@@ -10,12 +10,12 @@ ValueWindow::ValueWindow(QWidget *parent) :
     loadIcons();
 
     curent_field=0;
-    value_info=new ValueInfo();
+    value_info=ValueInfo();
     // to default curent side is up
     ui->pushButton_down->setEnabled(true);
     ui->pushButton_upp->setEnabled(false);
 
-    std::vector<std::string> main_info=value_info->getMain();
+    std::vector<std::string> main_info=value_info.getMain();
     for(auto x:main_info) ui->comboBox->addItem(QString::fromStdString(x));
     fillLeftRightBox();
 
@@ -211,14 +211,14 @@ void ValueWindow::updateResult(){
     QString temp="";
     // get result
     if(curent_field==1){
-        temp=QString::fromStdString(value_info->getMullNum(main,left,right,value));
+        temp=QString::fromStdString(value_info.getMullNum(main,left,right,value));
         bottom_object.setFullNum(temp.toStdString());
         bottom_object.checkNum();
         temp=QString::fromStdString(bottom_object.toString());
         ui->textEdit_right->setText(temp);
     }
     else{
-        temp=QString::fromStdString(value_info->getMullNum(main,right,left,value));
+        temp=QString::fromStdString(value_info.getMullNum(main,right,left,value));
         up_object.setFullNum(temp.toStdString());
         up_object.checkNum();
         temp=QString::fromStdString(up_object.toString());
@@ -231,7 +231,7 @@ void ValueWindow::fillLeftRightBox(){
     ui->comboBox_left->clear();
     ui->comboBox_right->clear();
     // get names of types from value object
-    std::vector<std::string> temp=value_info->getSecond(ui->comboBox->currentText().toStdString());
+    std::vector<std::string> temp=value_info.getSecond(ui->comboBox->currentText().toStdString());
     // set names in combo box
     for(auto x:temp){
         ui->comboBox_left->addItem(QString::fromStdString(x));

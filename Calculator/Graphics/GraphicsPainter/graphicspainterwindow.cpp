@@ -229,7 +229,7 @@ void GraphicsPainterWindow::paintGraphics(){
     QPainter painter(&curent_ord);
     CalculatorMath math_object;
     math_object.setFunctionAccuracy(10); // if set more can freez
-    math_object.SetDivAccuracy(4); // no need very big accuracy, not seen in graphics
+    math_object.setDivAccuracy(4); // no need very big accuracy, not seen in graphics
     math_object.setFunctionRadianFlag(true); // all points already in radian
 
     // paint graphics of all elements

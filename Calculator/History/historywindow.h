@@ -27,7 +27,7 @@ private:
     void closeEvent(QCloseEvent*);
 
 public slots:
-    void UpdateHis();
+    void updateHis();
     void needCloseWindow();
 
 signals:

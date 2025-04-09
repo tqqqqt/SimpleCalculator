@@ -28,7 +28,7 @@ public:
 private:
     Ui::ValueWindow *ui;
     ValueObject up_object, bottom_object;
-    ValueInfo* value_info;
+    ValueInfo value_info;
     int curent_field;
     QString disable_button_style, enable_button_style;
 
