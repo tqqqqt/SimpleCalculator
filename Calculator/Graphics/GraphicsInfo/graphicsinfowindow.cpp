@@ -333,6 +333,7 @@ void GraphicsInfoWindow::buttonAdd(){
     catch (std::exception &exp) {
         curent_text="";
         curent_object.clear();
+        objects.clear();
         ui->label->setText(exp.what());
         return;
     }
