@@ -229,7 +229,7 @@ void GraphicsPainterWindow::paintGraphics(){
     QPainter painter(&curent_ord);
     CalculatorMath math_object;
     math_object.setFunctionAccuracy(10); // if set more can freez
-    math_object.SetDivAccuracy(4); // no need very big accuracy, not seen in graphics
+    math_object.setDivAccuracy(4); // no need very big accuracy, not seen in graphics
     math_object.setFunctionRadianFlag(true); // all points already in radian
 
     // paint graphics of all elements
@@ -256,8 +256,8 @@ void GraphicsPainterWindow::paintGraphics(){
         temp_painter.setPen(QPen(new_color,1));
 
         // save last known point
-        double last_x=0.0, last_y=0.0;
-        double curent_y=0;
+        int last_x=0.0, last_y=0.0;
+        int curent_y=0;
         // create two part of num becouse double have trouble with accuracy
         // trouble like 2.0000000001 or 1.999999999999
         int whole_num_part=0, fractional_num_part=0, curent_step=1*curent_scale;
@@ -275,7 +275,7 @@ void GraphicsPainterWindow::paintGraphics(){
                 std::string string_result=temp_result.toString();
                 // change to dot becouse std::stod dont know what is it
                 if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
-                curent_y=(POINT_SPACE*std::stod(string_result))/curent_scale;
+                curent_y=static_cast<int>(std::round((POINT_SPACE*std::stod(string_result))/curent_scale));
 
                 // need count point > 0 for not draw line from 0,0 point in ord
                 if(count_points>0){
@@ -315,7 +315,7 @@ void GraphicsPainterWindow::paintGraphics(){
                 std::string string_result=temp_result.toString();
                 // change becouse std::stod
                 if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
-                curent_y=(POINT_SPACE*std::stod(string_result))/curent_scale;
+                curent_y=static_cast<int>(std::round((POINT_SPACE*std::stod(string_result))/curent_scale));
 
                 // need count point > 0 for not draw line from 0,0 point in ord
                 if(count_points>0){

@@ -13,20 +13,20 @@
 class CalculatorMath
 {
 private:
-    std::vector<CalculatorObject> polishEntry;
+    std::vector<CalculatorObject> polish_entry;
     int div_accuracy, function_accuracy;
     bool function_radian_data;
 
-    int CheckPrior(std::string);
+    int checkPrior(std::string);
 
 public:
     CalculatorMath();
 
     void setVector(std::vector<CalculatorObject>);
-    void SetDivAccuracy(int);
+    void setDivAccuracy(int);
     void setFunctionAccuracy(int);
     void simplifyExpression();
-    CalculatorObject GetResult();
+    CalculatorObject getResult();
     CalculatorObject getResultWithVariable(std::string);
     std::vector<CalculatorObject> getPolishEntry();
     void setPolishEntry(std::vector<CalculatorObject>);

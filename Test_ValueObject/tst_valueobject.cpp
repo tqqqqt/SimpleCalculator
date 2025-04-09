@@ -11,149 +11,187 @@ public:
     ~valueobject();
 
 private slots:
-    void test_toString_data();
-    void test_toString();
-    void test_getLength_data();
-    void test_getLength();
-    void test_addNum_data();
-    void test_addNum();
-    void test_deleteLastSymbol_data();
-    void test_deleteLastSymbol();
-    void test_setFullNum_data();
-    void test_setFullNum();
-    void test_clear();
+    void test_addNum_exception_incorect_symbol();
+    void test_addNum_incorect_add_dot();
+    void test_addNum_double_zero();
+    void test_addNum_change_first_zero();
+    void test_addNum_double_dot();
+    void test_addNum_correct();
+
+    void test_deleleLastSymbol_empty_num();
+    void test_deleleLastSymbol_dot_last();
+    void test_deleleLastSymbol_zero_last();
+
+    void test_setFullNum_exception_empty_num();
+    void test_setFullNum_exception_only_minus();
+    void test_setFullNum_exception_incorect_symbol();
+    void test_setFullNum_exception_count_dot();
+    void test_setFullNum_correct();
 };
 
 valueobject::valueobject(){ }
-
 valueobject::~valueobject(){ }
 
-void valueobject::test_toString_data(){
-    QTest::addColumn<QString>("num");
-
-    QTest::newRow("test_1")<<"0";
-    QTest::newRow("test_2")<<"768";
-    QTest::newRow("test_3")<<"0,234";
-    QTest::newRow("test_4")<<"-234";
-    QTest::newRow("test_5")<<"-0,01";
-    QTest::newRow("test_6")<<"234235,234234";
-    QTest::newRow("test_6")<<"-987,654";
-}
-
-void valueobject::test_toString(){
-    QFETCH(QString,num);
-
+void valueobject::test_addNum_exception_incorect_symbol(){
     ValueObject object;
-    object.setFullNum(num.toStdString());
-    QCOMPARE(object.toString(),num.toStdString());
+    QString result="input not a num or dot";
+
+    try{
+        object.addNum('a');
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
 }
 
-void valueobject::test_getLength_data(){
-    QTest::addColumn<QString>("num");
-    QTest::addColumn<int>("result");
-
-    QTest::newRow("test_1")<<"0"<<1;
-    QTest::newRow("test_2")<<"0,23"<<4;
-    QTest::newRow("test_3")<<"234"<<3;
-    QTest::newRow("test_4")<<"-123456"<<7;
-    QTest::newRow("test_5")<<"342,234"<<7;
-    QTest::newRow("test_6")<<"-13,456"<<7;
-    QTest::newRow("test_7")<<"-0,00000001"<<11;
-}
-
-void valueobject::test_getLength(){
-    QFETCH(QString,num);
-    QFETCH(int,result);
-
+void valueobject::test_addNum_incorect_add_dot(){
     ValueObject object;
-    object.setFullNum(num.toStdString());
-    QCOMPARE(object.getLength(),result);
+    QString result="", curent_result="";
+
+    object.addNum(',');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
 }
 
-void valueobject::test_addNum_data(){
-    QTest::addColumn<char>("input");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<'0'<<"0";
-    QTest::newRow("test_2")<<'1'<<"1";
-    QTest::newRow("test_3")<<'2'<<"2";
-    QTest::newRow("test_4")<<'3'<<"3";
-    QTest::newRow("test_5")<<'4'<<"4";
-    QTest::newRow("test_6")<<'5'<<"5";
-    QTest::newRow("test_7")<<'6'<<"6";
-    QTest::newRow("test_8")<<'7'<<"7";
-    QTest::newRow("test_9")<<'8'<<"8";
-    QTest::newRow("test_10")<<'9'<<"9";
-    QTest::newRow("test_11")<<','<<"";
-}
-
-void valueobject::test_addNum(){
-    QFETCH(char,input);
-    QFETCH(QString,result);
-
+void valueobject::test_addNum_double_zero(){
     ValueObject object;
-    object.addNum(input);
-    QCOMPARE(object.toString(),result.toStdString());
+    QString result="0", curent_result="";
+
+    object.addNum('0');
+    object.addNum('0');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
 }
 
-void valueobject::test_deleteLastSymbol_data(){
-    QTest::addColumn<QString>("num");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"0"<<"";
-    QTest::newRow("test_2")<<"123"<<"12";
-    QTest::newRow("test_3")<<"0,0123"<<"0,012";
-    QTest::newRow("test_4")<<"123,123"<<"123,12";
-    QTest::newRow("test_5")<<"-12"<<"-1";
-}
-
-void valueobject::test_deleteLastSymbol(){
-    QFETCH(QString,num);
-    QFETCH(QString,result);
-
+void valueobject::test_addNum_change_first_zero(){
     ValueObject object;
-    object.setFullNum(num.toStdString());
+    QString result="2", curent_result="";
+
+    object.addNum('0');
+    object.addNum('2');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void valueobject::test_addNum_double_dot(){
+    ValueObject object;
+    QString result="0,", curent_result="";
+
+    object.addNum('0');
+    object.addNum(',');
+    object.addNum(',');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void valueobject::test_addNum_correct(){
+    ValueObject object;
+    QString result="2", curent_result="";
+
+    object.addNum('2');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void valueobject::test_deleleLastSymbol_empty_num(){
+    ValueObject object;
+    QString result="", curent_result="";
+
     object.deleteLastSymbol();
-    QCOMPARE(object.toString(),result.toStdString());
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
 }
 
-void valueobject::test_setFullNum_data(){
-    QTest::addColumn<QString>("num");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"0"<<"0";
-    QTest::newRow("test_2")<<"234"<<"234";
-    QTest::newRow("test_3")<<"0,0001"<<"0,0001";
-    QTest::newRow("test_4")<<"-123"<<"-123";
-    QTest::newRow("test_5")<<"-0,002"<<"-0,002";
-    QTest::newRow("test_6")<<"-123456789,987654321"<<"-123456789,987654321";
-    QTest::newRow("test_7")<<""<<"incorect num";
-    QTest::newRow("test_8")<<"-"<<"incorect num";
-    QTest::newRow("test_9")<<"(-2)"<<"incorect num";
-    QTest::newRow("test_10")<<"2+2"<<"incorect num";
-    QTest::newRow("test_11")<<"2,2,2"<<"incorect num";
-}
-
-void valueobject::test_setFullNum(){
-    QFETCH(QString,num);
-    QFETCH(QString,result);
-
+void valueobject::test_deleleLastSymbol_dot_last(){
     ValueObject object;
-    try {
-        object.setFullNum(num.toStdString());
-        QCOMPARE(object.toString(),result.toStdString());
+    QString result="0", curent_result="";
+
+    object.addNum('0');
+    object.addNum(',');
+    object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void valueobject::test_deleleLastSymbol_zero_last(){
+    ValueObject object;
+    QString result="", curent_result="";
+
+    object.addNum('0');
+    object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void valueobject::test_setFullNum_exception_empty_num(){
+    ValueObject object;
+    QString result="empty string";
+
+    try{
+        object.setFullNum("");
+        QCOMPARE(1,0);
     }
-    catch (std::exception &exp) {
-        QCOMPARE(exp.what(),result.toStdString());
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
     }
 }
 
-void valueobject::test_clear(){
+void valueobject::test_setFullNum_exception_only_minus(){
     ValueObject object;
-    object.setFullNum("123,456");
-    object.clear();
-    QCOMPARE(object.toString(),"");
-    QCOMPARE(object.getLength(),0);
+    QString result="num have only minus";
+
+    try{
+        object.setFullNum("-");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void valueobject::test_setFullNum_exception_incorect_symbol(){
+    ValueObject object;
+    QString result="incorect symbol in num";
+
+    try{
+        object.setFullNum("12a");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void valueobject::test_setFullNum_exception_count_dot(){
+    ValueObject object;
+    QString result="incorect count dot";
+
+    try{
+        object.setFullNum("0,0,0");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void valueobject::test_setFullNum_correct(){
+    ValueObject object;
+    QString result="-2,2", curent_result="";
+
+    object.setFullNum("-2,2");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
 }
 
 QTEST_APPLESS_MAIN(valueobject)

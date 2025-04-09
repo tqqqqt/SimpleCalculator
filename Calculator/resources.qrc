@@ -13,5 +13,6 @@
         <file>Graphics/GraphicsInfo/enter-icon.png</file>
         <file>Graphics/GraphicsPainter/style.css</file>
         <file>Graphics/GraphicsInfo/style.css</file>
+        <file>Functions/functions_style.css</file>
     </qresource>
 </RCC>

@@ -10,11 +10,11 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
     ui->pushButton_dot->setStyleSheet(disable_button_style); // not used in with mode
     loadIcons();
 
-    object=new ProgrammistObject();
+    object=ProgrammistObject();
     buttonChangeSystem(10); // in default curent system is 10
     settings=new QSettings("tqqqqt","calculator");
     if(!settings->contains("progr/count")) settings->setValue("progr/count",5);
-    object->setCount(settings->value("progr/count",5).toInt());
+    object.setCount(settings->value("progr/count",5).toInt());
 
     // nums buttons
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -64,6 +64,7 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
 ProgrammistWindow::~ProgrammistWindow()
 {
     delete ui;
+    delete settings;
 }
 
 // load styles for buttons and future use
@@ -110,23 +111,23 @@ void ProgrammistWindow::loadIcons(){
 // display nums in all systems
 void ProgrammistWindow::updateResult(){
     // display num in curent system
-    ui->textEdit_input->setText(QString::fromStdString(object->toString()));
+    ui->textEdit_input->setText(QString::fromStdString(object.toString()));
     // display nums in all systems
-    ui->lineEdit_bin->setText(QString::fromStdString(object->toString2()));
-    ui->lineEdit_oct->setText(QString::fromStdString(object->toString8()));
-    ui->lineEdit_dec->setText(QString::fromStdString(object->toString10()));
-    ui->lineEdit_hex->setText(QString::fromStdString(object->toString16()));
+    ui->lineEdit_bin->setText(QString::fromStdString(object.toString2()));
+    ui->lineEdit_oct->setText(QString::fromStdString(object.toString8()));
+    ui->lineEdit_dec->setText(QString::fromStdString(object.toString10()));
+    ui->lineEdit_hex->setText(QString::fromStdString(object.toString16()));
 }
 
 // added num to object
 void ProgrammistWindow::pressNumberButton(QChar _num){
     try {
-        object->addNum(_num.toLatin1());
+        object.addNum(_num.toLatin1());
         // display new text in all systems
         emit getResult();
     }
     catch (std::exception &exp) {
-        object->clear();
+        object.clear();
         ui->textEdit_input->setText(exp.what());
     }
 }
@@ -134,7 +135,7 @@ void ProgrammistWindow::pressNumberButton(QChar _num){
 // add minus to num
 void ProgrammistWindow::pressMinusButton(){
     // add minus to num
-    object->addMinus();
+    object.addMinus();
 
     // display all nums in systems after changes
     emit getResult();
@@ -143,10 +144,10 @@ void ProgrammistWindow::pressMinusButton(){
 // move bin bite in left or right order
 void ProgrammistWindow::pressMoveButton(int _direction){
     // if object text is null
-    if(object->getLength()==0) return;
+    if(object.getLength()==0) return;
     // move bit in left (-1) order or right (1) order
-    if(_direction==-1) object->moveLeft();
-    else object->moveRight();
+    if(_direction==-1) object.moveLeft();
+    else object.moveRight();
     // display new nums in all systems after changes
     emit getResult();
 }
@@ -159,15 +160,15 @@ void ProgrammistWindow::buttonClear(){
     ui->lineEdit_oct->clear();
     ui->lineEdit_bin->clear();
 
-    object->clear();
+    object.clear();
 }
 
 // delete last input symbol
 void ProgrammistWindow::buttonDeleteLast(){
     // if no symbol in object
-    if(object->getLength()==0) return;
+    if(object.getLength()==0) return;
 
-    object->deleteLastSymbol();
+    object.deleteLastSymbol();
     // display new nums in all systems after changes
     emit getResult();
 }
@@ -193,8 +194,8 @@ void ProgrammistWindow::updateMode(int _mode){
 // change curent system
 void ProgrammistWindow::buttonChangeSystem(int _system){
     // change system in object and display system text
-    object->changeSystem(_system);
-    ui->textEdit_input->setText(QString::fromStdString(object->toString()));
+    object.changeSystem(_system);
+    ui->textEdit_input->setText(QString::fromStdString(object.toString()));
 
     // set enable buttons for curent system
     switch(_system){
@@ -307,5 +308,5 @@ void ProgrammistWindow::openSettings(){
 
 // load new settings after accept changes in settings window
 void ProgrammistWindow::updateSettings(){
-    object->setCount(settings->value("progr/count",5).toInt());
+    object.setCount(settings->value("progr/count",5).toInt());
 }

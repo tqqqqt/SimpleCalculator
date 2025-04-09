@@ -32,7 +32,7 @@ public:
     ~MainWindow();
 
 signals:
-    void PressResult();
+    void pressResult();
     void closeWindow();
     void changeWindow(int);
 
@@ -40,12 +40,12 @@ private:
     Ui::MainWindow *ui;
     QVector<CalculatorObject> objects;
     CalculatorObject curent_object;
-    QString curentText;
-    QVector<QString> historyArr;
+    QString curent_text;
+    QVector<QString> history_arr;
     QSettings* settings;
-    CalculatorMath* calculatorMathObject;
-    bool flagAfterResult, function_window_show, history_window_show;
-    int countOpenBracket, countOper;
+    CalculatorMath calculator_math_object;
+    bool flag_after_result, function_window_show, history_window_show;
+    int count_open_bracket, count_oper;
     int curent_acuracy, function_acuracy;
 
 private:
@@ -55,23 +55,23 @@ private:
 
 private slots:
     void setFullText();
-    void PressNumberButton(QChar buttonNum);
-    void PressOperButton(QString buttonOper);
+    void pressNumberButton(QChar);
+    void pressOperButton(QString);
     void pressFunctionsButton();
     void addedFunction(QString);
     void addedSpecialFunction(QString);
-    void ButtonDot();
-    void ButtonClear();
-    void ButtonOpenBrackets();
-    void ButtonCloseBrackets();
-    void ButtonResult();
-    void ButtonZnak();
-    void ButtonHistory();
-    void ButtonDeleteLast();
-    void ButtonSettings();
-    void UpdateSettings();
-    void ButtonChangeMode();
-    void UpdateMode(int);
+    void buttonDot();
+    void buttonClear();
+    void buttonOpenBrackets();
+    void buttonCloseBrackets();
+    void buttonResult();
+    void buttonZnak();
+    void buttonHistory();
+    void buttonDeleteLast();
+    void buttonSettings();
+    void updateSettings();
+    void buttonChangeMode();
+    void updateMode(int);
     void updateFunctionWindowState();
     void updateHistoryWindowState();
 };

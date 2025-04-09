@@ -251,12 +251,12 @@ std::string ProgrammistObject::convertTo10(std::string _num, int _system){
     size_t size=_num.length();
 
     for(int i=static_cast<int>(size)-1;i>=0;i--){
-        if(_num[i]!='-'){
-            if(_num[i]>='A') temp=nums_16[_num[i]-'A'];
-            else temp=_num[i];
-            result=MathSum(result,MathMul(temp,pow_num));
+        if(_num[static_cast<size_t>(i)]!='-'){
+            if(_num[static_cast<size_t>(i)]>='A') temp=nums_16[static_cast<size_t>(_num[static_cast<size_t>(i)])-static_cast<size_t>('A')];
+            else temp=_num[static_cast<size_t>(i)];
+            result=smath::mathSum(result,smath::mathMul(temp,pow_num));
         }
-        pow_num=MathMul(pow_num,system);
+        pow_num=smath::mathMul(pow_num,system);
     }
 
     return result;
@@ -274,12 +274,12 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
     // add 1 to curent num in 2 system
     int cary=1;
     for(int i=static_cast<int>(size)-1;i>=0;i--){
-        if(_num[i]=='0'){
-            _num[i]='1';
+        if(_num[static_cast<size_t>(i)]=='0'){
+            _num[static_cast<size_t>(i)]='1';
             cary=0;
             break;
         }
-        _num[i]='0';
+        _num[static_cast<size_t>(i)]='0';
     }
     if(cary==1) _num='1'+_num;
 
@@ -302,20 +302,20 @@ std::string ProgrammistObject::convert10To(int _system){
 
     std::string result="", num=text_10, system=std::to_string(_system), mul_num="", neg_num="", temp="";
     if(num[0]=='-') num=num.substr(1);
-    while(MaxNumber(num,system)!=1){
+    while(smath::maxNumber(num,system)!=1){
         mul_num="";
         neg_num="";
-        temp=MathDiv(num,system,1);
+        temp=smath::mathDiv(num,system,1);
         for(size_t i=0;i<temp.length();i++){
             if(temp[i]==',') break;
             mul_num+=temp[i];
         }
-        neg_num=MathNeg(num,MathMul(system,mul_num));
-        if(MaxNumber(neg_num,"10")<=0) neg_num=numToSymbol(neg_num);
+        neg_num=smath::mathNeg(num,smath::mathMul(system,mul_num));
+        if(smath::maxNumber(neg_num,"10")<=0) neg_num=numToSymbol(neg_num);
         result=neg_num+result;
         num=mul_num;
     }
-    if(_system==16 && MaxNumber(num,"10")<=0) num=numToSymbol(num);
+    if(_system==16 && smath::maxNumber(num,"10")<=0) num=numToSymbol(num);
     result=num+result;
     return result;
 }
@@ -416,6 +416,7 @@ void ProgrammistObject::clear(){
 
 // change maximum nums count
 void ProgrammistObject::setCount(int _count){
+    if(_count<=0) throw incorect_set_count("count <= 0");
     count_nums=4*static_cast<size_t>(_count);
 }
 
@@ -435,5 +436,9 @@ const char* ProgrammistObject::incorect_convert::what() const noexcept{
 }
 
 const char* ProgrammistObject::incorect_change_system::what() const noexcept{
+    return m_error.c_str();
+}
+
+const char* ProgrammistObject::incorect_set_count::what() const noexcept{
     return m_error.c_str();
 }

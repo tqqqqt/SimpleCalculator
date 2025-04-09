@@ -28,7 +28,7 @@ public:
 
 private:
     Ui::ProgrammistWindow *ui;
-    ProgrammistObject *object;
+    ProgrammistObject object;
     QSettings *settings;
     int curent_system;
     QString disable_button_style, enable_button_style, curent_system_button_style;

@@ -21,8 +21,8 @@ private:
 
 public:
     CalculatorObject();
-    ~CalculatorObject();
     CalculatorObject(const CalculatorObject&);
+    ~CalculatorObject();
 
     std::string toString();
     size_t getLength();

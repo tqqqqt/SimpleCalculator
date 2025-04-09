@@ -11,419 +11,516 @@ public:
     ~calculatorobject();
 
 private slots:
-    void test_toString_data();
-    void test_toString();
+    void test_addNum_exception_input();
+    void test_addNum_no_add_object_type();
+    void test_addNum_no_change_zero();
+    void test_addNum_cange_zero();
+    void test_addNum_no_add_dot();
 
-    void test_getLength_data();
-    void test_getLength();
+    void test_addSymbol_exception_input();
+    void test_addSymbol_not_none();
+    void test_addSymbol_minus_bracket();
+    void test_addSymbol_open_bracket();
+    void test_addSymbol_close_bracket();
+    void test_addSymbol_operator();
+    void test_addSymbol_pow();
 
-    void test_getObjectType_data();
-    void test_getObjectType();
+    void test_addFunction_exception_input();
+    void test_addFunction_not_none();
+    void test_addFunction_correct();
 
-    void test_addNum_data();
-    void test_addNum();
+    void test_addSpecialFunction_exception_input();
+    void test_addSpecialFunction_not_none();
+    void test_addSpecialFunction_mod();
+    void test_addSpecialFunction_factorial();
 
-    void test_addSymbol_data();
-    void test_addSymbol();
+    void test_addVariable_not_none();
+    void test_addVariable_correct();
 
-    void test_addFunction_data();
-    void test_addFunction();
+    void test_getOnlyNum_incorect_type();
+    void test_getOnlyNum_negative_num();
+    void test_getOnlyNum_positive_num();
 
-    void test_addSpecialFunction_data();
-    void test_addSpecialFunction();
+    void test_setFullNum_empty_num();
+    void test_setFullNum_only_minus();
+    void test_setFullNum_incorect_symbol();
+    void test_setFullNum_incorect_count_dot();
+    void test_setFullNum_correct();
 
-    void test_addVariable_1();
-    void test_addVariable_2();
+    void test_checkNum_incorect_type();
+    void test_checkNum_already_check();
+    void test_checkNum_delete_first_zeros();
+    void test_checkNum_save_nums_after_dot();
+    void test_checkNum_delete_nums_after_dot();
 
-    void test_deleteLastSymbol_data();
-    void test_deleteLastSymbol();
-
-    void test_setFullNum_data();
-    void test_setFullNum();
-
-    void test_getOnlyNum_data();
-    void test_getOnlyNum();
+    void test_deleteLastSymbol_empty_text();
+    void test_deleteLastSymbol_not_num();
+    void test_deleteLastSymbol_minus_bracket();
+    void test_deleteLastSymbol_end_dot();
+    void test_deleteLastSymbol_end_clear();
+    void test_deleteLastSymbol_change_type();
 };
 
 calculatorobject::calculatorobject(){ }
-
 calculatorobject::~calculatorobject(){ }
 
-void calculatorobject::test_toString_data(){
-    QTest::addColumn<QString>("num");
-
-    QTest::newRow("test_1")<<"0";
-    QTest::newRow("test_2")<<"24";
-    QTest::newRow("test_3")<<"-2,22";
-    QTest::newRow("test_4")<<"2,00000001";
-    QTest::newRow("test_5")<<"-2";
-    QTest::newRow("test_6")<<"-123,456";
-}
-
-void calculatorobject::test_toString(){
-    QFETCH(QString,num);
-
+void calculatorobject::test_addNum_exception_input(){
     CalculatorObject object;
-    object.setFullNum(num.toStdString());
-    std::string curent_result=object.toString();
-
-    QCOMPARE(curent_result,num.toStdString());
-}
-
-void calculatorobject::test_getLength_data(){
-    QTest::addColumn<QString>("num");
-    QTest::addColumn<int>("length");
-
-    QTest::newRow("test_1")<<"0"<<1;
-    QTest::newRow("test_2")<<"123"<<3;
-    QTest::newRow("test_3")<<"0,00000001"<<10;
-    QTest::newRow("test_4")<<"-24"<<3;
-    QTest::newRow("test_5")<<"-2"<<2;
-    QTest::newRow("test_6")<<"-2,1918"<<7;
-}
-
-void calculatorobject::test_getLength(){
-    QFETCH(QString,num);
-    QFETCH(int,length);
-
-    CalculatorObject object;
-    object.setFullNum(num.toStdString());
-    int curent_result=object.getLength();
-
-    QCOMPARE(curent_result,length);
-}
-
-void calculatorobject::test_getObjectType_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<int>("input_type");
-    QTest::addColumn<int>("type");
-
-    QTest::newRow("test_1")<<"0"<<1<<1;
-    QTest::newRow("test_2")<<"9"<<1<<1;
-    QTest::newRow("test_3")<<"3"<<1<<1;
-    QTest::newRow("test_4")<<"-"<<2<<5;
-    QTest::newRow("test_5")<<"+"<<2<<5;
-    QTest::newRow("test_6")<<"*"<<2<<5;
-    QTest::newRow("test_7")<<"/"<<2<<5;
-    QTest::newRow("test_8")<<"(-"<<2<<2;
-    QTest::newRow("test_9")<<"("<<2<<3;
-    QTest::newRow("test_10")<<")"<<2<<4;
-}
-
-void calculatorobject::test_getObjectType(){
-    QFETCH(QString,input);
-    QFETCH(int,input_type);
-    QFETCH(int,type);
-
-    CalculatorObject object;
-    if(input_type==1) object.addNum(input.toStdString()[0]);
-    else object.addSymbol(input.toStdString());
-
-    int curent_result=static_cast<int>(object.getObjectType());
-
-    QCOMPARE(curent_result,type);
-}
-
-void calculatorobject::test_addNum_data(){
-    QTest::addColumn<char>("input");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<'0'<<"0";
-    QTest::newRow("test_2")<<'1'<<"1";
-    QTest::newRow("test_3")<<'2'<<"2";
-    QTest::newRow("test_4")<<'3'<<"3";
-    QTest::newRow("test_5")<<'4'<<"4";
-    QTest::newRow("test_6")<<'5'<<"5";
-    QTest::newRow("test_7")<<'6'<<"6";
-    QTest::newRow("test_8")<<'7'<<"7";
-    QTest::newRow("test_9")<<'8'<<"8";
-    QTest::newRow("test_10")<<'9'<<"9";
-    QTest::newRow("test_11")<<'+'<<"input not in [0-9] and ','";
-    QTest::newRow("test_12")<<'-'<<"input not in [0-9] and ','";
-    QTest::newRow("test_13")<<'*'<<"input not in [0-9] and ','";
-    QTest::newRow("test_14")<<'/'<<"input not in [0-9] and ','";
-    QTest::newRow("test_15")<<'('<<"input not in [0-9] and ','";
-    QTest::newRow("test_16")<<')'<<"input not in [0-9] and ','";
-    QTest::newRow("test_17")<<' '<<"input not in [0-9] and ','";
-}
-
-void calculatorobject::test_addNum(){
-    QFETCH(char,input);
-    QFETCH(QString,result);
-
-    CalculatorObject object;
-    std::string curent_result="";
-
-    try {
-        object.addNum(input);
-        curent_result=object.toString();
-        QCOMPARE(curent_result,result.toStdString());
-    }
-    catch (std::exception &exp) {
-        QCOMPARE(exp.what(),result.toStdString());
-    }
-}
-
-void calculatorobject::test_addSymbol_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"0"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_2")<<"1"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_3")<<"2"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_4")<<"3"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_5")<<"4"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_6")<<"5"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_7")<<"6"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_8")<<"7"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_9")<<"8"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_10")<<"9"<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_11")<<"+"<<"+";
-    QTest::newRow("test_12")<<"-"<<"-";
-    QTest::newRow("test_13")<<"*"<<"*";
-    QTest::newRow("test_14")<<"/"<<"/";
-    QTest::newRow("test_15")<<"("<<"(";
-    QTest::newRow("test_16")<<")"<<")";
-    QTest::newRow("test_17")<<""<<"input not a {+, -, *, /, (-, (, ), ^( }";
-    QTest::newRow("test_18")<<" "<<"input not a {+, -, *, /, (-, (, ), ^( }";
-}
-
-void calculatorobject::test_addSymbol(){
-    QFETCH(QString,input);
-    QFETCH(QString,result);
-
-    CalculatorObject object;
-    std::string curent_result="";
-
-    try {
-        object.addSymbol(input.toStdString());
-        curent_result=object.toString();
-        QCOMPARE(curent_result,result.toStdString());
-    }
-    catch (std::exception &exp) {
-        QCOMPARE(exp.what(),result.toStdString().c_str());
-    }
-}
-
-void calculatorobject::test_addFunction_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"Sin("<<"Sin(";
-    QTest::newRow("test_2")<<"Cos("<<"Cos(";
-    QTest::newRow("test_3")<<"Tng("<<"Tng(";
-    QTest::newRow("test_4")<<"Ctng("<<"Ctng(";
-    QTest::newRow("test_5")<<"mod"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-    QTest::newRow("test_6")<<"!"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-    QTest::newRow("test_7")<<"Module("<<"Module(";
-    QTest::newRow("test_8")<<"RoundUp("<<"RoundUp(";
-    QTest::newRow("test_9")<<"RoundDown("<<"RoundDown(";
-    QTest::newRow("test_10")<<"("<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-    QTest::newRow("test_11")<<"+"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-    QTest::newRow("test_12")<<"-"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-    QTest::newRow("test_13")<<"1"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-    QTest::newRow("test_14")<<","<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-    QTest::newRow("test_15")<<"0"<<"input not a {Sin, Cos, Tan, Ctan, Module, Round }";
-}
-
-void calculatorobject::test_addFunction(){
-    QFETCH(QString,input);
-    QFETCH(QString,result);
-
-    CalculatorObject object;
-    std::string curent_result="";
+    QString result="input not in [0-9] and ','";
 
     try{
-        object.addFunction(input.toStdString());
-        curent_result=object.toString();
-        QCOMPARE(curent_result,result.toStdString());
+        object.addNum('a');
+        QCOMPARE(1,0);
     }
-    catch(std::exception &exp){
-        QCOMPARE(exp.what(),result.toStdString());
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
     }
 }
 
-void calculatorobject::test_addSpecialFunction_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"Sin("<<"input not a mod or !";
-    QTest::newRow("test_2")<<"Cos("<<"input not a mod or !";
-    QTest::newRow("test_3")<<"Tng("<<"input not a mod or !";
-    QTest::newRow("test_4")<<"Ctng("<<"input not a mod or !";
-    QTest::newRow("test_5")<<"mod"<<"mod";
-    QTest::newRow("test_6")<<"!"<<"!";
-    QTest::newRow("test_7")<<"Module("<<"input not a mod or !";
-    QTest::newRow("test_8")<<"RoundUp("<<"input not a mod or !";
-    QTest::newRow("test_9")<<"RoundDown("<<"input not a mod or !";
-    QTest::newRow("test_10")<<"("<<"input not a mod or !";
-    QTest::newRow("test_11")<<"+"<<"input not a mod or !";
-    QTest::newRow("test_12")<<"-"<<"input not a mod or !";
-    QTest::newRow("test_13")<<"1"<<"input not a mod or !";
-    QTest::newRow("test_14")<<","<<"input not a mod or !";
-    QTest::newRow("test_15")<<"0"<<"input not a mod or !";
-}
-
-void calculatorobject::test_addSpecialFunction(){
-    QFETCH(QString,input);
-    QFETCH(QString,result);
-
+void calculatorobject::test_addNum_no_add_object_type(){
     CalculatorObject object;
-    std::string curent_result="";
+    QString result="Sin(", curent_result="";
 
-    try{
-        object.addSpecialFunction(input.toStdString());
-        curent_result=object.toString();
-        QCOMPARE(curent_result,result.toStdString());
-    }
-    catch(std::exception &exp){
-        QCOMPARE(exp.what(),result.toStdString().c_str());
-    }
+    object.addFunction("Sin(");
+    object.addNum('2');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_addVariable_1(){
+void calculatorobject::test_addNum_no_change_zero(){
     CalculatorObject object;
-    std::string curent_str="", result_str="x";
-    size_t curent_size=0, result_size=1;
-    CalculatorObject::ObjectsTypes curent_type=CalculatorObject::ObjectsTypes::None, result_type=CalculatorObject::ObjectsTypes::X_variable;
+    QString result="0", curent_result="";
 
-    object.addVariable();
+    object.addNum('0');
+    object.addNum('0');
+    curent_result=QString::fromStdString(object.toString());
 
-    curent_str=object.toString();
-    curent_size=object.getLength();
-    curent_type=object.getObjectType();
-
-    QCOMPARE(curent_str,result_str);
-    QCOMPARE(curent_size,result_size);
-    QCOMPARE(curent_type,result_type);
+    QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_addVariable_2(){
+void calculatorobject::test_addNum_cange_zero(){
     CalculatorObject object;
-    std::string curent_str="", result_str="1";
-    size_t curent_size=0, result_size=1;
-    CalculatorObject::ObjectsTypes curent_type=CalculatorObject::ObjectsTypes::None, result_type=CalculatorObject::ObjectsTypes::Num;
+    QString result="2", curent_result="";
+
+    object.addNum('0');
+    object.addNum('2');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addNum_no_add_dot(){
+    CalculatorObject object;
+    QString result="1,", curent_result="";
 
     object.addNum('1');
+    object.addNum(',');
+    object.addNum(',');
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSymbol_exception_input(){
+    CalculatorObject object;
+    QString result="input not a {+, -, *, /, (-, (, ), ^( }";
+
+    try{
+        object.addSymbol("a");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_addSymbol_not_none(){
+    CalculatorObject object;
+    QString result="(", curent_result="";
+
+    object.addSymbol("(");
+    object.addSymbol(")");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSymbol_minus_bracket(){
+    CalculatorObject object;
+    QString result="(-", curent_result="";
+
+    object.addSymbol("(-");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSymbol_open_bracket(){
+    CalculatorObject object;
+    QString result="(", curent_result="";
+
+    object.addSymbol("(");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSymbol_close_bracket(){
+    CalculatorObject object;
+    QString result=")", curent_result="";
+
+    object.addSymbol(")");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSymbol_operator(){
+    CalculatorObject object;
+    QString result="+", curent_result="";
+
+    object.addSymbol("+");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSymbol_pow(){
+    CalculatorObject object;
+    QString result="^(", curent_result="";
+
+    object.addSymbol("^(");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addFunction_exception_input(){
+    CalculatorObject object;
+    QString result="input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+
+    try{
+        object.addFunction("a");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_addFunction_not_none(){
+    CalculatorObject object;
+    QString result="(", curent_result="";
+
+    object.addSymbol("(");
+    object.addFunction("Sin(");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addFunction_correct(){
+    CalculatorObject object;
+    QString result="Sin(", curent_result="";
+
+    object.addFunction("Sin(");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSpecialFunction_exception_input(){
+    CalculatorObject object;
+    QString result="input not a mod or !";
+
+    try{
+        object.addSpecialFunction("a");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_addSpecialFunction_not_none(){
+    CalculatorObject object;
+    QString result="(", curent_result="";
+
+    object.addSymbol("(");
+    object.addSpecialFunction("!");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSpecialFunction_mod(){
+    CalculatorObject object;
+    QString result="mod", curent_result="";
+
+    object.addSpecialFunction("mod");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addSpecialFunction_factorial(){
+    CalculatorObject object;
+    QString result="!", curent_result="";
+
+    object.addSpecialFunction("!");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_addVariable_not_none(){
+    CalculatorObject object;
+    QString result="(", curent_result="";
+
+    object.addSymbol("(");
     object.addVariable();
+    curent_result=QString::fromStdString(object.toString());
 
-    curent_str=object.toString();
-    curent_size=object.getLength();
-    curent_type=object.getObjectType();
-
-    QCOMPARE(curent_str,result_str);
-    QCOMPARE(curent_size,result_size);
-    QCOMPARE(curent_type,result_type);
+    QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_deleteLastSymbol_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<int>("type_input");
-    QTest::addColumn<int>("type_object");
-    QTest::addColumn<int>("length");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"1"<<1<<0<<0<<"";
-    QTest::newRow("test_2")<<"4"<<1<<0<<0<<"";
-    QTest::newRow("test_3")<<"8"<<1<<0<<0<<"";
-    QTest::newRow("test_4")<<"+"<<2<<0<<0<<"";
-    QTest::newRow("test_5")<<"-"<<2<<0<<0<<"";
-    QTest::newRow("test_6")<<"/"<<2<<0<<0<<"";
-    QTest::newRow("test_7")<<"*"<<2<<0<<0<<"";
-    QTest::newRow("test_8")<<"(-"<<2<<3<<1<<"(";
-    QTest::newRow("test_9")<<"("<<2<<0<<0<<"";
-    QTest::newRow("test_10")<<")"<<2<<0<<0<<"";
-    QTest::newRow("test_11")<<"1234253"<<3<<1<<6<<"123425";
-    QTest::newRow("test_12")<<"-1,00000001"<<3<<1<<10<<"-1,0000000";
-    QTest::newRow("test_14")<<"-123"<<3<<1<<3<<"-12";
-}
-
-void calculatorobject::test_deleteLastSymbol(){
-    QFETCH(QString,input);
-    QFETCH(int,type_input);
-    QFETCH(int,type_object);
-    QFETCH(int,length);
-    QFETCH(QString,result);
-
+void calculatorobject::test_addVariable_correct(){
     CalculatorObject object;
-    if(type_input==1) object.addNum(input.toStdString()[0]);
-    else if(type_input==2) object.addSymbol(input.toStdString());
-    else object.setFullNum(input.toStdString());
+    QString result="x", curent_result="";
+
+    object.addVariable();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_getOnlyNum_incorect_type(){
+    CalculatorObject object;
+    QString result="object is not num", curent_result;
+
+    try{
+        object.addSymbol("(");
+        curent_result=QString::fromStdString(object.getOnlyNum().toString());
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_getOnlyNum_negative_num(){
+    CalculatorObject object, curent_object;
+    QString result="-2", curent_result="";
+
+    object.setFullNum("-2");
+    curent_object=object.getOnlyNum();
+    curent_result=QString::fromStdString(curent_object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_getOnlyNum_positive_num(){
+    CalculatorObject object, curent_object;
+    QString result="2", curent_result="";
+
+    object.addNum('2');
+    curent_object=object.getOnlyNum();
+    curent_result=QString::fromStdString(curent_object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_setFullNum_empty_num(){
+    CalculatorObject object;
+    QString result="length == 0", curent_result="";
+
+    try{
+        object.setFullNum("");
+        curent_result=QString::fromStdString(object.getOnlyNum().toString());
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_setFullNum_only_minus(){
+    CalculatorObject object;
+    QString result="only minus in num", curent_result="";
+
+    try{
+        object.setFullNum("-");
+        curent_result=QString::fromStdString(object.getOnlyNum().toString());
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_setFullNum_incorect_symbol(){
+    CalculatorObject object;
+    QString result="incorect symbol in num", curent_result="";
+
+    try{
+        object.setFullNum("a");
+        curent_result=QString::fromStdString(object.getOnlyNum().toString());
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_setFullNum_incorect_count_dot(){
+    CalculatorObject object;
+    QString result="count dot in num more then one", curent_result="";
+
+    try{
+        object.setFullNum("0,0,0");
+        curent_result=QString::fromStdString(object.getOnlyNum().toString());
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void calculatorobject::test_setFullNum_correct(){
+    CalculatorObject object;
+    QString result="-2,3", curent_result="";
+
+    object.setFullNum("-2,3");
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_checkNum_incorect_type(){
+    CalculatorObject object;
+    QString result="Sin(", curent_result="";
+
+    object.addFunction("Sin(");
+    object.checkNum();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_checkNum_already_check(){
+    CalculatorObject object;
+    QString result="1", curent_result="";
+
+    object.addNum('1');
+    object.checkNum();
+    object.checkNum();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_checkNum_delete_first_zeros(){
+    CalculatorObject object;
+    QString result="21", curent_result="";
+
+    object.setFullNum("0021");
+    object.checkNum();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_checkNum_save_nums_after_dot(){
+    CalculatorObject object;
+    QString result="0,02", curent_result="";
+
+    object.setFullNum("0,02");
+    object.checkNum();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_checkNum_delete_nums_after_dot(){
+    CalculatorObject object;
+    QString result="2", curent_result="";
+
+    object.setFullNum("2,00");
+    object.checkNum();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_deleteLastSymbol_empty_text(){
+    CalculatorObject object;
+    QString result="", curent_result="";
+
     object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
 
-    int curent_type=static_cast<int>(object.getObjectType()), curent_length=object.getLength();
-    std::string curent_result=object.toString();
-
-    QCOMPARE(curent_type,type_object);
-    QCOMPARE(curent_length,length);
-    QCOMPARE(curent_result,result.toStdString());
+    QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_setFullNum_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"123"<<"123";
-    QTest::newRow("test_2")<<"-3435,01"<<"-3435,01";
-    QTest::newRow("test_3")<<"1,0000000000001"<<"1,0000000000001";
-    QTest::newRow("test_4")<<"-223"<<"-223";
-    QTest::newRow("test_5")<<"2+"<<"incorect symbol in num";
-    QTest::newRow("test_6")<<"-234"<<"-234";
-    QTest::newRow("test_7")<<"/*"<<"incorect symbol in num";
-    QTest::newRow("test_8")<<""<<"length == 0";
-    QTest::newRow("test_9")<<"2,2,2"<<"count dot in num more then one";
-}
-
-void calculatorobject::test_setFullNum(){
-    QFETCH(QString,input);
-    QFETCH(QString,result);
-
+void calculatorobject::test_deleteLastSymbol_not_num(){
     CalculatorObject object;
-    std::string curent_result="";
+    QString result="", curent_result="";
 
-    try{
-        object.setFullNum(input.toStdString());
-        curent_result=object.toString();
-        QCOMPARE(curent_result,result.toStdString());
-    }
-    catch(std::exception &exp){
-        QCOMPARE(exp.what(),result.toStdString());
-    }
+    object.addFunction("Sin(");
+    object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_getOnlyNum_data(){
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<int>("input_type");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("test_1")<<"10"<<1<<"10";
-    QTest::newRow("test_2")<<"0,00001"<<1<<"0,00001";
-    QTest::newRow("test_3")<<"-234,43"<<1<<"-234,43";
-    QTest::newRow("test_4")<<"-0,01"<<1<<"-0,01";
-    QTest::newRow("test_5")<<"+"<<2<<"object is not num";
-    QTest::newRow("test_6")<<"*"<<2<<"object is not num";
-    QTest::newRow("test_7")<<"/"<<2<<"object is not num";
-    QTest::newRow("test_8")<<"(-"<<2<<"object is not num";
-}
-
-void calculatorobject::test_getOnlyNum(){
-    QFETCH(QString,input);
-    QFETCH(int,input_type);
-    QFETCH(QString,result);
-
+void calculatorobject::test_deleteLastSymbol_minus_bracket(){
     CalculatorObject object;
-    if(input_type==1) object.setFullNum(input.toStdString());
-    else object.addSymbol(input.toStdString());
+    QString result="(", curent_result="";
 
-    std::string curent_result="";
+    object.addSymbol("(-");
+    object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
 
-    try{
-        curent_result=object.getOnlyNum().toString();
-        QCOMPARE(curent_result,result.toStdString());
-    }
-    catch(std::exception &exp){
-        QCOMPARE(exp.what(),result.toStdString());
-    }
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_deleteLastSymbol_end_dot(){
+    CalculatorObject object;
+    QString result="2", curent_result="";
+
+    object.addNum('2');
+    object.addNum(',');
+    object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_deleteLastSymbol_end_clear(){
+    CalculatorObject object;
+    QString result="", curent_result="";
+
+    object.addNum('1');
+    object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
+
+    QCOMPARE(curent_result,result);
+}
+
+void calculatorobject::test_deleteLastSymbol_change_type(){
+    CalculatorObject object;
+    QString result="(-", curent_result="";
+    CalculatorObject::ObjectsTypes result_type=CalculatorObject::ObjectsTypes::MinusBrackets, curent_result_type;
+
+    object.addSymbol("(-");
+    object.addNum('2');
+    object.deleteLastSymbol();
+    curent_result=QString::fromStdString(object.toString());
+    curent_result_type=object.getObjectType();
+
+    QCOMPARE(curent_result_type,result_type);
+    QCOMPARE(curent_result,result);
 }
 
 QTEST_APPLESS_MAIN(calculatorobject)

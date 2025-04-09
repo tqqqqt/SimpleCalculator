@@ -26,7 +26,7 @@ HistoryWindow::~HistoryWindow()
 }
 
 // Update history list when get signal from calculator
-void HistoryWindow::UpdateHis(){
+void HistoryWindow::updateHis(){
     ui->listView->setModel(new QStringListModel(QList<QString>::fromVector(*memory)));
 }
 

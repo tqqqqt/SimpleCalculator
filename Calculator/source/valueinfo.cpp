@@ -110,10 +110,10 @@ std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::str
     std::string result="";
 
     if(_main!=mains[TEMPERATURE_INDEX]){
-        std::string mul_value=MathDiv(info[_left],info[_right],20);
-        if(_main==mains[DATA_INDEX] || _main==mains[SPEED_INDEX]) mul_value=MathDiv(info[_right],info[_left],20);
+        std::string mul_value=smath::mathDiv(info[_left],info[_right],20);
+        if(_main==mains[DATA_INDEX] || _main==mains[SPEED_INDEX]) mul_value=smath::mathDiv(info[_right],info[_left],20);
         if(mul_value.find('.')!=std::string::npos) mul_value[mul_value.find('.')]=',';
-        result=MathMul(_value,mul_value);
+        result=smath::mathMul(_value,mul_value);
     }
     // tempterature have special equation
     else result=getTemperature(_left,_right,_value);
@@ -125,27 +125,27 @@ std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::str
 std::string ValueInfo::getTemperature(std::string _from, std::string _to, std::string _value){
     if(_from=="Градус Цельсия (C)"){
         if(_to=="Градус Цельсия (C)") return _value;
-        else if(_to=="Градус Фарингейта (F)") return MathSum(MathMul(_value,MathDiv("9","5",10)),"32");
-        else if(_to=="Градус Кельвина (K)") return MathSum(_value,"273,15");
+        else if(_to=="Градус Фарингейта (F)") return smath::mathSum(smath::mathMul(_value,smath::mathDiv("9","5",10)),"32");
+        else if(_to=="Градус Кельвина (K)") return smath::mathSum(_value,"273,15");
     }
     else if(_from=="Градус Фарингейта (F)"){
         if(_to=="Градус Фарингейта (F)") return _value;
         else if(_to=="Градус Цельсия (C)"){
-            std::string temp=MathNeg(_value,"32");
-            return MathDiv(MathMul(temp,"5"),"9",10);
+            std::string temp=smath::mathNeg(_value,"32");
+            return smath::mathDiv(smath::mathMul(temp,"5"),"9",10);
         }
         else if(_to=="Градус Кельвина (K)"){
-            std::string temp=MathSum(_value,"459,67");
-            return MathDiv(MathMul(temp,"5"),"9",10);
+            std::string temp=smath::mathSum(_value,"459,67");
+            return smath::mathDiv(smath::mathMul(temp,"5"),"9",10);
         }
     }
     else if(_from=="Градус Кельвина (K)"){
         if(_to=="Градус Кельвина (K)") return _value;
         else if(_to=="Градус Фарингейта (F)"){
-            std::string temp=MathDiv(MathMul(_value,"9"),"5",10);
-            return MathNeg(temp,"459,67");
+            std::string temp=smath::mathDiv(smath::mathMul(_value,"9"),"5",10);
+            return smath::mathNeg(temp,"459,67");
         }
-        else if(_to=="Градус Цельсия (C)") return MathNeg(_value,"273,15");
+        else if(_to=="Градус Цельсия (C)") return smath::mathNeg(_value,"273,15");
     }
 
     return "error";

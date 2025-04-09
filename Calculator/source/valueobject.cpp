@@ -24,7 +24,7 @@ size_t ValueObject::getLength(){
 // add num in text
 void ValueObject::addNum(char _num){
     // rules for add num
-    if(!(_num>='0' && _num<='9') && _num!=',') throw std::invalid_argument("input not a num");
+    if(!(_num>='0' && _num<='9') && _num!=',') throw incorect_add_num("input not a num or dot");
     if(length==0 && _num==',') return;
     if(length==1 && count_null==0 && count_dot==1 && _num=='0') return;
 
@@ -60,22 +60,22 @@ void ValueObject::deleteLastSymbol(){
 
 // set in text full complete num
 void ValueObject::setFullNum(std::string _num){
-    if(_num.length()==0) throw std::invalid_argument("incorect num");
-    if(_num[0]=='-' && _num.length()==1) throw std::invalid_argument("incorect num");
+    if(_num.length()==0) throw incorect_set_full_num("empty string");
+    if(_num[0]=='-' && _num.length()==1) throw incorect_set_full_num("num have only minus");
 
-    int start_point=0, end_point=static_cast<int>(_num.length());
+    size_t start_point=0, end_point=_num.length(), find_dot=0;
     if(_num[0]=='-') start_point=1;
     // check for incorect symbols in num
-    for(int i=start_point, find_dot=0;i<end_point;i++){
-        if(!(_num[i]>='0' && _num[i]<='9') && _num[i]!=',') throw std::invalid_argument("incorect num");
+    for(size_t i=start_point;i<end_point;i++){
+        if(!(_num[i]>='0' && _num[i]<='9') && _num[i]!=',') throw incorect_set_full_num("incorect symbol in num");
         if(_num[i]==',') find_dot++;
-        if(find_dot>1) throw std::invalid_argument("incorect num");
+        if(find_dot>1) throw incorect_set_full_num("incorect count dot");
     }
 
     check_num_complete=false;
     text=_num;
     length=text.length();
-    if(_num.find(',')!=std::string::npos) count_dot=0;
+    if(find_dot!=0) count_dot=0;
 }
 
 void ValueObject::checkNum(){
