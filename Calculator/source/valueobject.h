@@ -19,12 +19,12 @@ public:
     ValueObject();
     ~ValueObject();
 
-    std::string toString();
-    size_t getLength();
+    std::string toString() const;
+    size_t getLength() const;
 
-    void addNum(char);
+    void addNum(const char&);
     void deleteLastSymbol();
-    void setFullNum(std::string);
+    void setFullNum(const std::string&);
     void clear();
 
     void checkNum();

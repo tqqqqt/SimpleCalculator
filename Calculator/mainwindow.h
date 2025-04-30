@@ -34,7 +34,7 @@ public:
 signals:
     void pressResult();
     void closeWindow();
-    void changeWindow(int);
+    void changeWindow(const int&);
 
 private:
     Ui::MainWindow *ui;
@@ -42,7 +42,6 @@ private:
     CalculatorObject curent_object;
     QString curent_text;
     QVector<QString> history_arr;
-    QSettings* settings;
     CalculatorMath calculator_math_object;
     bool flag_after_result, function_window_show, history_window_show;
     int count_open_bracket, count_oper;
@@ -55,11 +54,11 @@ private:
 
 private slots:
     void setFullText();
-    void pressNumberButton(QChar);
-    void pressOperButton(QString);
+    void pressNumberButton(const QChar&);
+    void pressOperButton(const QString&);
     void pressFunctionsButton();
-    void addedFunction(QString);
-    void addedSpecialFunction(QString);
+    void addedFunction(const QString&);
+    void addedSpecialFunction(const QString&);
     void buttonDot();
     void buttonClear();
     void buttonOpenBrackets();
@@ -71,7 +70,7 @@ private slots:
     void buttonSettings();
     void updateSettings();
     void buttonChangeMode();
-    void updateMode(int);
+    void updateMode(const int&);
     void updateFunctionWindowState();
     void updateHistoryWindowState();
 };

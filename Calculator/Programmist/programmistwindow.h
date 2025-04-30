@@ -29,32 +29,31 @@ public:
 private:
     Ui::ProgrammistWindow *ui;
     ProgrammistObject object;
-    QSettings *settings;
     int curent_system;
     QString disable_button_style, enable_button_style, curent_system_button_style;
 
     void loadStyle();
     void loadIcons();
-    void setSymbolButtonsEnable(bool,QString);
-    void setNumsButtonsEnable(bool,QString);
+    void setSymbolButtonsEnable(const bool&,const QString&);
+    void setNumsButtonsEnable(const bool&,const QString&);
     void setSystemButtonsEnable();
 
 private slots:
-    void pressNumberButton(QChar);
+    void pressNumberButton(const QChar&);
     void pressMinusButton();
-    void pressMoveButton(int);
+    void pressMoveButton(const int&);
     void buttonClear();
     void buttonDeleteLast();
-    void updateMode(int);
+    void updateMode(const int&);
     void buttonChangeMode();
-    void buttonChangeSystem(int);
+    void buttonChangeSystem(const int&);
     void updateResult();
     void openSettings();
     void updateSettings();
 
 signals:
     void getResult();
-    void changeWindow(int);
+    void changeWindow(const int&);
 };
 
 #endif // PROGRAMMISTWINDOW_H

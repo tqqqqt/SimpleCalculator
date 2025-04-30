@@ -38,7 +38,7 @@ void FunctionsWindow::loadStyle(){
 }
 
 // Send to calculator what function selected
-void FunctionsWindow::pressButtons(QString _function){
+void FunctionsWindow::pressButtons(const QString& _function){
     // special functions
     // becouse factorial not need brackets, mod use like operators
     if(_function=="!" || _function=="mod") emit pressSpecialFunction(_function);

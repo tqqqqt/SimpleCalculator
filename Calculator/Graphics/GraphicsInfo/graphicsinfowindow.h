@@ -52,7 +52,7 @@ private:
 
 signals:
     void closeWindow();
-    void changeWindow(int);
+    void changeWindow(const int&);
     void needUpdateList();
     void addNewElement();
 
@@ -61,15 +61,15 @@ public slots:
 
 private slots:
     void buttonChangeMode();
-    void updateMode(int);
+    void updateMode(const int&);
     void updatePainterWindowState();
     void setFullText();
-    void pressNumberButton(QChar buttonNum);
-    void pressOperButton(QString buttonOper);
+    void pressNumberButton(const QChar& buttonNum);
+    void pressOperButton(const QString& buttonOper);
     void pressVariableButton();
     void pressFunctionsButton();
-    void addedFunction(QString);
-    void addedSpecialFunction(QString);
+    void addedFunction(const QString&);
+    void addedSpecialFunction(const QString&);
     void buttonDot();
     void buttonClear();
     void buttonOpenBrackets();

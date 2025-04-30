@@ -18,27 +18,27 @@ ProgrammistObject::ProgrammistObject()
 ProgrammistObject::~ProgrammistObject(){ }
 
 // get display text in 2 system
-std::string ProgrammistObject::toString2(){
+std::string ProgrammistObject::toString2() const{
     return text_2;
 }
 
 // get display text in 8 system
-std::string ProgrammistObject::toString8(){
+std::string ProgrammistObject::toString8() const{
     return text_8;
 }
 
 // get display text in 10 system
-std::string ProgrammistObject::toString10(){
+std::string ProgrammistObject::toString10() const{
     return text_10;
 }
 
 // get display text in 16 system
-std::string ProgrammistObject::toString16(){
+std::string ProgrammistObject::toString16() const{
     return text_16;
 }
 
 // get display text in curent chose system
-std::string ProgrammistObject::toString(){
+std::string ProgrammistObject::toString() const{
     switch(curent_system){
     case 2:
         return text_2;
@@ -53,7 +53,7 @@ std::string ProgrammistObject::toString(){
 }
 
 // get length text in curent choose system
-size_t ProgrammistObject::getLength(){
+size_t ProgrammistObject::getLength() const{
     switch(curent_system) {
     case 2:
         return length_2;
@@ -68,7 +68,7 @@ size_t ProgrammistObject::getLength(){
 }
 
 // added symbol to num in 2 system
-void ProgrammistObject::addSymbolTo2(char _num){
+void ProgrammistObject::addSymbolTo2(const char& _num){
     // rules to add symbol in 2 system
     if(_num!='0' && _num!='1') throw incorect_add_symbol("incorect symbol to 2 system");
 
@@ -96,7 +96,7 @@ bool ProgrammistObject::updateTextOn2(){
 }
 
 // add symbol to num in 8 system
-void ProgrammistObject::addSymbolTo8(char _num){
+void ProgrammistObject::addSymbolTo8(const char& _num){
     // rules to add symbol
     if(!(_num>='0' && _num<='7')) throw incorect_add_symbol("incorect symbol to 8 system");
 
@@ -123,7 +123,7 @@ bool ProgrammistObject::updateTextOn8(){
 }
 
 // add symbol to num in 10 system
-void ProgrammistObject::addSymbolTo10(char _num){
+void ProgrammistObject::addSymbolTo10(const char& _num){
     // rules to add symbol
     if(!(_num>='0' && _num<='9')) throw incorect_add_symbol("incorect symbol to 10 system");
 
@@ -162,7 +162,7 @@ bool ProgrammistObject::updateTextOn10(){
 }
 
 // add symbol to num in 16 system
-void ProgrammistObject::addSymbolTo16(char _num){
+void ProgrammistObject::addSymbolTo16(const char& _num){
     // check symbol
     if(!(_num>='0' && _num<='9') && !(_num>='A' && _num<='F')) throw incorect_add_symbol("incorect symbol to 16 system");
 
@@ -201,7 +201,7 @@ void ProgrammistObject::addMinus(){
 }
 
 // add symbol to text
-void ProgrammistObject::addNum(char _num){
+void ProgrammistObject::addNum(const char& _num){
     // variable show what do we can add symbol or not
     bool update_result=false;
 
@@ -242,7 +242,7 @@ void ProgrammistObject::addNum(char _num){
 }
 
 // function convert num frmo _system to 10 system
-std::string ProgrammistObject::convertTo10(std::string _num, int _system){
+std::string ProgrammistObject::convertTo10(const std::string& _num, const int& _system){
     if(_system!=2 && _system!=8 && _system!=16) throw incorect_convert("cant convert from unknown system to 10");
 
     std::string result="0", temp="", system=std::to_string(_system), pow_num="1";
@@ -263,7 +263,8 @@ std::string ProgrammistObject::convertTo10(std::string _num, int _system){
 }
 
 // function convert curent text from 2 system to minus
-std::string ProgrammistObject::convert2ToMinus(std::string _num){
+std::string ProgrammistObject::convert2ToMinus(const std::string& _s_num){
+    std::string _num=_s_num;
     size_t size=_num.length();
     // convert curent nums in text
     for(size_t i=0;i<size;i++){
@@ -294,7 +295,7 @@ std::string ProgrammistObject::convert2ToMinus(std::string _num){
 }
 
 // convert num in 10 system to _system
-std::string ProgrammistObject::convert10To(int _system){
+std::string ProgrammistObject::convert10To(const int& _system){
     if(_system!=2 && _system!=8 && _system!=16) throw incorect_convert("cant convert from 10 to unknown system");
 
     size_t length_num_10=text_10.length();
@@ -321,7 +322,7 @@ std::string ProgrammistObject::convert10To(int _system){
 }
 
 // return special num to 16 system
-std::string ProgrammistObject::numToSymbol(std::string _num){
+std::string ProgrammistObject::numToSymbol(const std::string& _num){
     if(_num=="10") return "A";
     if(_num=="11") return "B";
     if(_num=="12") return "C";
@@ -358,7 +359,7 @@ void ProgrammistObject::deleteLastSymbol(){
 }
 
 // change curent system to _system
-void ProgrammistObject::changeSystem(int _system){
+void ProgrammistObject::changeSystem(const int& _system){
     if(_system!=2 && _system!=8 && _system!=10 && _system!=16) throw incorect_change_system("use only 2, 8, 10, 16 systems");
 
     curent_system=_system;
@@ -415,7 +416,7 @@ void ProgrammistObject::clear(){
 }
 
 // change maximum nums count
-void ProgrammistObject::setCount(int _count){
+void ProgrammistObject::setCount(const int& _count){
     if(_count<=0) throw incorect_set_count("count <= 0");
     count_nums=4*static_cast<size_t>(_count);
 }

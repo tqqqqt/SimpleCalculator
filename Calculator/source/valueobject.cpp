@@ -12,17 +12,17 @@ ValueObject::ValueObject()
 ValueObject::~ValueObject(){ }
 
 // get text from object
-std::string ValueObject::toString(){
+std::string ValueObject::toString() const{
     return text;
 }
 
 // get length from object
-size_t ValueObject::getLength(){
+size_t ValueObject::getLength() const{
     return length;
 }
 
 // add num in text
-void ValueObject::addNum(char _num){
+void ValueObject::addNum(const char& _num){
     // rules for add num
     if(!(_num>='0' && _num<='9') && _num!=',') throw incorect_add_num("input not a num or dot");
     if(length==0 && _num==',') return;
@@ -59,7 +59,7 @@ void ValueObject::deleteLastSymbol(){
 }
 
 // set in text full complete num
-void ValueObject::setFullNum(std::string _num){
+void ValueObject::setFullNum(const std::string& _num){
     if(_num.length()==0) throw incorect_set_full_num("empty string");
     if(_num[0]=='-' && _num.length()==1) throw incorect_set_full_num("num have only minus");
 

@@ -228,9 +228,16 @@ void GraphicsPainterWindow::paintGraphics(){
     int width=curent_ord.width(), height=curent_ord.height();
     QPainter painter(&curent_ord);
     CalculatorMath math_object;
-    math_object.setFunctionAccuracy(10); // if set more can freez
+    math_object.setFunctionAccuracy(8); // if set more can freez
     math_object.setDivAccuracy(4); // no need very big accuracy, not seen in graphics
     math_object.setFunctionRadianFlag(true); // all points already in radian
+
+    // temp objects
+    CalculatorObject temp_result;
+    Qt::GlobalColor new_color;
+    std::string full_num="", string_result="";
+    QPixmap new_graphic(width,height);
+    QPainter temp_painter;
 
     // paint graphics of all elements
     for(GraphicsInfoObject& element: *info_objects){
@@ -242,37 +249,37 @@ void GraphicsPainterWindow::paintGraphics(){
         }
 
         // object to collect results after calculate
-        CalculatorObject temp_result;
         math_object.setPolishEntry(element.getPolishEntry());
 
         // create new pixmap
-        QPixmap new_graphic(width,height);
         new_graphic.fill(Qt::transparent);
-        Qt::GlobalColor new_color;
         // if color already set in object use or set new color
         if(element.getColorFlag()==false) new_color=getNewColor();
         else new_color=element.getGraphicsColor();
-        QPainter temp_painter(&new_graphic);
+        temp_painter.begin(&new_graphic);
         temp_painter.setPen(QPen(new_color,1));
 
         // save last known point
-        int last_x=0.0, last_y=0.0;
-        int curent_y=0;
+        int last_x=0.0, last_y=0.0, curent_y=0;
         // create two part of num becouse double have trouble with accuracy
         // trouble like 2.0000000001 or 1.999999999999
         int whole_num_part=0, fractional_num_part=0, curent_step=1*curent_scale;
         // full num use to set in math
-        std::string full_num="";
+        full_num="";
         // move to right X ord
         for(int curent_x=0, count_points=0;curent_x<width/2;curent_x+=POINT_SPACE/10){
             try{
                 // collect two variable in one num
-                if(fractional_num_part==0) full_num=std::to_string(whole_num_part);
-                else full_num=std::to_string(whole_num_part)+','+std::to_string(fractional_num_part);
+                full_num=std::to_string(whole_num_part);
+                if(fractional_num_part!=0) full_num+=','+std::to_string(fractional_num_part);
                 // calculate result
-                temp_result=math_object.getResultWithVariable(full_num);
+                if(element.checkPointInHash(full_num)==false){
+                    temp_result=math_object.getResultWithVariable(full_num);
+                    string_result=temp_result.toString();
+                    element.setPointInHash(full_num,string_result);
+                }
+                else string_result=element.getPointInHash(full_num);
 
-                std::string string_result=temp_result.toString();
                 // change to dot becouse std::stod dont know what is it
                 if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
                 curent_y=static_cast<int>(std::round((POINT_SPACE*std::stod(string_result))/curent_scale));
@@ -307,12 +314,16 @@ void GraphicsPainterWindow::paintGraphics(){
         for(int curent_x=0, count_points=0;curent_x<width/2;curent_x+=POINT_SPACE/10){
             try{
                 // collect all num
-                if(fractional_num_part==0) full_num='-'+std::to_string(whole_num_part);
-                else full_num='-'+std::to_string(whole_num_part)+','+std::to_string(fractional_num_part);
+                full_num='-'+std::to_string(whole_num_part);
+                if(fractional_num_part!=0) full_num+=','+std::to_string(fractional_num_part);
                 // calculate result
-                temp_result=math_object.getResultWithVariable(full_num);
+                if(element.checkPointInHash(full_num)==false){
+                    temp_result=math_object.getResultWithVariable(full_num);
+                    string_result=temp_result.toString();
+                    element.setPointInHash(full_num,string_result);
+                }
+                else string_result=element.getPointInHash(full_num);
 
-                std::string string_result=temp_result.toString();
                 // change becouse std::stod
                 if(string_result.find(',')!=std::string::npos) string_result[string_result.find(',')]='.';
                 curent_y=static_cast<int>(std::round((POINT_SPACE*std::stod(string_result))/curent_scale));
@@ -343,6 +354,7 @@ void GraphicsPainterWindow::paintGraphics(){
         element.setGraphic(new_graphic);
         element.setGraphicsColor(new_color);
         painter.drawPixmap(curent_ord.rect(),new_graphic,new_graphic.rect());
+        temp_painter.end();
     }
 
     // set complete picture on screen

@@ -17,20 +17,20 @@ private:
     int div_accuracy, function_accuracy;
     bool function_radian_data;
 
-    int checkPrior(std::string);
+    int checkPrior(const std::string&);
 
 public:
     CalculatorMath();
 
-    void setVector(std::vector<CalculatorObject>);
-    void setDivAccuracy(int);
-    void setFunctionAccuracy(int);
+    void setVector(const std::vector<CalculatorObject>&);
+    void setDivAccuracy(const int&);
+    void setFunctionAccuracy(const int&);
     void simplifyExpression();
     CalculatorObject getResult();
-    CalculatorObject getResultWithVariable(std::string);
+    CalculatorObject getResultWithVariable(const std::string&);
     std::vector<CalculatorObject> getPolishEntry();
-    void setPolishEntry(std::vector<CalculatorObject>);
-    void setFunctionRadianFlag(bool);
+    void setPolishEntry(const std::vector<CalculatorObject>&);
+    void setFunctionRadianFlag(const bool&);
 
     /*
      *

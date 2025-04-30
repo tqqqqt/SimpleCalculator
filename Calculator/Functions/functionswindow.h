@@ -25,12 +25,12 @@ private:
     void loadStyle();
 
 private slots:
-    void pressButtons(QString);
+    void pressButtons(const QString&);
     void needCloseWindow();
 
 signals:
-    void pressFunction(QString);
-    void pressSpecialFunction(QString);
+    void pressFunction(const QString&);
+    void pressSpecialFunction(const QString&);
     void updateWindowState();
 };
 

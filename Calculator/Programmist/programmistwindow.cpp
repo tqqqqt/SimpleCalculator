@@ -12,9 +12,10 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
 
     object=ProgrammistObject();
     buttonChangeSystem(10); // in default curent system is 10
-    settings=new QSettings("tqqqqt","calculator");
+    QSettings *settings=new QSettings("tqqqqt","calculator");
     if(!settings->contains("progr/count")) settings->setValue("progr/count",5);
     object.setCount(settings->value("progr/count",5).toInt());
+    delete settings;
 
     // nums buttons
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -64,7 +65,6 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
 ProgrammistWindow::~ProgrammistWindow()
 {
     delete ui;
-    delete settings;
 }
 
 // load styles for buttons and future use
@@ -120,7 +120,7 @@ void ProgrammistWindow::updateResult(){
 }
 
 // added num to object
-void ProgrammistWindow::pressNumberButton(QChar _num){
+void ProgrammistWindow::pressNumberButton(const QChar& _num){
     try {
         object.addNum(_num.toLatin1());
         // display new text in all systems
@@ -142,7 +142,7 @@ void ProgrammistWindow::pressMinusButton(){
 }
 
 // move bin bite in left or right order
-void ProgrammistWindow::pressMoveButton(int _direction){
+void ProgrammistWindow::pressMoveButton(const int& _direction){
     // if object text is null
     if(object.getLength()==0) return;
     // move bit in left (-1) order or right (1) order
@@ -182,7 +182,7 @@ void ProgrammistWindow::buttonChangeMode(){
 }
 
 // update curent window mode
-void ProgrammistWindow::updateMode(int _mode){
+void ProgrammistWindow::updateMode(const int& _mode){
     // if chose curent programmist mode
     if(_mode==3) return;
 
@@ -192,7 +192,7 @@ void ProgrammistWindow::updateMode(int _mode){
 }
 
 // change curent system
-void ProgrammistWindow::buttonChangeSystem(int _system){
+void ProgrammistWindow::buttonChangeSystem(const int& _system){
     // change system in object and display system text
     object.changeSystem(_system);
     ui->textEdit_input->setText(QString::fromStdString(object.toString()));
@@ -245,7 +245,7 @@ void ProgrammistWindow::buttonChangeSystem(int _system){
 }
 
 // set all symbol buttons enable flag and enable style string
-void ProgrammistWindow::setSymbolButtonsEnable(bool _flag, QString _style){
+void ProgrammistWindow::setSymbolButtonsEnable(const bool& _flag, const QString& _style){
     ui->pushButton_A->setEnabled(_flag);
     ui->pushButton_B->setEnabled(_flag);
     ui->pushButton_C->setEnabled(_flag);
@@ -262,7 +262,7 @@ void ProgrammistWindow::setSymbolButtonsEnable(bool _flag, QString _style){
 }
 
 // set all num buttons enable flag and enable style string
-void ProgrammistWindow::setNumsButtonsEnable(bool _flag, QString _style){
+void ProgrammistWindow::setNumsButtonsEnable(const bool& _flag, const QString& _style){
     ui->pushButton_n0->setEnabled(_flag);
     ui->pushButton_n1->setEnabled(_flag);
     ui->pushButton_n2->setEnabled(_flag);
@@ -308,5 +308,7 @@ void ProgrammistWindow::openSettings(){
 
 // load new settings after accept changes in settings window
 void ProgrammistWindow::updateSettings(){
+    QSettings *settings=new QSettings("tqqqqt","calculator");
     object.setCount(settings->value("progr/count",5).toInt());
+    delete settings;
 }
