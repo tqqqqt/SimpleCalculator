@@ -347,7 +347,7 @@ void MainWindow::buttonHistory(){
 // Open options window
 void MainWindow::buttonSettings(){
     SettingsWindow* settings_window=new SettingsWindow(this);
-    this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(UpdateSettings()));
+    this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(updateSettings()));
 
     settings_window->exec();
 }
