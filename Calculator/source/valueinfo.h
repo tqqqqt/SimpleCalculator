@@ -16,7 +16,7 @@ private:
     std::vector<std::vector<std::string>> seconds;
     std::unordered_map<std::string,std::string> info;
 
-    std::string getTemperature(std::string, std::string, std::string);
+    std::string getTemperature(const std::string&, const std::string&, const std::string&);
 
     void createArea();
     void createLength();
@@ -30,9 +30,9 @@ private:
 public:
     ValueInfo();
 
-    std::vector<std::string> getMain();
-    std::vector<std::string> getSecond(std::string);
-    std::string getMullNum(std::string, std::string, std::string, std::string);
+    std::vector<std::string> getMain() const;
+    std::vector<std::string> getSecond(const std::string&) const;
+    std::string getMullNum(const std::string&, const std::string&, const std::string&, const std::string&);
 };
 
 #endif // VALUEINFO_H

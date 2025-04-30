@@ -14,28 +14,28 @@ void GraphicsInfoObject::setDisplayText(const std::string& _text){
 }
 
 // get text what display in list
-std::string GraphicsInfoObject::getDisplayText(){
+std::string GraphicsInfoObject::getDisplayText() const{
     return "y = "+display_text;
 }
 
 // set simplify polish entry in object
-void GraphicsInfoObject::setPolishEntry(std::vector<CalculatorObject> _polish_entry){
+void GraphicsInfoObject::setPolishEntry(const std::vector<CalculatorObject>& _polish_entry){
     polish_entry=_polish_entry;
 }
 
 // get simplify polish entry from object
-std::vector<CalculatorObject> GraphicsInfoObject::getPolishEntry(){
+std::vector<CalculatorObject> GraphicsInfoObject::getPolishEntry() const{
     return polish_entry;
 }
 
 // save graphics in object
-void GraphicsInfoObject::setGraphic(QPixmap _graphic){
+void GraphicsInfoObject::setGraphic(const QPixmap& _graphic){
     graphic=_graphic;
     graphic_enable=true;
 }
 
 // get graphics from object
-QPixmap GraphicsInfoObject::getGraphic(){
+QPixmap GraphicsInfoObject::getGraphic() const{
     return graphic;
 }
 
@@ -45,23 +45,23 @@ void GraphicsInfoObject::clearGraphic(){
 }
 
 // set color graphics to this object
-void GraphicsInfoObject::setGraphicsColor(Qt::GlobalColor _color){
+void GraphicsInfoObject::setGraphicsColor(const Qt::GlobalColor& _color){
     graphics_color=_color;
     color_enable=true;
 }
 
 // get color graphics from this object
-Qt::GlobalColor GraphicsInfoObject::getGraphicsColor(){
+Qt::GlobalColor GraphicsInfoObject::getGraphicsColor() const{
     return graphics_color;
 }
 
 // get flag what show what object have done graphic or not
-bool GraphicsInfoObject::getGraphicFlag(){
+bool GraphicsInfoObject::getGraphicFlag() const{
     return graphic_enable;
 }
 
 // get flag what show what object have color for graphic or not
-bool GraphicsInfoObject::getColorFlag(){
+bool GraphicsInfoObject::getColorFlag() const{
     return color_enable;
 }
 

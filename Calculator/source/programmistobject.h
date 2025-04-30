@@ -16,41 +16,41 @@ private:
     size_t length_2, length_8, length_10, length_16, count_nums;
     int curent_system;
 
-    void addSymbolTo2(char);
+    void addSymbolTo2(const char&);
     bool updateTextOn2();
-    void addSymbolTo8(char);
+    void addSymbolTo8(const char&);
     bool updateTextOn8();
-    void addSymbolTo10(char);
+    void addSymbolTo10(const char&);
     bool updateTextOn10();
-    void addSymbolTo16(char);
+    void addSymbolTo16(const char&);
     bool updateTextOn16();
 
-    std::string convertTo10(std::string,int);
-    std::string convert10To(int);
-    std::string convert2ToMinus(std::string);
-    std::string numToSymbol(std::string);
+    std::string convertTo10(const std::string&,const int&);
+    std::string convert10To(const int&);
+    std::string convert2ToMinus(const std::string&);
+    std::string numToSymbol(const std::string&);
     void updateTextsLength();
 
 public:
     ProgrammistObject();
     ~ProgrammistObject();
 
-    std::string toString2();
-    std::string toString8();
-    std::string toString10();
-    std::string toString16();
-    std::string toString();
-    size_t getLength();
+    std::string toString2() const;
+    std::string toString8() const;
+    std::string toString10() const;
+    std::string toString16() const;
+    std::string toString() const;
+    size_t getLength() const;
 
-    void addNum(char);
+    void addNum(const char&);
     void addMinus();
     void deleteLastSymbol();
-    void changeSystem(int);
+    void changeSystem(const int&);
     void clear();
     void moveLeft();
     void moveRight();
 
-    void setCount(int);
+    void setCount(const int&);
 
     /*
      *

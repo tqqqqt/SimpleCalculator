@@ -24,18 +24,18 @@ public:
     CalculatorObject(const CalculatorObject&);
     ~CalculatorObject();
 
-    std::string toString();
-    size_t getLength();
-    ObjectsTypes getObjectType();
+    std::string toString() const;
+    size_t getLength() const;
+    ObjectsTypes getObjectType() const;
 
-    void addNum(char);
-    void addSymbol(std::string);
-    void addFunction(std::string);
-    void addSpecialFunction(std::string);
+    void addNum(const char&);
+    void addSymbol(const std::string&);
+    void addFunction(const std::string&);
+    void addSpecialFunction(const std::string&);
     void addVariable();
     void deleteLastSymbol();
 
-    void setFullNum(std::string);
+    void setFullNum(const std::string&);
     void clear();
     CalculatorObject getOnlyNum();
     void checkNum();
