@@ -21,10 +21,10 @@ private:
     Ui::ModeWindow *ui;
 
 private slots:
-    void buttonMode(int);
+    void buttonMode(const int&);
 
 signals:
-    void changeMode(int);
+    void changeMode(const int&);
 };
 
 #endif // MODEWINDOW_H

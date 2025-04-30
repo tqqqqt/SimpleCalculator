@@ -24,7 +24,7 @@ ModeWindow::~ModeWindow()
 }
 
 // Save and send to calculator selected mode
-void ModeWindow::buttonMode(int _mode){
+void ModeWindow::buttonMode(const int& _mode){
     // open PC settings and save changes
     QSettings settings("tqqqqt","calculator");
     settings.setValue("calc/mode",_mode);

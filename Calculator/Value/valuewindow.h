@@ -36,20 +36,20 @@ private:
     void loadIcons();
 
 private slots:
-    void pressNumberButton(QChar);
+    void pressNumberButton(const QChar&);
     void buttonClear();
     void buttonDeleteLast();
     void buttonChangeMode();
-    void updateMode(int);
+    void updateMode(const int&);
     void updateResult();
     void updateText();
-    void buttonChangeField(int);
+    void buttonChangeField(const int&);
     void fillLeftRightBox();
 
 signals:
     void refreshText();
     void getResult();
-    void changeWindow(int);
+    void changeWindow(const int&);
 };
 
 #endif // VALUEWINDOW_H

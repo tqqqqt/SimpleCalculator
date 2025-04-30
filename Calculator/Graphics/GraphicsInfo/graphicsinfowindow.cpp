@@ -104,7 +104,7 @@ void GraphicsInfoWindow::buttonChangeMode(){
 }
 
 // change curent window mode if it not 4 couse 4 is graphics
-void GraphicsInfoWindow::updateMode(int _mode){
+void GraphicsInfoWindow::updateMode(const int& _mode){
     if(_mode==4) return;
 
     // set false to window state
@@ -121,6 +121,10 @@ void GraphicsInfoWindow::updateMode(int _mode){
 // change flag to enable open new window
 void GraphicsInfoWindow::updatePainterWindowState(){
     painter_window_open=false;
+
+    this->disconnect(this,SIGNAL(closeWindow()),painter_window,SLOT(needClose()));
+    this->disconnect(this,SIGNAL(addNewElement()),painter_window,SLOT(paintGraphics()));
+    this->disconnect(painter_window,SIGNAL(closeWindow()),this,SLOT(updatePainterWindowState()));
 }
 
 // open painter window if no one open
@@ -139,7 +143,7 @@ void GraphicsInfoWindow::openPainter(){
 
 // collect text from all objects and display on screen
 void GraphicsInfoWindow::setFullText(){
-    curent_text="";
+    curent_text.clear();
 
     // collect all texts
     for(auto element:objects){
@@ -151,7 +155,7 @@ void GraphicsInfoWindow::setFullText(){
 }
 
 // added pressed num to curent object
-void GraphicsInfoWindow::pressNumberButton(QChar buttonNum){
+void GraphicsInfoWindow::pressNumberButton(const QChar& buttonNum){
     // drop curent object in vector if it's not a num
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
@@ -163,7 +167,7 @@ void GraphicsInfoWindow::pressNumberButton(QChar buttonNum){
 }
 
 // added operator to curent object
-void GraphicsInfoWindow::pressOperButton(QString buttonOper){
+void GraphicsInfoWindow::pressOperButton(const QString& buttonOper){
     // rules for use operator
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
 
@@ -220,7 +224,7 @@ void GraphicsInfoWindow::pressFunctionsButton(){
 }
 
 // react to press function in function window and added function to curent object
-void GraphicsInfoWindow::addedFunction(QString _function){
+void GraphicsInfoWindow::addedFunction(const QString& _function){
     // function use rules
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
 
@@ -238,7 +242,7 @@ void GraphicsInfoWindow::addedFunction(QString _function){
 }
 
 // some function with more arguments then 1 (mod)
-void GraphicsInfoWindow::addedSpecialFunction(QString _function){
+void GraphicsInfoWindow::addedSpecialFunction(const QString& _function){
     // special function use rules
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
 

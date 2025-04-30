@@ -86,12 +86,12 @@ void ValueInfo::createTime(){
 }
 
 // get avalible mains
-std::vector<std::string> ValueInfo::getMain(){
+std::vector<std::string> ValueInfo::getMain() const{
     return mains;
 }
 
 // get child topics when change main topic
-std::vector<std::string> ValueInfo::getSecond(std::string _main){
+std::vector<std::string> ValueInfo::getSecond(const std::string& _main) const{
     std::vector<std::string> result;
     size_t index=0, size=mains.size();
 
@@ -106,7 +106,7 @@ std::vector<std::string> ValueInfo::getSecond(std::string _main){
 }
 
 // get result from translate value
-std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::string _right, std::string _value){
+std::string ValueInfo::getMullNum(const std::string& _main, const std::string& _left, const std::string& _right, const std::string& _value){
     std::string result="";
 
     if(_main!=mains[TEMPERATURE_INDEX]){
@@ -122,7 +122,7 @@ std::string ValueInfo::getMullNum(std::string _main, std::string _left, std::str
 }
 
 // calculate result in temperature type
-std::string ValueInfo::getTemperature(std::string _from, std::string _to, std::string _value){
+std::string ValueInfo::getTemperature(const std::string& _from, const std::string& _to, const std::string& _value){
     if(_from=="Градус Цельсия (C)"){
         if(_to=="Градус Цельсия (C)") return _value;
         else if(_to=="Градус Фарингейта (F)") return smath::mathSum(smath::mathMul(_value,smath::mathDiv("9","5",10)),"32");

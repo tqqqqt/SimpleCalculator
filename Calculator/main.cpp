@@ -23,7 +23,7 @@ public:
     }
 
     // open curent calculatore mode
-    void curentWindow(int curent_mode){
+    void curentWindow(const int& curent_mode){
         if(curent_mode==1) calculator_window->show();
         else if(curent_mode==2) value_window->show();
         else if(curent_mode==3) programmist_window->show();

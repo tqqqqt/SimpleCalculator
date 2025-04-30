@@ -1,7 +1,7 @@
 #include "numbermath.h"
 
 // choose max number in num_1 and num_2
-int smath::maxNumber(std::string num_1, std::string num_2){
+int smath::maxNumber(const std::string& num_1, const std::string& num_2){
     size_t len_num_1=num_1.length(), len_num_2=num_2.length();
     // exceptions
     if(len_num_1==0 || len_num_2==0) throw incorect_num("no symbols in num");
@@ -63,7 +63,7 @@ int smath::maxNumber(std::string num_1, std::string num_2){
 }
 
 // find multiplier for nums
-std::string smath::findMultiplier(std::string num_1, std::string num_2){
+std::string smath::findMultiplier(const std::string& num_1, const std::string& num_2){
     size_t len_num_1=num_1.length(), len_num_2=num_2.length();
     // exceptions
     if(len_num_1==0 || len_num_2==0) throw incorect_num("no symbols in num");
@@ -99,7 +99,7 @@ std::string smath::findMultiplier(std::string num_1, std::string num_2){
 }
 
 // calculate sum of num_1 and num_2
-std::string smath::mathSum(std::string num_1, std::string num_2){
+std::string smath::mathSum(const std::string& num_1, const std::string& num_2){
     size_t length_num_1=num_1.length(), length_num_2=num_2.length();
 
     // exceptions
@@ -154,10 +154,10 @@ std::string smath::mathSum(std::string num_1, std::string num_2){
 
     // set point to nums before dot
     int point_num_1=0, point_num_2=0;
-    if(dot_position_num_1!=std::string::npos) point_num_1=dot_position_num_1-1;
-    else point_num_1=length_num_1-1;
-    if(dot_position_num_2!=std::string::npos) point_num_2=dot_position_num_2-1;
-    else point_num_2=length_num_2-1;
+    if(dot_position_num_1!=std::string::npos) point_num_1=static_cast<int>(dot_position_num_1)-1;
+    else point_num_1=static_cast<int>(length_num_1)-1;
+    if(dot_position_num_2!=std::string::npos) point_num_2=static_cast<int>(dot_position_num_2)-1;
+    else point_num_2=static_cast<int>(length_num_2)-1;
 
     // sum nums before dot
     while(point_num_1>=0 || point_num_2>=0){
@@ -166,11 +166,11 @@ std::string smath::mathSum(std::string num_1, std::string num_2){
 
         // collect nums
         if(point_num_1>=0){
-            curent_num_1=num_1[point_num_1]-'0';
+            curent_num_1=num_1[static_cast<size_t>(point_num_1)]-'0';
             point_num_1-=1;
         }
         if(point_num_2>=0){
-            curent_num_2=num_2[point_num_2]-'0';
+            curent_num_2=num_2[static_cast<size_t>(point_num_2)]-'0';
             point_num_2-=1;
         }
 
@@ -268,10 +268,10 @@ std::string smath::mathNeg(std::string num_1, std::string num_2){
 
     // set point before dot
     int point_num_1=0, point_num_2=0;
-    if(dot_position_num_1!=std::string::npos) point_num_1=dot_position_num_1-1;
-    else point_num_1=length_num_1-1;
-    if(dot_position_num_2!=std::string::npos) point_num_2=dot_position_num_2-1;
-    else point_num_2=length_num_2-1;
+    if(dot_position_num_1!=std::string::npos) point_num_1=static_cast<int>(dot_position_num_1)-1;
+    else point_num_1=static_cast<int>(length_num_1)-1;
+    if(dot_position_num_2!=std::string::npos) point_num_2=static_cast<int>(dot_position_num_2)-1;
+    else point_num_2=static_cast<int>(length_num_2)-1;
 
     // substract nums before dot, from right to left
     while(point_num_1>=0 || point_num_2>=0){
@@ -280,11 +280,11 @@ std::string smath::mathNeg(std::string num_1, std::string num_2){
 
         // collect nums
         if(point_num_1>=0){
-            curent_num_1=num_1[point_num_1]-'0';
+            curent_num_1=num_1[static_cast<size_t>(point_num_1)]-'0';
             point_num_1-=1;
         }
         if(point_num_2>=0){
-            curent_num_2=num_2[point_num_2]-'0';
+            curent_num_2=num_2[static_cast<size_t>(point_num_2)]-'0';
             point_num_2-=1;
         }
 
@@ -305,7 +305,7 @@ std::string smath::mathNeg(std::string num_1, std::string num_2){
     }
 
     // delete first null if exists
-    int result_length=result.length();
+    int result_length=static_cast<int>(result.length());
     while(result_length>0 && result[0]=='0'){
         result.erase(0,1);
         result_length-=1;
@@ -357,24 +357,24 @@ std::string smath::mathMul(std::string num_1, std::string num_2){
 
     // calculate mull
     int curent_num_1=0, curent_num_2=0, result_mul=0, carry=0;
-    int curent_index=0, result_length=result.length();
-    for(int bottom_num=length_num_2-1;bottom_num>=0;bottom_num--){
+    int curent_index=0, result_length=static_cast<int>(result.length());
+    for(int bottom_num=static_cast<int>(length_num_2)-1;bottom_num>=0;bottom_num--){
         // dont calculate dot
-        if(num_2[bottom_num]==',') continue;
+        if(num_2[static_cast<size_t>(bottom_num)]==',') continue;
 
         carry=0;
         // collect bottom symbol
-        curent_num_2=num_2[bottom_num]-'0';
+        curent_num_2=num_2[static_cast<size_t>(bottom_num)]-'0';
 
         // summ nums from first +1 every iteration
         int temp_index=curent_index;
         // mull all up nums and add to result
-        for(int up_num=length_num_1-1;up_num>=0;up_num--){
+        for(int up_num=static_cast<int>(length_num_1)-1;up_num>=0;up_num--){
             // dont calculate dot
-            if(num_1[up_num]==',') continue;
+            if(num_1[static_cast<size_t>(up_num)]==',') continue;
 
             // collect up symbol
-            curent_num_1=num_1[up_num]-'0';
+            curent_num_1=num_1[static_cast<size_t>(up_num)]-'0';
 
             // mull
             result_mul=curent_num_1*curent_num_2+carry;
@@ -388,11 +388,11 @@ std::string smath::mathMul(std::string num_1, std::string num_2){
             }
             // else summ nums
             else{
-                int temp_num=result[temp_index]-'0';
+                int temp_num=result[static_cast<size_t>(temp_index)]-'0';
                 result_mul+=temp_num;
                 carry=result_mul/10;
                 result_mul%=10;
-                result[temp_index]='0'+result_mul;
+                result[static_cast<size_t>(temp_index)]='0'+result_mul;
             }
 
             // next index to add num
@@ -410,11 +410,11 @@ std::string smath::mathMul(std::string num_1, std::string num_2){
 
     // need reverse string
     std::reverse(result.begin(),result.end());
-    result_length=result.length();
+    result_length=static_cast<int>(result.length());
 
     // add dot if dot exist in start
     if(count_nums_after_dot!=0){
-        result.insert(result.begin()+(result_length-count_nums_after_dot),',');
+        result.insert(result.begin()+(result_length-static_cast<int>(count_nums_after_dot)),',');
         result_length+=1;
     }
 
@@ -696,26 +696,26 @@ std::string smath::mathDiv(std::string num_1, std::string num_2, int _accuracy){
         if(last_num>=5){
             int temp=0, carry=1;
             // try add one to dot part
-            for(int i=length_dot_result-1;i>=0;i--){
+            for(int i=static_cast<int>(length_dot_result)-1;i>=0;i--){
                 if(carry==0) break;
 
-                temp=dot_result[i]-'0';
+                temp=dot_result[static_cast<size_t>(i)]-'0';
                 temp+=carry;
                 carry=temp/10;
                 temp%=10;
-                dot_result[i]='0'+temp;
+                dot_result[static_cast<size_t>(i)]='0'+temp;
             }
 
             // if carry exist try add one to result part
             if(carry!=0){
-                for(int i=length_result-1;i>=0;i--){
+                for(int i=static_cast<int>(length_result)-1;i>=0;i--){
                     if(carry==0) break;
 
-                    temp=result[i]-'0';
+                    temp=result[static_cast<size_t>(i)]-'0';
                     temp+=carry;
                     carry=temp/10;
                     temp%=10;
-                    result[i]='0'+temp;
+                    result[static_cast<size_t>(i)]='0'+temp;
                 }
             }
 
@@ -741,7 +741,7 @@ std::string smath::mathDiv(std::string num_1, std::string num_2, int _accuracy){
 }
 
 // function calculate pow of num
-std::string smath::mathPow(std::string num, std::string pow, int accuracy){
+std::string smath::mathPow(const std::string& num, std::string pow, const int& accuracy){
     size_t length_num=num.length(), length_pow=pow.length();
     size_t dot_position_pow=pow.find(',');
 
@@ -770,7 +770,7 @@ std::string smath::mathPow(std::string num, std::string pow, int accuracy){
 }
 
 // function convert degree value to radian
-std::string smath::mathTrigonometricConvertDegreeToRadian(std::string degree, int div_acuracy){
+std::string smath::mathTrigonometricConvertDegreeToRadian(std::string degree, const int& div_acuracy){
     // check what degree in bound
     while(smath::maxNumber(degree,"360")==-1){
         degree=smath::mathNeg(degree,"360");
@@ -779,8 +779,8 @@ std::string smath::mathTrigonometricConvertDegreeToRadian(std::string degree, in
         degree=smath::mathSum(degree,"360");
     }
     // calculate result
-    std::string temp_mul=smath::mathMul(degree,smath::S_PI), radian=smath::mathDiv(temp_mul,"180",div_acuracy);
-    return radian;
+    std::string temp_mul=smath::mathMul(degree,smath::S_PI);
+    return smath::mathDiv(temp_mul,"180",div_acuracy);
 }
 
 // function check radian value to valid
@@ -803,7 +803,7 @@ std::string smath::mathTrigonometricCheckRadian(std::string radian){
 }
 
 // function calculate sin of input num
-std::string smath::mathSin(std::string degree, bool radian_flag, int function_acuracy, int div_acuracy){
+std::string smath::mathSin(std::string degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
     size_t length_degree=degree.length();
 
     // exceptions
@@ -812,32 +812,32 @@ std::string smath::mathSin(std::string degree, bool radian_flag, int function_ac
     if(function_acuracy<0) throw incorect_accuracy("function acuracy < 0");
 
     // convert or check input num
-    std::string radian="0";
-    if(radian_flag==false) radian=smath::mathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
-    else radian=smath::mathTrigonometricCheckRadian(degree);
+    if(radian_flag==false) degree=smath::mathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
+    else degree=smath::mathTrigonometricCheckRadian(degree);
 
     // prapair values
-    std::string result="0", one_num="1", pow_num=radian, factorial_num="2", factorial_res="1";
+    long long one_num=1, factorial_num=2;
+    std::string result="0", pow_num=degree, factorial_res="1", pow_degree=smath::mathMul(degree,degree);
     std::string up_fraction_num="", fraction_num="";
 
     // calculate sin
     for(int i=0;i<function_acuracy;i++){
-        up_fraction_num=smath::mathMul(one_num,pow_num);
+        up_fraction_num=smath::mathMul(std::to_string(one_num),pow_num);
         fraction_num=smath::mathDiv(up_fraction_num,factorial_res,div_acuracy);
 
         result=smath::mathSum(result,fraction_num);
 
-        one_num=smath::mathMul(one_num,"-1");
-        pow_num=smath::mathMul(smath::mathMul(pow_num,radian),radian);
-        factorial_res=smath::mathMul(smath::mathMul(factorial_res,factorial_num),smath::mathSum(factorial_num,"1"));
-        factorial_num=smath::mathSum(factorial_num,"2");
+        one_num*=-1;
+        pow_num=smath::mathMul(pow_num,pow_degree);
+        factorial_res=smath::mathMul(smath::mathMul(factorial_res,std::to_string(factorial_num)),std::to_string(factorial_num+1));
+        factorial_num+=2;
     }
 
     return result;
 }
 
 // function calculate cos of input num
-std::string smath::mathCos(std::string degree, bool radian_flag, int function_acuracy, int div_acuracy){
+std::string smath::mathCos(std::string degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
     size_t length_input=degree.length();
 
     // exceptions
@@ -846,32 +846,32 @@ std::string smath::mathCos(std::string degree, bool radian_flag, int function_ac
     if(function_acuracy<0) throw incorect_accuracy("function acuracy < 0");
 
     // convert or check input num
-    std::string radian="0";
-    if(radian_flag==false) radian=smath::mathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
-    else radian=smath::mathTrigonometricCheckRadian(degree);
+    if(radian_flag==false) degree=smath::mathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
+    else degree=smath::mathTrigonometricCheckRadian(degree);
 
     // prepair values
-    std::string result="1", one_num="-1", pow_num=smath::mathMul(radian,radian), factorial_num="3", factorial_res="2";
+    long long one_num=-1, factorial_num=3;
+    std::string result="1", pow_num=smath::mathMul(degree,degree), factorial_res="2", pow_degree=pow_num;
     std::string up_fraction_num="", fraction_num="";
 
     // calculate cos
     for(int i=0;i<function_acuracy;i++){
-        up_fraction_num=smath::mathMul(one_num,pow_num);
+        up_fraction_num=smath::mathMul(std::to_string(one_num),pow_num);
         fraction_num=smath::mathDiv(up_fraction_num,factorial_res,div_acuracy);
 
         result=smath::mathSum(result,fraction_num);
 
-        one_num=smath::mathMul(one_num,"-1");
-        pow_num=smath::mathMul(smath::mathMul(pow_num,radian),radian);
-        factorial_res=smath::mathMul(smath::mathMul(factorial_res,factorial_num),smath::mathSum(factorial_num,"1"));
-        factorial_num=smath::mathSum(factorial_num,"2");
+        one_num*=-1;
+        pow_num=smath::mathMul(pow_num,pow_degree);
+        factorial_res=smath::mathMul(smath::mathMul(factorial_res,std::to_string(factorial_num)),std::to_string(factorial_num+1));
+        factorial_num+=2;
     }
 
     return result;
 }
 
 // calculate tng of input value
-std::string smath::mathTng(std::string degree, bool radian_flag, int function_acuracy, int div_acuracy){
+std::string smath::mathTng(const std::string& degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
     std::string result_sin="", result_cos="", result="0";
 
     // try calculate sin and cos, after tng
@@ -892,7 +892,7 @@ std::string smath::mathTng(std::string degree, bool radian_flag, int function_ac
 }
 
 // calculate ctng of input value
-std::string smath::mathCtng(std::string degree, bool radian_flag, int function_acuracy, int div_acuracy){
+std::string smath::mathCtng(const std::string& degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
     std::string result_sin="", result_cos="", result="0";
 
     // try calculate sin and cos, after ctng
@@ -913,7 +913,7 @@ std::string smath::mathCtng(std::string degree, bool radian_flag, int function_a
 }
 
 // calculate factorial of input num
-std::string smath::mathFactorial(std::string num){
+std::string smath::mathFactorial(const std::string& num){
     size_t length_num=num.length(), dot_position=num.find(','), minus_position=num.find('-');
 
     // exceptions
@@ -939,7 +939,7 @@ std::string smath::mathFactorial(std::string num){
 }
 
 // calculate mod input num by mod num
-std::string smath::mathMod(std::string num, std::string mod_num){
+std::string smath::mathMod(const std::string& num, std::string mod_num){
     size_t length_num=num.length(), length_mod_num=mod_num.length();
 
     // exceptions
@@ -951,16 +951,14 @@ std::string smath::mathMod(std::string num, std::string mod_num){
     if(smath::maxNumber(mod_num,"1")==0) return "0";
 
     std::string module_num=smath::mathModule(num), div_result=smath::mathDiv(module_num,mod_num,10);
-    std::string temp_result=smath::mathRoundDown(div_result), result=smath::mathNeg(module_num,smath::mathMul(mod_num,temp_result));
+    std::string result=smath::mathNeg(module_num,smath::mathMul(mod_num,smath::mathRoundDown(div_result)));
 
     if(num[0]!='-') return result;
-    result=smath::mathNeg(mod_num,result);
-
-    return result;
+    return smath::mathNeg(mod_num,result);
 }
 
 // calculate module of num
-std::string smath::mathModule(std::string num){
+std::string smath::mathModule(const std::string& num){
     size_t length_num=num.length(), minus_position=num.find('-');
 
     // exceptions
@@ -970,12 +968,11 @@ std::string smath::mathModule(std::string num){
     // special situation
     if(minus_position==std::string::npos) return num;
 
-    std::string result=num.substr(1);
-    return result;
+    return num.substr(1);
 }
 
 // rount input num up
-std::string smath::mathRoundUp(std::string num){
+std::string smath::mathRoundUp(const std::string& num){
     size_t length_num=num.length(), dot_position=num.find(',');
 
     // exceptions
@@ -1004,7 +1001,7 @@ std::string smath::mathRoundUp(std::string num){
 }
 
 // round input num down
-std::string smath::mathRoundDown(std::string num){
+std::string smath::mathRoundDown(const std::string& num){
     size_t length_num=num.length(), dot_position=num.find(',');
 
     // exceptions

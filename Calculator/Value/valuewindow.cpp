@@ -97,7 +97,7 @@ void ValueWindow::loadIcons(){
 }
 
 // add input num to object
-void ValueWindow::pressNumberButton(QChar button_num){
+void ValueWindow::pressNumberButton(const QChar& button_num){
     // add to up field
     if(curent_field==1){
         up_object.addNum(button_num.toLatin1());
@@ -114,7 +114,7 @@ void ValueWindow::pressNumberButton(QChar button_num){
 }
 
 // change curent field and styles
-void ValueWindow::buttonChangeField(int _field){
+void ValueWindow::buttonChangeField(const int& _field){
     // if no changes
     if(_field==curent_field) return;
     // if chose up field
@@ -182,7 +182,7 @@ void ValueWindow::buttonChangeMode(){
 }
 
 // update window mode if have change
-void ValueWindow::updateMode(int _mode){
+void ValueWindow::updateMode(const int& _mode){
     if(_mode==2) return;
     // signal to main what need change calculator window
     emit changeWindow(_mode);
