@@ -21,7 +21,7 @@ The basis for the interface was taken from the calculator application on Android
 - [x] Make multiplication
 - [x] Make division
 - [x] Improve the interface
-- [x] Add a floating point
+- [x] Add a floating point to nums
 
 ## Future big plans:
 
