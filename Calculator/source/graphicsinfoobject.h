@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 #include <QPixmap>
 
@@ -17,6 +18,7 @@ private:
     QPixmap graphic;
     Qt::GlobalColor graphics_color;
     bool graphic_enable, color_enable;
+    std::unordered_map<std::string,std::string> hash;
 
 public:
     GraphicsInfoObject();
@@ -32,6 +34,9 @@ public:
     Qt::GlobalColor getGraphicsColor();
     bool getGraphicFlag();
     bool getColorFlag();
+    bool checkPointInHash(const std::string&);
+    void setPointInHash(const std::string&,const std::string&);
+    std::string getPointInHash(const std::string&);
 };
 
 #endif // GRAPHICSINFOOBJECT_H

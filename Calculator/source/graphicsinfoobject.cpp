@@ -64,3 +64,18 @@ bool GraphicsInfoObject::getGraphicFlag(){
 bool GraphicsInfoObject::getColorFlag(){
     return color_enable;
 }
+
+// check is there point in hash
+bool GraphicsInfoObject::checkPointInHash(const std::string& _point){
+    return hash.find(_point)!=hash.end();
+}
+
+// set value for point in hash
+void GraphicsInfoObject::setPointInHash(const std::string& _point, const std::string& _value){
+    hash[_point]=_value;
+}
+
+// get value from hash
+std::string GraphicsInfoObject::getPointInHash(const std::string& _point){
+    return hash[_point];
+}
