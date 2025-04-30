@@ -23,7 +23,7 @@ private:
 public:
     GraphicsInfoObject();
 
-    void setDisplayText(std::string);
+    void setDisplayText(const std::string&);
     std::string getDisplayText();
     void setPolishEntry(std::vector<CalculatorObject>);
     std::vector<CalculatorObject> getPolishEntry();

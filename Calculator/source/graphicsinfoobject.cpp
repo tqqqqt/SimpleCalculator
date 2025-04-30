@@ -9,7 +9,7 @@ GraphicsInfoObject::GraphicsInfoObject()
 }
 
 // set text what display in list
-void GraphicsInfoObject::setDisplayText(std::string _text){
+void GraphicsInfoObject::setDisplayText(const std::string& _text){
     display_text=_text;
 }
 

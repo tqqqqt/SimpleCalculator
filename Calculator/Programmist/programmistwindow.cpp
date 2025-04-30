@@ -12,9 +12,10 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
 
     object=ProgrammistObject();
     buttonChangeSystem(10); // in default curent system is 10
-    settings=new QSettings("tqqqqt","calculator");
+    QSettings *settings=new QSettings("tqqqqt","calculator");
     if(!settings->contains("progr/count")) settings->setValue("progr/count",5);
     object.setCount(settings->value("progr/count",5).toInt());
+    delete settings;
 
     // nums buttons
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -64,7 +65,6 @@ ProgrammistWindow::ProgrammistWindow(QWidget *parent) :
 ProgrammistWindow::~ProgrammistWindow()
 {
     delete ui;
-    delete settings;
 }
 
 // load styles for buttons and future use
@@ -308,5 +308,7 @@ void ProgrammistWindow::openSettings(){
 
 // load new settings after accept changes in settings window
 void ProgrammistWindow::updateSettings(){
+    QSettings *settings=new QSettings("tqqqqt","calculator");
     object.setCount(settings->value("progr/count",5).toInt());
+    delete settings;
 }

@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     loadIcons();
 
-    settings=new QSettings("tqqqqt","calculator");
+    QSettings *settings=new QSettings("tqqqqt","calculator");
     calculator_math_object=CalculatorMath();
     curent_text="";
     flag_after_result=false;
@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     calculator_math_object.setDivAccuracy(curent_acuracy);
     calculator_math_object.setFunctionAccuracy(function_acuracy);
     ui->label->setText(curent_text);
+
+    delete settings;
 
     //nums buttons
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -75,7 +77,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete settings;
 }
 
 // Close all windows before close calculator window
@@ -113,9 +114,9 @@ void MainWindow::loadIcons(){
 
 // Collect text from all objects and display it on the screen
 void MainWindow::setFullText(){
-    curent_text="";
+    curent_text.clear();
     // collect all text from objects
-    for(auto element:objects){
+    for(CalculatorObject element:objects){
         curent_text+=QString::fromStdString(element.toString());
     }
     curent_text+=QString::fromStdString(curent_object.toString());
@@ -124,7 +125,7 @@ void MainWindow::setFullText(){
 }
 
 // Added num in the object
-void MainWindow::pressNumberButton(QChar button_num){
+void MainWindow::pressNumberButton(const QChar& button_num){
     // rules to use number button
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
@@ -142,7 +143,7 @@ void MainWindow::pressNumberButton(QChar button_num){
 }
 
 // Added operator in the object
-void MainWindow::pressOperButton(QString button_oper){
+void MainWindow::pressOperButton(const QString& button_oper){
     // rules for use operators button
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial) return;
     // change curent object type on minus bracket
@@ -184,7 +185,7 @@ void MainWindow::pressFunctionsButton(){
 }
 
 // Added function in the object
-void MainWindow::addedFunction(QString _function){
+void MainWindow::addedFunction(const QString& _function){
     // rules for use functions
     if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || flag_after_result==true) return;
     // drop curent object in vector if his no none
@@ -201,7 +202,7 @@ void MainWindow::addedFunction(QString _function){
 }
 
 // Added mod and factorial functions
-void MainWindow::addedSpecialFunction(QString _function){
+void MainWindow::addedSpecialFunction(const QString& _function){
     // rules for use special functions
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
     // always drop curent object in vector
@@ -354,8 +355,10 @@ void MainWindow::buttonSettings(){
 
 // Update settings after pressed accept in settings window
 void MainWindow::updateSettings(){
+    QSettings *settings=new QSettings("tqqqqt","calculator");
     curent_acuracy=settings->value("calc/acuracy",10).toInt();
     function_acuracy=settings->value("calc/func_acuracy",10).toInt();
+    delete settings;
 
     calculator_math_object.setDivAccuracy(curent_acuracy);
     calculator_math_object.setFunctionAccuracy(function_acuracy);
@@ -370,7 +373,7 @@ void MainWindow::buttonChangeMode(){
 }
 
 // Change window after change calculator mode
-void MainWindow::updateMode(int _mode){
+void MainWindow::updateMode(const int& _mode){
     // curent calculator is 1 mode, no need change
     if(_mode==1) return;
 
