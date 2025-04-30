@@ -121,6 +121,10 @@ void GraphicsInfoWindow::updateMode(const int& _mode){
 // change flag to enable open new window
 void GraphicsInfoWindow::updatePainterWindowState(){
     painter_window_open=false;
+
+    this->disconnect(this,SIGNAL(closeWindow()),painter_window,SLOT(needClose()));
+    this->disconnect(this,SIGNAL(addNewElement()),painter_window,SLOT(paintGraphics()));
+    this->disconnect(painter_window,SIGNAL(closeWindow()),this,SLOT(updatePainterWindowState()));
 }
 
 // open painter window if no one open
