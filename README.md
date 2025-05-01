@@ -1,4 +1,4 @@
-# SimpleCalculator
+# Simple Calculator
 
 This project is a final qualifying work at the institute.
 

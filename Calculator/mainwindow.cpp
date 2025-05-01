@@ -127,6 +127,7 @@ void MainWindow::setFullText(){
 // Added num in the object
 void MainWindow::pressNumberButton(const QChar& button_num){
     // rules to use number button
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
         curent_object.clear();

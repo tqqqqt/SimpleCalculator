@@ -17,7 +17,7 @@ ValueWindow::ValueWindow(QWidget *parent) :
 
     std::vector<std::string> main_info=value_info.getMain();
     for(auto x:main_info) ui->comboBox->addItem(QString::fromStdString(x));
-    fillLeftRightBox();
+    fillUpBottomBox();
 
     // nums buttons
     this->connect(ui->pushButton_n0,&QPushButton::clicked,[this]{ pressNumberButton('0'); });
@@ -46,9 +46,9 @@ ValueWindow::ValueWindow(QWidget *parent) :
     this->connect(ui->pushButton_mode,SIGNAL(clicked()),this,SLOT(buttonChangeMode()));
 
     // events then user change curent values
-    this->connect(ui->comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[this]{ buttonClear(); fillLeftRightBox(); });
-    this->connect(ui->comboBox_left,QOverload<int>::of(&QComboBox::currentIndexChanged),[this]{ emit getResult(); });
-    this->connect(ui->comboBox_right,QOverload<int>::of(&QComboBox::currentIndexChanged),[this]{ emit getResult(); });
+    this->connect(ui->comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[this]{ buttonClear(); fillUpBottomBox(); });
+    this->connect(ui->comboBox_up,QOverload<int>::of(&QComboBox::currentIndexChanged),[this]{ emit getResult(); });
+    this->connect(ui->comboBox_down,QOverload<int>::of(&QComboBox::currentIndexChanged),[this]{ emit getResult(); });
 
     // signals
     this->connect(this,SIGNAL(getResult()),this,SLOT(updateResult()));
@@ -204,21 +204,21 @@ void ValueWindow::updateResult(){
         return;
     }
     // get value types
-    std::string main=ui->comboBox->currentText().toStdString(), left=ui->comboBox_left->currentText().toStdString();
-    std::string right=ui->comboBox_right->currentText().toStdString();
+    std::string main=ui->comboBox->currentText().toStdString(), upp=ui->comboBox_up->currentText().toStdString();
+    std::string down=ui->comboBox_down->currentText().toStdString();
     // get value in curent field
     std::string value=(curent_field==1)?up_object.toString():bottom_object.toString();
     QString temp="";
     // get result
     if(curent_field==1){
-        temp=QString::fromStdString(value_info.getMullNum(main,left,right,value));
+        temp=QString::fromStdString(value_info.getMullNum(main,upp,down,value));
         bottom_object.setFullNum(temp.toStdString());
         bottom_object.checkNum();
         temp=QString::fromStdString(bottom_object.toString());
         ui->textEdit_right->setText(temp);
     }
     else{
-        temp=QString::fromStdString(value_info.getMullNum(main,right,left,value));
+        temp=QString::fromStdString(value_info.getMullNum(main,down,upp,value));
         up_object.setFullNum(temp.toStdString());
         up_object.checkNum();
         temp=QString::fromStdString(up_object.toString());
@@ -227,14 +227,14 @@ void ValueWindow::updateResult(){
 }
 
 // fill child value type then chose main type
-void ValueWindow::fillLeftRightBox(){
-    ui->comboBox_left->clear();
-    ui->comboBox_right->clear();
+void ValueWindow::fillUpBottomBox(){
+    ui->comboBox_up->clear();
+    ui->comboBox_down->clear();
     // get names of types from value object
     std::vector<std::string> temp=value_info.getSecond(ui->comboBox->currentText().toStdString());
     // set names in combo box
     for(auto x:temp){
-        ui->comboBox_left->addItem(QString::fromStdString(x));
-        ui->comboBox_right->addItem(QString::fromStdString(x));
+        ui->comboBox_up->addItem(QString::fromStdString(x));
+        ui->comboBox_down->addItem(QString::fromStdString(x));
     }
 }

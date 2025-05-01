@@ -301,7 +301,7 @@ void ProgrammistWindow::setSystemButtonsEnable(){
 
 // open settings window and wait result
 void ProgrammistWindow::openSettings(){
-    ProgrammistSettingsWindow *settings_window=new ProgrammistSettingsWindow();
+    ProgrammistSettingsWindow *settings_window=new ProgrammistSettingsWindow(this);
     this->connect(settings_window,SIGNAL(acceptSettings()),this,SLOT(updateSettings()));
     settings_window->exec();
 }

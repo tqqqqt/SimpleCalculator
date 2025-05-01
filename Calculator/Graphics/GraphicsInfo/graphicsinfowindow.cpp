@@ -157,6 +157,7 @@ void GraphicsInfoWindow::setFullText(){
 // added pressed num to curent object
 void GraphicsInfoWindow::pressNumberButton(const QChar& buttonNum){
     // drop curent object in vector if it's not a num
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
         curent_object.clear();
