@@ -81,7 +81,8 @@ private slots:
     void test_mathPow_negative_accuracy();
     void test_mathPow_zero_pow();
     void test_mathPow_minus_pow();
-    void test_mathPow_simple();
+    void test_mathPow_simple_even_pow();
+    void test_mathPow_simple_odd_pow();
 
     void test_mathTrigonometricConvertDegreeToRadian_correct();
     void test_mathTrigonometricConvertDegreeToRadian_bigger_normal();
@@ -783,9 +784,19 @@ void numbermath::test_mathPow_minus_pow(){
     QCOMPARE(curent_result,result);
 }
 
-void numbermath::test_mathPow_simple(){
+void numbermath::test_mathPow_simple_even_pow(){
     QString result="16", curent_result="";
     std::string first_num="2", second_num="4";
+    int accuracy=4;
+
+    curent_result=QString::fromStdString(smath::mathPow(first_num,second_num,accuracy));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathPow_simple_odd_pow(){
+    QString result="32", curent_result="";
+    std::string first_num="2", second_num="5";
     int accuracy=4;
 
     curent_result=QString::fromStdString(smath::mathPow(first_num,second_num,accuracy));
