@@ -44,7 +44,7 @@ private slots:
     void updateResult();
     void updateText();
     void buttonChangeField(const int&);
-    void fillLeftRightBox();
+    void fillUpBottomBox();
 
 signals:
     void refreshText();
