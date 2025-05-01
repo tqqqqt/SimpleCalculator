@@ -740,35 +740,6 @@ std::string smath::mathDiv(std::string num_1, std::string num_2, int _accuracy){
     return result;
 }
 
-// function calculate pow of num
-std::string smath::mathPow(const std::string& num, std::string pow, const int& accuracy){
-    size_t length_num=num.length(), length_pow=pow.length();
-    size_t dot_position_pow=pow.find(',');
-
-    // exceptions
-    if(length_num==0 || length_pow==0) throw incorect_num("no symbols in num");
-    if(dot_position_pow!=std::string::npos) throw incorect_num("cant have dot"); // while not create sqrt
-    if(accuracy<0) throw incorect_accuracy("accuracy < 0");
-
-    std::string result=num;
-
-    // special situations
-    if(pow=="0") return "1";
-    if(pow=="1") return num;
-    if(pow[0]=='-'){
-        result=smath::mathDiv("1",smath::mathPow(num,pow.substr(1)),accuracy);
-        return result;
-    }
-
-    // calculate pow
-    while(smath::maxNumber("1",pow)!=0){
-        result=smath::mathMul(result,num);
-        pow=smath::mathNeg(pow,"1");
-    }
-
-    return result;
-}
-
 // function convert degree value to radian
 std::string smath::mathTrigonometricConvertDegreeToRadian(std::string degree, const int& div_acuracy){
     // check what degree in bound
@@ -955,6 +926,44 @@ std::string smath::mathMod(const std::string& num, std::string mod_num){
 
     if(num[0]!='-') return result;
     return smath::mathNeg(mod_num,result);
+}
+
+// function calculate pow of num
+std::string smath::mathPow(const std::string& num, std::string pow, const int& accuracy){
+    size_t length_num=num.length(), length_pow=pow.length();
+    size_t dot_position_pow=pow.find(',');
+
+    // exceptions
+    if(length_num==0 || length_pow==0) throw incorect_num("no symbols in num");
+    if(dot_position_pow!=std::string::npos) throw incorect_num("cant have dot"); // while not create sqrt
+    if(accuracy<0) throw incorect_accuracy("accuracy < 0");
+
+    std::string result=num;
+
+    // special situations
+    if(pow=="0") return "1";
+    if(pow=="1") return num;
+    if(pow[0]=='-'){
+        result=smath::mathDiv("1",smath::mathPow(num,pow.substr(1)),accuracy);
+        return result;
+    }
+
+    // calculate pow
+    std::vector<std::string> temp_mul;
+    while(smath::maxNumber(pow,"2")<=0){
+        if(smath::mathMod(pow,"2")!="0"){
+            temp_mul.push_back(result);
+            pow=smath::mathNeg(pow,"1");
+        }
+        result=smath::mathMul(result,result);
+        pow=smath::mathDiv(pow,"2");
+    }
+    int size=static_cast<int>(temp_mul.size());
+    for(int i=size-1;i>=0;i--){
+        result=smath::mathMul(result,temp_mul[static_cast<size_t>(i)]);
+    }
+
+    return result;
 }
 
 // calculate module of num
