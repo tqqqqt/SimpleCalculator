@@ -18,8 +18,6 @@ namespace smath{
     std::string mathDiv(std::string num_1, std::string num_2, int accuracy=10);
     std::string mathMul(std::string num_1, std::string num_2);
 
-    std::string mathPow(const std::string& num, std::string pow, const int& accuracy=10);
-
     std::string mathTrigonometricConvertDegreeToRadian(std::string degree, const int& div_acuracy=10);
     std::string mathTrigonometricCheckRadian(std::string radian);
 
@@ -30,6 +28,7 @@ namespace smath{
 
     std::string mathFactorial(const std::string& num);
     std::string mathMod(const std::string& num, std::string mod_num);
+    std::string mathPow(const std::string& num, std::string pow, const int& accuracy=10);
 
     std::string mathModule(const std::string& num);
     std::string mathRoundUp(const std::string& num);
