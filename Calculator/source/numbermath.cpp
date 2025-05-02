@@ -741,66 +741,52 @@ std::string smath::mathDiv(std::string num_1, std::string num_2, int _accuracy){
 }
 
 // function convert degree value to radian
-std::string smath::mathTrigonometricConvertDegreeToRadian(std::string degree, const int& div_acuracy){
-    // check what degree in bound
-    while(smath::maxNumber(degree,"360")==-1){
-        degree=smath::mathNeg(degree,"360");
-    }
-    while(smath::maxNumber(degree,"-360")==1){
-        degree=smath::mathSum(degree,"360");
-    }
-    // calculate result
-    std::string temp_mul=smath::mathMul(degree,smath::S_PI);
-    return smath::mathDiv(temp_mul,"180",div_acuracy);
+std::string smath::mathDegreeToRadian(const std::string& degree){
+    return smath::mathMul(smath::S_PI_DIV_180,degree);
 }
 
 // function check radian value to valid
-std::string smath::mathTrigonometricCheckRadian(std::string radian){
-    // get maximum valid value
-    std::string max_num=smath::mathMul("2",smath::S_PI);
+std::string smath::mathCheckRadian(std::string radian){
     // check what num in bound
-    while(smath::maxNumber(radian,max_num)==-1){
-        radian=smath::mathNeg(radian,max_num);
+    if(smath::maxNumber(radian,S_2_PI)==-1){
+        radian=smath::mathNeg(radian,smath::mathMul(S_2_PI,smath::mathRoundDown(smath::mathDiv(radian,S_2_PI))));
     }
+    if(smath::maxNumber(radian,"0")==-1) return radian;
 
     // get minimum value
-    std::string min_num=smath::mathMul(max_num,"-1");
+    std::string min_num=smath::mathMul(S_2_PI,"-1");
     // check what num in bound
-    while(smath::maxNumber(radian,min_num)==1){
-        radian=smath::mathSum(radian,max_num);
+    if(smath::maxNumber(radian,min_num)==1){
+        radian=smath::mathSum(radian,smath::mathMul(S_2_PI,smath::mathRoundDown(smath::mathDiv(radian,min_num))));
     }
 
     return radian;
 }
 
 // function calculate sin of input num
-std::string smath::mathSin(std::string degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
+std::string smath::mathSin(std::string degree, const int& function_acuracy, const int& div_acuracy){
     size_t length_degree=degree.length();
 
     // exceptions
     if(length_degree==0) throw incorect_num("no symbols in num");
     if(div_acuracy<0) throw incorect_accuracy("div acuracy < 0");
-    if(function_acuracy<0) throw incorect_accuracy("function acuracy < 0");
-
-    // convert or check input num
-    if(radian_flag==false) degree=smath::mathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
-    else degree=smath::mathTrigonometricCheckRadian(degree);
+    if(function_acuracy<=0) throw incorect_accuracy("function acuracy < 0");
 
     // prapair values
-    long long one_num=1, factorial_num=2;
-    std::string result="0", pow_num=degree, factorial_res="1", pow_degree=smath::mathMul(degree,degree);
-    std::string up_fraction_num="", fraction_num="";
+    degree=smath::mathCheckRadian(degree);
+
+    long long one_num=1, factorial_num=0;
+    std::string result="0", factorial_res="1", pow_degree=smath::mathMul(degree,degree), up_fraction_num=degree;
 
     // calculate sin
     for(int i=0;i<function_acuracy;i++){
-        up_fraction_num=smath::mathMul(std::to_string(one_num),pow_num);
-        fraction_num=smath::mathDiv(up_fraction_num,factorial_res,div_acuracy);
-
-        result=smath::mathSum(result,fraction_num);
+        if(i>0){
+            up_fraction_num=smath::mathMul(up_fraction_num,pow_degree);
+            factorial_res=smath::mathMul(smath::mathMul(factorial_res,std::to_string(factorial_num)),std::to_string(factorial_num+1));
+        }
+        result=smath::mathSum(result,smath::mathMul(std::to_string(one_num),smath::mathDiv(up_fraction_num,factorial_res,div_acuracy)));
 
         one_num*=-1;
-        pow_num=smath::mathMul(pow_num,pow_degree);
-        factorial_res=smath::mathMul(smath::mathMul(factorial_res,std::to_string(factorial_num)),std::to_string(factorial_num+1));
         factorial_num+=2;
     }
 
@@ -808,33 +794,29 @@ std::string smath::mathSin(std::string degree, const bool& radian_flag, const in
 }
 
 // function calculate cos of input num
-std::string smath::mathCos(std::string degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
+std::string smath::mathCos(std::string degree, const int& function_acuracy, const int& div_acuracy){
     size_t length_input=degree.length();
 
     // exceptions
     if(length_input==0) throw incorect_num("no symbols in num");
     if(div_acuracy<0) throw incorect_accuracy("div acuracy < 0");
-    if(function_acuracy<0) throw incorect_accuracy("function acuracy < 0");
-
-    // convert or check input num
-    if(radian_flag==false) degree=smath::mathTrigonometricConvertDegreeToRadian(degree,div_acuracy);
-    else degree=smath::mathTrigonometricCheckRadian(degree);
+    if(function_acuracy<=0) throw incorect_accuracy("function acuracy < 0");
 
     // prepair values
-    long long one_num=-1, factorial_num=3;
-    std::string result="1", pow_num=smath::mathMul(degree,degree), factorial_res="2", pow_degree=pow_num;
-    std::string up_fraction_num="", fraction_num="";
+    degree=smath::mathCheckRadian(degree);
+
+    long long one_num=1, factorial_num=-1;
+    std::string result="0", pow_num=smath::mathMul(degree,degree), factorial_res="1", up_fraction_num="1";
 
     // calculate cos
     for(int i=0;i<function_acuracy;i++){
-        up_fraction_num=smath::mathMul(std::to_string(one_num),pow_num);
-        fraction_num=smath::mathDiv(up_fraction_num,factorial_res,div_acuracy);
-
-        result=smath::mathSum(result,fraction_num);
+        if(i>0){
+            up_fraction_num=smath::mathMul(up_fraction_num,pow_num);
+            factorial_res=smath::mathMul(smath::mathMul(factorial_res,std::to_string(factorial_num)),std::to_string(factorial_num+1));
+        }
+        result=smath::mathSum(result,smath::mathMul(std::to_string(one_num),smath::mathDiv(up_fraction_num,factorial_res,div_acuracy)));
 
         one_num*=-1;
-        pow_num=smath::mathMul(pow_num,pow_degree);
-        factorial_res=smath::mathMul(smath::mathMul(factorial_res,std::to_string(factorial_num)),std::to_string(factorial_num+1));
         factorial_num+=2;
     }
 
@@ -842,13 +824,13 @@ std::string smath::mathCos(std::string degree, const bool& radian_flag, const in
 }
 
 // calculate tng of input value
-std::string smath::mathTng(const std::string& degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
+std::string smath::mathTng(const std::string& degree, const int& function_acuracy, const int& div_acuracy){
     std::string result_sin="", result_cos="", result="0";
 
     // try calculate sin and cos, after tng
     try{
-        result_sin=smath::mathSin(degree,radian_flag,function_acuracy,div_acuracy);
-        result_cos=smath::mathCos(degree,radian_flag,function_acuracy,div_acuracy);
+        result_sin=smath::mathSin(degree,function_acuracy,div_acuracy);
+        result_cos=smath::mathCos(degree,function_acuracy,div_acuracy);
 
         result=smath::mathDiv(result_sin,result_cos,div_acuracy);
     }
@@ -863,13 +845,13 @@ std::string smath::mathTng(const std::string& degree, const bool& radian_flag, c
 }
 
 // calculate ctng of input value
-std::string smath::mathCtng(const std::string& degree, const bool& radian_flag, const int& function_acuracy, const int& div_acuracy){
+std::string smath::mathCtng(const std::string& degree, const int& function_acuracy, const int& div_acuracy){
     std::string result_sin="", result_cos="", result="0";
 
     // try calculate sin and cos, after ctng
     try{
-        result_sin=smath::mathSin(degree,radian_flag,function_acuracy,div_acuracy);
-        result_cos=smath::mathCos(degree,radian_flag,function_acuracy,div_acuracy);
+        result_sin=smath::mathSin(degree,function_acuracy,div_acuracy);
+        result_cos=smath::mathCos(degree,function_acuracy,div_acuracy);
 
         result=smath::mathDiv(result_cos,result_sin,div_acuracy);
     }
@@ -1021,7 +1003,7 @@ std::string smath::mathRoundDown(const std::string& num){
 
     std::string result="";
     size_t i=0;
-    // collect num after dot
+    // collect num before dot
     while(i<length_num){
         if(num[i]==',') break;
         result+=num[i];

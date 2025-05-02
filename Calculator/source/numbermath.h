@@ -9,6 +9,8 @@
 
 namespace smath{
     const std::string S_PI="3,141592653589793";
+    const std::string S_2_PI="6,283185307179586";
+    const std::string S_PI_DIV_180="0,017453292519943";
 
     int maxNumber(const std::string& num_1, const std::string& num_2);
     std::string findMultiplier(const std::string& num_1, const std::string& num_2);
@@ -18,13 +20,13 @@ namespace smath{
     std::string mathDiv(std::string num_1, std::string num_2, int accuracy=10);
     std::string mathMul(std::string num_1, std::string num_2);
 
-    std::string mathTrigonometricConvertDegreeToRadian(std::string degree, const int& div_acuracy=10);
-    std::string mathTrigonometricCheckRadian(std::string radian);
+    std::string mathDegreeToRadian(const std::string& degree);
+    std::string mathCheckRadian(std::string radian);
 
-    std::string mathSin(std::string degree, const bool& radian_flag, const int& function_acuracy=8, const int& div_acuracy=10);
-    std::string mathCos(std::string degree, const bool& radian_flag, const int& function_acuracy=8, const int& div_acuracy=10);
-    std::string mathTng(const std::string& degree, const bool& radian_flag, const int& function_acuracy=8, const int& div_acuracy=10);
-    std::string mathCtng(const std::string& degree, const bool& radian_flag, const int& function_acuracy=8, const int& div_acuracy=10);
+    std::string mathSin(std::string degree, const int& function_acuracy=8, const int& div_acuracy=10);
+    std::string mathCos(std::string degree, const int& function_acuracy=8, const int& div_acuracy=10);
+    std::string mathTng(const std::string& degree, const int& function_acuracy=8, const int& div_acuracy=10);
+    std::string mathCtng(const std::string& degree, const int& function_acuracy=8, const int& div_acuracy=10);
 
     std::string mathFactorial(const std::string& num);
     std::string mathMod(const std::string& num, std::string mod_num);
