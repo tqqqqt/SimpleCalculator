@@ -13,6 +13,7 @@ FunctionsWindow::FunctionsWindow(QWidget *parent) :
     this->connect(ui->pushButton_cos,&QPushButton::clicked,[this]{ pressButtons("Cos("); });
     this->connect(ui->pushButton_tng,&QPushButton::clicked,[this]{ pressButtons("Tng("); });
     this->connect(ui->pushButton_ctng,&QPushButton::clicked,[this]{ pressButtons("Ctng("); });
+    this->connect(ui->pushButton_grad,&QPushButton::clicked,[this]{ pressButtons("°"); });
     this->connect(ui->pushButton_fact,&QPushButton::clicked,[this]{ pressButtons("!"); });
     this->connect(ui->pushButton_mod,&QPushButton::clicked,[this]{ pressButtons("mod"); });
     this->connect(ui->pushButton_module,&QPushButton::clicked,[this]{ pressButtons("Module("); });
@@ -41,7 +42,8 @@ void FunctionsWindow::loadStyle(){
 void FunctionsWindow::pressButtons(const QString& _function){
     // special functions
     // becouse factorial not need brackets, mod use like operators
-    if(_function=="!" || _function=="mod") emit pressSpecialFunction(_function);
+    if(_function=="!" || _function=="°") emit pressSpecialFunction(_function);
+    else if(_function=="mod") emit pressOperator(_function);
     else emit pressFunction(_function);
 }
 
