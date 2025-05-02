@@ -127,7 +127,7 @@ void MainWindow::setFullText(){
 // Added num in the object
 void MainWindow::pressNumberButton(const QChar& button_num){
     // rules to use number button
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::SpecialFunction) return;
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
         curent_object.clear();
@@ -146,9 +146,9 @@ void MainWindow::pressNumberButton(const QChar& button_num){
 // Added operator in the object
 void MainWindow::pressOperButton(const QString& button_oper){
     // rules for use operators button
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::SpecialFunction) return;
     // change curent object type on minus bracket
-    if(button_oper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets){
+    if(button_oper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBracket){
         curent_object.addSymbol("-");
         if(flag_after_result==true) flag_after_result=false;
         // update display text
@@ -178,6 +178,7 @@ void MainWindow::pressFunctionsButton(){
     FunctionsWindow *functions_window=new FunctionsWindow();
     this->connect(functions_window,SIGNAL(pressFunction(QString)),this,SLOT(addedFunction(QString)));
     this->connect(functions_window,SIGNAL(pressSpecialFunction(QString)),this,SLOT(addedSpecialFunction(QString)));
+    this->connect(functions_window,SIGNAL(pressOperator(QString)),this,SLOT(pressOperButton(QString)));
     this->connect(functions_window,SIGNAL(updateWindowState()),this,SLOT(updateFunctionWindowState()));
     this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(needCloseWindow()));
 
@@ -188,7 +189,7 @@ void MainWindow::pressFunctionsButton(){
 // Added function in the object
 void MainWindow::addedFunction(const QString& _function){
     // rules for use functions
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || flag_after_result==true) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || flag_after_result==true) return;
     // drop curent object in vector if his no none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
@@ -205,7 +206,7 @@ void MainWindow::addedFunction(const QString& _function){
 // Added mod and factorial functions
 void MainWindow::addedSpecialFunction(const QString& _function){
     // rules for use special functions
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket) return;
     // always drop curent object in vector
     objects.push_back(curent_object);
     curent_object.clear();
@@ -241,7 +242,7 @@ void MainWindow::buttonClear(){
 // Added open brackets in the object
 void MainWindow::buttonOpenBrackets(){
     // rules for use open bracket
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::SpecialFunction) return;
     // drop curent object in vector if his not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);
@@ -259,7 +260,7 @@ void MainWindow::buttonCloseBrackets(){
     // no need close bracket if no have open bracket
     if(count_open_bracket==0) return;
     // rules for use close bracket
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::SpecialFunction && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket) return;
     // always drop curent object in vector
     objects.push_back(curent_object);
     curent_object.clear();
@@ -272,7 +273,7 @@ void MainWindow::buttonCloseBrackets(){
 // Added minus oper after num to negative num
 void MainWindow::buttonZnak(){
     // rules for use minus button
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBracket) return;
     // drop curent object in vector if his not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
     curent_object.clear();
@@ -287,7 +288,7 @@ void MainWindow::buttonZnak(){
 // Calculate result and display on the screen
 void MainWindow::buttonResult(){
     // rules for get result
-    if(curent_text.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial)) return;
+    if(curent_text.length()==0 || (curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::SpecialFunction)) return;
     if(count_open_bracket || count_oper==0) return;
     // save display text to set in history
     QString save_calculator_text=curent_text;
@@ -415,9 +416,9 @@ void MainWindow::buttonDeleteLast(){
         return;
     }
     // if curent object not null check type for special types
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operators) count_oper--;
-    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) count_open_bracket++;
-    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets) count_open_bracket--;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Operator) count_oper--;
+    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket) count_open_bracket++;
+    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Function) count_open_bracket--;
     curent_object.deleteLastSymbol();
     // check what curent object not null and change on no null object in vector
     if(curent_object.getLength()==0){
