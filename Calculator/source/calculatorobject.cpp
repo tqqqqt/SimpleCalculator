@@ -41,7 +41,7 @@ void CalculatorObject::addNum(const char& _num){
     // check input symbol
     if(!(_num>='0' && _num<='9') && _num!=',') throw incorect_add_num("input not in [0-9] and ','");
     // check what curent object None type
-    if(object_type>ObjectsTypes::MinusBrackets) return;
+    if(object_type>ObjectsTypes::MinusBracket) return;
 
     object_type=ObjectsTypes::Num;
     check_num_complete=false;
@@ -65,22 +65,21 @@ void CalculatorObject::addNum(const char& _num){
 // add operators to object
 void CalculatorObject::addSymbol(const std::string& _symbol){
     // check input
-    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/" && _symbol!="^(") throw incorect_add_symbol("input not a {+, -, *, /, (-, (, ), ^( }");
+    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/" && _symbol!="mod") throw incorect_add_symbol("input not a {+, -, *, /, (-, (, ), ^( }");
     // change object type to another and change text in object
-    if(object_type==ObjectsTypes::OpenBrackets && _symbol=="-"){
+    if(object_type==ObjectsTypes::OpenBracket && _symbol=="-"){
         text="(-";
         length=2;
-        object_type=ObjectsTypes::MinusBrackets;
+        object_type=ObjectsTypes::MinusBracket;
         return;
     }
     // if object not none return
     if(object_type!=ObjectsTypes::None) return;
     // set object type
-    if(_symbol=="(-") object_type=ObjectsTypes::MinusBrackets;
-    else if(_symbol=="(") object_type=ObjectsTypes::OpenBrackets;
-    else if(_symbol==")") object_type=ObjectsTypes::CloseBrackets;
-    else if(_symbol=="+" || _symbol=="-" || _symbol=="*" || _symbol=="/") object_type=ObjectsTypes::Operators;
-    else if(_symbol=="^(") object_type=ObjectsTypes::PowOperator;
+    if(_symbol=="(-") object_type=ObjectsTypes::MinusBracket;
+    else if(_symbol=="(") object_type=ObjectsTypes::OpenBracket;
+    else if(_symbol==")") object_type=ObjectsTypes::CloseBracket;
+    else if(_symbol=="+" || _symbol=="-" || _symbol=="*" || _symbol=="/" || _symbol=="mod") object_type=ObjectsTypes::Operator;
 
     text=_symbol;
     length=text.length();
@@ -89,11 +88,12 @@ void CalculatorObject::addSymbol(const std::string& _symbol){
 // add fucntion in object
 void CalculatorObject::addFunction(const std::string& _function){
     // check input
-    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(") throw incorect_add_function("input not a {Sin, Cos, Tan, Ctan, Module, Round }");
+    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(" && _function!="^(") throw incorect_add_function("input not a {Sin, Cos, Tan, Ctan, Module, Round, ^( }");
     // check object type to none
     if(object_type!=ObjectsTypes::None) return;
 
-    object_type=ObjectsTypes::Functins;
+    if(_function=="^(") object_type=ObjectsTypes::PowFunction;
+    else object_type=ObjectsTypes::Function;
     text=_function;
     length=text.length();
 }
@@ -101,12 +101,11 @@ void CalculatorObject::addFunction(const std::string& _function){
 // add special function in object
 void CalculatorObject::addSpecialFunction(const std::string& _special_function){
     // check input
-    if(_special_function!="mod" && _special_function!="!") throw incorect_add_special_function("input not a mod or !");
+    if(_special_function!="!" && _special_function!="°") throw incorect_add_special_function("input not a ! or °");
     // check object type
     if(object_type!=ObjectsTypes::None) return;
     // set new object type
-    if(_special_function=="mod") object_type=ObjectsTypes::Mod;
-    else if(_special_function=="!") object_type=ObjectsTypes::Factorial;
+    object_type=ObjectsTypes::SpecialFunction;
 
     text=_special_function;
     length=text.length();
@@ -127,17 +126,17 @@ void CalculatorObject::addVariable(){
 void CalculatorObject::deleteLastSymbol(){
     if(length==0) return;
     // clear all text becouse this objects don't have part
-    if(object_type>ObjectsTypes::MinusBrackets){
+    if(object_type>ObjectsTypes::MinusBracket){
         text="";
         length=0;
         object_type=ObjectsTypes::None;
         return;
     }
     // delete only minus in minus brackets
-    if(object_type==ObjectsTypes::MinusBrackets && text.back()=='-' && length==2){
+    if(object_type==ObjectsTypes::MinusBracket && text.back()=='-' && length==2){
         text="(";
         length=1;
-        object_type=ObjectsTypes::OpenBrackets;
+        object_type=ObjectsTypes::OpenBracket;
         return;
     }
     // check for special states
@@ -149,7 +148,7 @@ void CalculatorObject::deleteLastSymbol(){
     text.pop_back();
     length--;
 
-    if(length==2 && text[0]=='(' && text[1]=='-') object_type=ObjectsTypes::MinusBrackets;
+    if(length==2 && text[0]=='(' && text[1]=='-') object_type=ObjectsTypes::MinusBracket;
     if(length==0) clear();
 }
 
