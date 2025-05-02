@@ -157,7 +157,7 @@ void GraphicsInfoWindow::setFullText(){
 // added pressed num to curent object
 void GraphicsInfoWindow::pressNumberButton(const QChar& buttonNum){
     // drop curent object in vector if it's not a num
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::SpecialFunction) return;
     if(curent_object.getObjectType()>CalculatorObject::ObjectsTypes::Num){
         objects.push_back(curent_object);
         curent_object.clear();
@@ -170,10 +170,10 @@ void GraphicsInfoWindow::pressNumberButton(const QChar& buttonNum){
 // added operator to curent object
 void GraphicsInfoWindow::pressOperButton(const QString& buttonOper){
     // rules for use operator
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::SpecialFunction && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
 
     // change object to minus bracket without drop in vector
-    if(buttonOper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets){
+    if(buttonOper=='-' && curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBracket){
         curent_object.addSymbol("-");
         setFullText();
         return;
@@ -195,7 +195,7 @@ void GraphicsInfoWindow::pressOperButton(const QString& buttonOper){
 // added X variable to curent object
 void GraphicsInfoWindow::pressVariableButton(){
     // variable use rules
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::SpecialFunction || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
 
     // drop objects in vector if it's not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
@@ -217,6 +217,7 @@ void GraphicsInfoWindow::pressFunctionsButton(){
     // connects signals
     this->connect(functions_window,SIGNAL(pressFunction(QString)),this,SLOT(addedFunction(QString)));
     this->connect(functions_window,SIGNAL(pressSpecialFunction(QString)),this,SLOT(addedSpecialFunction(QString)));
+    this->connect(functions_window,SIGNAL(pressOperator(QString)),this,SLOT(pressOperButton(QString)));
     this->connect(functions_window,SIGNAL(updateWindowState()),this,SLOT(updateFunctionWindowState()));
     this->connect(this,SIGNAL(closeWindow()),functions_window,SLOT(needCloseWindow()));
 
@@ -227,7 +228,7 @@ void GraphicsInfoWindow::pressFunctionsButton(){
 // react to press function in function window and added function to curent object
 void GraphicsInfoWindow::addedFunction(const QString& _function){
     // function use rules
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
 
     // drop object in vector if it's not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
@@ -245,7 +246,7 @@ void GraphicsInfoWindow::addedFunction(const QString& _function){
 // some function with more arguments then 1 (mod)
 void GraphicsInfoWindow::addedSpecialFunction(const QString& _function){
     // special function use rules
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
 
     // always drop curetn object in vector
     objects.push_back(curent_object);
@@ -281,7 +282,7 @@ void GraphicsInfoWindow::buttonClear(){
 // added open bracket to curent object
 void GraphicsInfoWindow::buttonOpenBrackets(){
     // open bracket rules use
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Factorial || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::SpecialFunction || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
 
     // drop curent object in vector
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
@@ -302,7 +303,7 @@ void GraphicsInfoWindow::buttonCloseBrackets(){
     if(count_open_bracket==0) return;
 
     // rules to use close bracket
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::MinusBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::SpecialFunction && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
 
     // always drop curent object in vector
     objects.push_back(curent_object);
@@ -318,7 +319,7 @@ void GraphicsInfoWindow::buttonCloseBrackets(){
 void GraphicsInfoWindow::buttonAdd(){
     // rules to add input to list
     if(curent_text.length()==0 || count_open_bracket!=0) return;
-    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBrackets && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Factorial && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::Num && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::CloseBracket && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::SpecialFunction && curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::X_variable) return;
 
     // save text and polish entry to add in info object
     QString save_text=curent_text;
@@ -363,7 +364,7 @@ void GraphicsInfoWindow::buttonAdd(){
 // added minus in curent object
 void GraphicsInfoWindow::buttonZnak(){
     // rules for use minus bracket
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::MinusBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
 
     // drop object in vector if his not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None) objects.push_back(curent_object);
@@ -406,8 +407,8 @@ void GraphicsInfoWindow::buttonDeleteLast(){
     }
     // if curent object length not null
     // some checks for change count brackets and operators
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBrackets) count_open_bracket++;
-    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBrackets) count_open_bracket--;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket) count_open_bracket++;
+    else if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::OpenBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Function) count_open_bracket--;
 
     curent_object.deleteLastSymbol();
     // check curent length and change curent object if can
