@@ -65,7 +65,7 @@ void CalculatorObject::addNum(const char& _num){
 // add operators to object
 void CalculatorObject::addSymbol(const std::string& _symbol){
     // check input
-    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/" && _symbol!="mod") throw incorect_add_symbol("input not a {+, -, *, /, (-, (, ), ^( }");
+    if(_symbol!="(-" && _symbol!="(" && _symbol!=")" && _symbol!="+" && _symbol!="-" && _symbol!="*" && _symbol!="/" && _symbol!="mod") throw incorect_add_symbol("input not a {+, -, *, /, (-, (, ), mod }");
     // change object type to another and change text in object
     if(object_type==ObjectsTypes::OpenBracket && _symbol=="-"){
         text="(-";
