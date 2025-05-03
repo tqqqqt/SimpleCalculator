@@ -60,7 +60,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Точность при делении</string>
+         <string>Точность деления</string>
         </property>
        </widget>
       </item>
@@ -87,7 +87,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Количество елементов для функций</string>
+         <string>Точность вычисления функций</string>
         </property>
        </widget>
       </item>
