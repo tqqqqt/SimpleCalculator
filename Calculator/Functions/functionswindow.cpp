@@ -15,6 +15,7 @@ FunctionsWindow::FunctionsWindow(QWidget *parent) :
     this->connect(ui->pushButton_ctng,&QPushButton::clicked,[this]{ pressButtons("Ctng("); });
     this->connect(ui->pushButton_grad,&QPushButton::clicked,[this]{ pressButtons("°"); });
     this->connect(ui->pushButton_fact,&QPushButton::clicked,[this]{ pressButtons("!"); });
+    this->connect(ui->pushButton_sqrt,&QPushButton::clicked,[this]{ pressButtons("√("); });
     this->connect(ui->pushButton_mod,&QPushButton::clicked,[this]{ pressButtons("mod"); });
     this->connect(ui->pushButton_module,&QPushButton::clicked,[this]{ pressButtons("Module("); });
     this->connect(ui->pushButton_round_up,&QPushButton::clicked,[this]{ pressButtons("RoundUp("); });
