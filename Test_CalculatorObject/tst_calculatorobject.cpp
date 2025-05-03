@@ -124,7 +124,7 @@ void calculatorobject::test_addNum_no_add_dot(){
 
 void calculatorobject::test_addSymbol_exception_input(){
     CalculatorObject object;
-    QString result="input not a {+, -, *, /, (-, (, ), ^( }";
+    QString result="input not a {+, -, *, /, (-, (, ), mod }";
 
     try{
         object.addSymbol("a");
