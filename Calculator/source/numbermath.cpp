@@ -949,6 +949,21 @@ std::string smath::mathPow(const std::string& num, std::string pow, const int& a
     return result;
 }
 
+std::string smath::mathSqrt(const std::string& num, const int& function_acuracy, const int& div_acuracy){
+    if(smath::maxNumber(num,"0")==1) throw incorect_num("negative num in sqrt");
+
+    // special situation
+    if(smath::maxNumber(num,"0")==0) return "0";
+    if(smath::maxNumber(num,"1")==0) return "1";
+
+    std::string result=std::to_string(function_acuracy*100);
+    for(int i=0;i<function_acuracy;++i){
+        result=smath::mathDiv(smath::mathSum(result,smath::mathDiv(num,result,div_acuracy)),"2");
+    }
+
+    return result;
+}
+
 // calculate module of num
 std::string smath::mathModule(const std::string& num){
     size_t length_num=num.length(), minus_position=num.find('-');
