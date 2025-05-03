@@ -918,7 +918,7 @@ std::string smath::mathPow(const std::string& num, std::string pow, const int& a
 
     // exceptions
     if(length_num==0 || length_pow==0) throw incorect_num("no symbols in num");
-    if(dot_position_pow!=std::string::npos) throw incorect_num("cant have dot"); // while not create sqrt
+    if(dot_position_pow!=std::string::npos) throw incorect_num("cant have dot");
     if(accuracy<0) throw incorect_accuracy("accuracy < 0");
 
     std::string result=num;
@@ -949,8 +949,13 @@ std::string smath::mathPow(const std::string& num, std::string pow, const int& a
     return result;
 }
 
+// calculate sqrt of num
 std::string smath::mathSqrt(const std::string& num, const int& function_acuracy, const int& div_acuracy){
+    // exceptions
+    if(num.length()==0) throw incorect_num("no symbols in num");
     if(smath::maxNumber(num,"0")==1) throw incorect_num("negative num in sqrt");
+    if(function_acuracy<=0) throw incorect_accuracy("function acuracy <= 0");
+    if(div_acuracy<0) throw incorect_accuracy("div acuracy < 0");
 
     // special situation
     if(smath::maxNumber(num,"0")==0) return "0";
@@ -962,6 +967,16 @@ std::string smath::mathSqrt(const std::string& num, const int& function_acuracy,
     }
 
     return result;
+}
+
+// calculate percent of num
+std::string smath::mathPercent(const std::string& num){
+    size_t len=num.length();
+
+    // exception
+    if(len==0) throw incorect_num("no symbols in num");
+
+    return smath::mathDiv(num,"100",static_cast<int>(len));
 }
 
 // calculate module of num

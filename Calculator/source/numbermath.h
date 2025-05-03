@@ -32,6 +32,7 @@ namespace smath{
     std::string mathMod(const std::string& num, std::string mod_num);
     std::string mathPow(const std::string& num, std::string pow, const int& accuracy=10);
     std::string mathSqrt(const std::string& num, const int& function_acuracy=8, const int& div_acuracy=10);
+    std::string mathPercent(const std::string& num);
 
     std::string mathModule(const std::string& num);
     std::string mathRoundUp(const std::string& num);
