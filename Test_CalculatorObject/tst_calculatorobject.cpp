@@ -232,7 +232,7 @@ void calculatorobject::test_addFunction_correct(){
 
 void calculatorobject::test_addSpecialFunction_exception_input(){
     CalculatorObject object;
-    QString result="input not a ! or °";
+    QString result="input not a { !, °, % }";
 
     try{
         object.addSpecialFunction("a");
