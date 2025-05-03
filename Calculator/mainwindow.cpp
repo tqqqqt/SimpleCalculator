@@ -161,9 +161,12 @@ void MainWindow::pressOperButton(const QString& button_oper){
         curent_object.clear();
     }
 
-    curent_object.addSymbol(button_oper.toStdString());
+    if(button_oper=="^("){
+        curent_object.addFunction(button_oper.toStdString());
+        count_open_bracket+=1;
+    }
+    else curent_object.addSymbol(button_oper.toStdString());
     count_oper+=1;
-    if(button_oper=="^(") count_open_bracket+=1;
     // change flag after result
     if(flag_after_result==true) flag_after_result=false;
     // update display text
@@ -189,7 +192,7 @@ void MainWindow::pressFunctionsButton(){
 // Added function in the object
 void MainWindow::addedFunction(const QString& _function){
     // rules for use functions
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || flag_after_result==true) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::SpecialFunction || flag_after_result==true) return;
     // drop curent object in vector if his no none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
         objects.push_back(curent_object);

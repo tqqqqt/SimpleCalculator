@@ -185,8 +185,11 @@ void GraphicsInfoWindow::pressOperButton(const QString& buttonOper){
         curent_object.clear();
     }
 
-    curent_object.addSymbol(buttonOper.toStdString());
-    if(buttonOper=="^(") count_open_bracket+=1;
+    if(buttonOper=="^("){
+        curent_object.addFunction(buttonOper.toStdString());
+        count_open_bracket+=1;
+    }
+    else curent_object.addSymbol(buttonOper.toStdString());
 
     // display curent text
     setFullText();
@@ -228,7 +231,7 @@ void GraphicsInfoWindow::pressFunctionsButton(){
 // react to press function in function window and added function to curent object
 void GraphicsInfoWindow::addedFunction(const QString& _function){
     // function use rules
-    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
+    if(curent_object.getObjectType()==CalculatorObject::ObjectsTypes::Num || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::CloseBracket || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::SpecialFunction || curent_object.getObjectType()==CalculatorObject::ObjectsTypes::X_variable) return;
 
     // drop object in vector if it's not none
     if(curent_object.getObjectType()!=CalculatorObject::ObjectsTypes::None){
