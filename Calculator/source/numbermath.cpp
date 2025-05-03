@@ -872,6 +872,7 @@ std::string smath::mathFactorial(const std::string& num){
     // exceptions
     if(length_num==0) throw incorect_num("no symbols in num");
     if(dot_position!=std::string::npos || minus_position!=std::string::npos) throw incorect_num("dot or minus in num");
+    if(smath::maxNumber(num,"0")==1) throw incorect_num("factorial num cant be a negative num");
 
     int check_end=0;
     check_end=smath::maxNumber(num,"1");
