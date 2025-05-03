@@ -116,10 +116,14 @@ private slots:
     void test_mathMod_normal();
     void test_mathMod_first_num_negative();
 
-    void test_mathSqrt_exception();
+    void test_mathSqrt_empty_string();
+    void test_mathSqrt_negative_num();
     void test_mathSqrt_num_zero();
     void test_mathSqrt_num_one();
     void test_mathSqrt_simple();
+
+    void test_mathPercent_empty_string();
+    void test_mathPercent_simple();
 
     void test_mathModule_empty_string();
     void test_mathModule_incorect_minus_position();
@@ -1065,7 +1069,19 @@ void numbermath::test_mathMod_first_num_negative(){
     QCOMPARE(curent_result,result);
 }
 
-void numbermath::test_mathSqrt_exception(){
+void numbermath::test_mathSqrt_empty_string(){
+    QString result="no symbols in num", curent_result="";
+
+    try{
+        curent_result=QString::fromStdString(smath::mathSqrt(""));
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void numbermath::test_mathSqrt_negative_num(){
     QString result="negative num in sqrt", curent_result="";
 
     try{
@@ -1100,6 +1116,28 @@ void numbermath::test_mathSqrt_simple(){
     std::string num="2";
 
     curent_result=QString::fromStdString(smath::mathSqrt(num,20,10));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathPercent_empty_string(){
+    QString result="no symbols in num";
+    std::string temp="";
+
+    try {
+        temp=smath::mathPercent("");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp) {
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void numbermath::test_mathPercent_simple(){
+    QString result="2,45", curent_result="";
+    std::string num="245";
+
+    curent_result=QString::fromStdString(smath::mathPercent(num));
 
     QCOMPARE(curent_result,result);
 }
