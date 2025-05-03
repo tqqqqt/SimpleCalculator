@@ -101,7 +101,7 @@ void CalculatorObject::addFunction(const std::string& _function){
 // add special function in object
 void CalculatorObject::addSpecialFunction(const std::string& _special_function){
     // check input
-    if(_special_function!="!" && _special_function!="°") throw incorect_add_special_function("input not a ! or °");
+    if(_special_function!="!" && _special_function!="°" && _special_function!="%") throw incorect_add_special_function("input not a { !, °, % }");
     // check object type
     if(object_type!=ObjectsTypes::None) return;
     // set new object type

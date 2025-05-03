@@ -110,6 +110,7 @@ CalculatorObject CalculatorMath::getResult(){
                 else if(object_string=="Ctng(") math_result=smath::mathCtng(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="!") math_result=smath::mathFactorial(polish_entry[i-1].toString());
                 else if(object_string=="°") math_result=smath::mathDegreeToRadian(polish_entry[i-1].toString());
+                else if(object_string=="%") math_result=smath::mathPercent(polish_entry[i-1].toString());
                 else if(object_string=="√(") math_result=smath::mathSqrt(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="Module(") math_result=smath::mathModule(polish_entry[i-1].toString());
                 else if(object_string=="RoundUp(") math_result=smath::mathRoundUp(polish_entry[i-1].toString());
@@ -192,6 +193,7 @@ void CalculatorMath::simplifyExpression(){
                 else if(object_string=="Ctng(") math_result=smath::mathCtng(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="!") math_result=smath::mathFactorial(polish_entry[i-1].toString());
                 else if(object_string=="°") math_result=smath::mathDegreeToRadian(polish_entry[i-1].toString());
+                else if(object_string=="%") math_result=smath::mathPercent(polish_entry[i-1].toString());
                 else if(object_string=="√(") math_result=smath::mathSqrt(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="Module(") math_result=smath::mathModule(polish_entry[i-1].toString());
                 else if(object_string=="RoundUp(") math_result=smath::mathRoundUp(polish_entry[i-1].toString());
@@ -268,6 +270,7 @@ CalculatorObject CalculatorMath::getResultWithVariable(const std::string& _point
                 else if(object_string=="Ctng(") math_result=smath::mathCtng(num_1.toString(),function_accuracy,div_accuracy);
                 else if(object_string=="!") math_result=smath::mathFactorial(num_1.toString());
                 else if(object_string=="°") math_result=smath::mathDegreeToRadian(num_1.toString());
+                else if(object_string=="%") math_result=smath::mathPercent(num_1.toString());
                 else if(object_string=="√(") math_result=smath::mathSqrt(num_1.toString(),function_accuracy,div_accuracy);
                 else if(object_string=="Module(") math_result=smath::mathModule(num_1.toString());
                 else if(object_string=="RoundUp(") math_result=smath::mathRoundUp(num_1.toString());
