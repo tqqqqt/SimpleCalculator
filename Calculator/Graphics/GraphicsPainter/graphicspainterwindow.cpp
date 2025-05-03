@@ -230,7 +230,6 @@ void GraphicsPainterWindow::paintGraphics(){
     CalculatorMath math_object;
     math_object.setFunctionAccuracy(8); // if set more can freez
     math_object.setDivAccuracy(4); // no need very big accuracy, not seen in graphics
-    math_object.setFunctionRadianFlag(true); // all points already in radian
 
     // temp objects
     CalculatorObject temp_result;

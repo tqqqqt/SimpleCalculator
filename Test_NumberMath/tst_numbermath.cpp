@@ -84,23 +84,19 @@ private slots:
     void test_mathPow_simple_even_pow();
     void test_mathPow_simple_odd_pow();
 
-    void test_mathTrigonometricConvertDegreeToRadian_correct();
-    void test_mathTrigonometricConvertDegreeToRadian_bigger_normal();
-    void test_mathTrigonometricConvertDegreeToRadian_smaller_normal();
+    void test_mathDegreeToRadian_correct();
 
-    void test_mathTrigonometricCheckRadian_bigger_normal();
-    void test_mathTrigonometricCheckRadian_smaller_normal();
+    void test_mathCheckRadian_bigger_normal();
+    void test_mathCheckRadian_smaller_normal();
 
     void test_mathSin_empty_string();
     void test_mathSin_incorect_div_accuracy();
     void test_mathSin_incorect_function_accuracy();
-    void test_mathSin_degree();
     void test_mathSin_radian();
 
     void test_mathCos_empty_string();
     void test_mathCos_incorect_div_accuracy();
     void test_mathCos_incorect_function_accuracy();
-    void test_mathCos_degree();
     void test_mathCos_radian();
 
     void test_mathTng_error();
@@ -119,6 +115,15 @@ private slots:
     void test_mathMod_second_num_minus_one();
     void test_mathMod_normal();
     void test_mathMod_first_num_negative();
+
+    void test_mathSqrt_empty_string();
+    void test_mathSqrt_negative_num();
+    void test_mathSqrt_num_zero();
+    void test_mathSqrt_num_one();
+    void test_mathSqrt_simple();
+
+    void test_mathPercent_empty_string();
+    void test_mathPercent_simple();
 
     void test_mathModule_empty_string();
     void test_mathModule_incorect_minus_position();
@@ -804,47 +809,29 @@ void numbermath::test_mathPow_simple_odd_pow(){
     QCOMPARE(curent_result,result);
 }
 
-void numbermath::test_mathTrigonometricConvertDegreeToRadian_correct(){
-    QString result="0,418879", curent_result="";
+void numbermath::test_mathDegreeToRadian_correct(){
+    QString result="0,418879020478632", curent_result="";
     std::string num="24";
 
-    curent_result=QString::fromStdString(smath::mathTrigonometricConvertDegreeToRadian(num,6));
+    curent_result=QString::fromStdString(smath::mathDegreeToRadian(num));
 
     QCOMPARE(curent_result,result);
 }
 
-void numbermath::test_mathTrigonometricConvertDegreeToRadian_bigger_normal(){
-    QString result="1,04720", curent_result="";
-    std::string num="420";
-
-    curent_result=QString::fromStdString(smath::mathTrigonometricConvertDegreeToRadian(num,5));
-
-    QCOMPARE(curent_result,result);
-}
-
-void numbermath::test_mathTrigonometricConvertDegreeToRadian_smaller_normal(){
-    QString result="-3,141593", curent_result="";
-    std::string num="-540";
-
-    curent_result=QString::fromStdString(smath::mathTrigonometricConvertDegreeToRadian(num,6));
-
-    QCOMPARE(curent_result,result);
-}
-
-void numbermath::test_mathTrigonometricCheckRadian_bigger_normal(){
+void numbermath::test_mathCheckRadian_bigger_normal(){
     QString result="0,716814692820414", curent_result="";
     std::string num="7";
 
-    curent_result=QString::fromStdString(smath::mathTrigonometricCheckRadian(num));
+    curent_result=QString::fromStdString(smath::mathCheckRadian(num));
 
     QCOMPARE(curent_result,result);
 }
 
-void numbermath::test_mathTrigonometricCheckRadian_smaller_normal(){
+void numbermath::test_mathCheckRadian_smaller_normal(){
     QString result="-1,716814692820414", curent_result="";
     std::string num="-8";
 
-    curent_result=QString::fromStdString(smath::mathTrigonometricCheckRadian(num));
+    curent_result=QString::fromStdString(smath::mathCheckRadian(num));
 
     QCOMPARE(curent_result,result);
 }
@@ -854,7 +841,7 @@ void numbermath::test_mathSin_empty_string(){
     std::string temp="";
 
     try {
-        temp=smath::mathSin("",false,4,4);
+        temp=smath::mathSin("",4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -867,7 +854,7 @@ void numbermath::test_mathSin_incorect_div_accuracy(){
     std::string temp="";
 
     try {
-        temp=smath::mathSin("12",false,4,-2);
+        temp=smath::mathSin("12",4,-2);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -880,7 +867,7 @@ void numbermath::test_mathSin_incorect_function_accuracy(){
     std::string temp="";
 
     try {
-        temp=smath::mathSin("12",false,-4,4);
+        temp=smath::mathSin("12",-4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -888,20 +875,11 @@ void numbermath::test_mathSin_incorect_function_accuracy(){
     }
 }
 
-void numbermath::test_mathSin_degree(){
-    QString result="0,866026", curent_result="";
-    std::string num="420";
-
-    curent_result=QString::fromStdString(smath::mathSin(num,false,6,6));
-
-    QCOMPARE(curent_result,result);
-}
-
 void numbermath::test_mathSin_radian(){
     QString result="-0,826830273852676", curent_result="";
     std::string num="420";
 
-    curent_result=QString::fromStdString(smath::mathSin(num,true,10,4));
+    curent_result=QString::fromStdString(smath::mathSin(num,10,4));
 
     QCOMPARE(curent_result,result);
 }
@@ -911,7 +889,7 @@ void numbermath::test_mathCos_empty_string(){
     std::string temp="";
 
     try {
-        temp=smath::mathCos("",false,4,4);
+        temp=smath::mathCos("",4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -924,7 +902,7 @@ void numbermath::test_mathCos_incorect_div_accuracy(){
     std::string temp="";
 
     try {
-        temp=smath::mathCos("12",false,4,-4);
+        temp=smath::mathCos("12",4,-4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -937,7 +915,7 @@ void numbermath::test_mathCos_incorect_function_accuracy(){
     std::string temp="";
 
     try {
-        temp=smath::mathCos("12",false,-4,4);
+        temp=smath::mathCos("12",-4,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -945,20 +923,11 @@ void numbermath::test_mathCos_incorect_function_accuracy(){
     }
 }
 
-void numbermath::test_mathCos_degree(){
-    QString result="0,342020", curent_result="";
-    std::string num="430";
-
-    curent_result=QString::fromStdString(smath::mathCos(num,false,6,6));
-
-    QCOMPARE(curent_result,result);
-}
-
 void numbermath::test_mathCos_radian(){
-    QString result="-0,921748", curent_result="";
+    QString result="-0,921764", curent_result="";
     std::string num="430";
 
-    curent_result=QString::fromStdString(smath::mathCos(num,true,6,6));
+    curent_result=QString::fromStdString(smath::mathCos(num,10,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -968,7 +937,7 @@ void numbermath::test_mathTng_error(){
     std::string temp="";
 
     try {
-        temp=smath::mathTng("90",false,10,4);
+        temp=smath::mathTng(smath::mathDegreeToRadian("90"),10,4);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -977,10 +946,10 @@ void numbermath::test_mathTng_error(){
 }
 
 void numbermath::test_mathTng_correct(){
-    QString result="0,424476", curent_result="";
+    QString result="1,588153", curent_result="";
     std::string num="23";
 
-    curent_result=QString::fromStdString(smath::mathTng(num,false,6,6));
+    curent_result=QString::fromStdString(smath::mathTng(num,10,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -990,7 +959,7 @@ void numbermath::test_mathCtng_error(){
     std::string temp="";
 
     try {
-        temp=smath::mathCtng("0",false,4,10);
+        temp=smath::mathCtng("0",4,10);
         QCOMPARE(1,0);
     }
     catch(std::exception& exp) {
@@ -999,10 +968,10 @@ void numbermath::test_mathCtng_error(){
 }
 
 void numbermath::test_mathCtng_correct(){
-    QString result="1,072368", curent_result="";
+    QString result="-0,667216", curent_result="";
     std::string num="43";
 
-    curent_result=QString::fromStdString(smath::mathCtng(num,false,6,6));
+    curent_result=QString::fromStdString(smath::mathCtng(num,10,6));
 
     QCOMPARE(curent_result,result);
 }
@@ -1096,6 +1065,79 @@ void numbermath::test_mathMod_first_num_negative(){
     std::string num_1="-5", num_2="3";
 
     curent_result=QString::fromStdString(smath::mathMod(num_1,num_2));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathSqrt_empty_string(){
+    QString result="no symbols in num", curent_result="";
+
+    try{
+        curent_result=QString::fromStdString(smath::mathSqrt(""));
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void numbermath::test_mathSqrt_negative_num(){
+    QString result="negative num in sqrt", curent_result="";
+
+    try{
+        curent_result=QString::fromStdString(smath::mathSqrt("-23"));
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void numbermath::test_mathSqrt_num_zero(){
+    QString result="0", curent_result="";
+    std::string num="0";
+
+    curent_result=QString::fromStdString(smath::mathSqrt(num));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathSqrt_num_one(){
+    QString result="1", curent_result="";
+    std::string num="1";
+
+    curent_result=QString::fromStdString(smath::mathSqrt(num));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathSqrt_simple(){
+    QString result="1,4142135624", curent_result="";
+    std::string num="2";
+
+    curent_result=QString::fromStdString(smath::mathSqrt(num,20,10));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathPercent_empty_string(){
+    QString result="no symbols in num";
+    std::string temp="";
+
+    try {
+        temp=smath::mathPercent("");
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp) {
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void numbermath::test_mathPercent_simple(){
+    QString result="2,45", curent_result="";
+    std::string num="245";
+
+    curent_result=QString::fromStdString(smath::mathPercent(num));
 
     QCOMPARE(curent_result,result);
 }

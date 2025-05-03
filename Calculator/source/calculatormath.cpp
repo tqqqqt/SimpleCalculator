@@ -4,7 +4,6 @@ CalculatorMath::CalculatorMath()
 {
     div_accuracy=10;
     function_accuracy=10;
-    function_radian_data=false;
 }
 
 // check prior of curent operator for polish entry
@@ -28,33 +27,33 @@ void CalculatorMath::setVector(const std::vector<CalculatorObject>& _objects){
     for(CalculatorObject element:_objects){
         object_type=element.getObjectType();
         // nums, x variable and factorial dont need do something
-        if(object_type==CalculatorObject::ObjectsTypes::Num || object_type==CalculatorObject::ObjectsTypes::X_variable || object_type==CalculatorObject::ObjectsTypes::Factorial){
+        if(object_type==CalculatorObject::ObjectsTypes::Num || object_type==CalculatorObject::ObjectsTypes::X_variable || object_type==CalculatorObject::ObjectsTypes::SpecialFunction){
             element.checkNum();
             polish_entry.push_back(element);
             continue;
         }
         // function and operator who use bracket need special move
-        if(object_type==CalculatorObject::ObjectsTypes::MinusBrackets || object_type==CalculatorObject::ObjectsTypes::PowOperator || object_type==CalculatorObject::ObjectsTypes::Functins){
+        if(object_type==CalculatorObject::ObjectsTypes::MinusBracket || object_type==CalculatorObject::ObjectsTypes::Function || object_type==CalculatorObject::ObjectsTypes::PowFunction){
             oper_mas.push(element);
             oper_mas.push(open_bracket);
             continue;
         }
         // open bracket simply add to oper_mas
-        if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets){
+        if(object_type==CalculatorObject::ObjectsTypes::OpenBracket){
             oper_mas.push(element);
             continue;
         }
         // if find close bracket we need add all while not find open bracket what add before
-        if(object_type==CalculatorObject::ObjectsTypes::CloseBrackets){
+        if(object_type==CalculatorObject::ObjectsTypes::CloseBracket){
             // add in polish entry all what find between open and close bracket
-            while(oper_mas.size() && oper_mas.top().getObjectType()!=CalculatorObject::ObjectsTypes::OpenBrackets){
+            while(oper_mas.size() && oper_mas.top().getObjectType()!=CalculatorObject::ObjectsTypes::OpenBracket){
                 polish_entry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
             // delete open bracket
             oper_mas.pop();
             // to function special move need add this function and delete from oper mas
-            if(oper_mas.size() && (oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::MinusBrackets || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::PowOperator || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Functins || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Mod)){
+            if(oper_mas.size() && (oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::MinusBracket || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::Function || oper_mas.top().getObjectType()==CalculatorObject::ObjectsTypes::PowFunction)){
                 polish_entry.push_back(oper_mas.top());
                 oper_mas.pop();
             }
@@ -105,11 +104,14 @@ CalculatorObject CalculatorMath::getResult(){
                 // check if it function
                 delete_mode=1;
                 if(object_string=="(-") math_result=smath::mathMul(polish_entry[i-1].toString(),"-1");
-                else if(object_string=="Sin(") math_result=smath::mathSin(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Cos(") math_result=smath::mathCos(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Tng(") math_result=smath::mathTng(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Ctng(") math_result=smath::mathCtng(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
+                else if(object_string=="Sin(") math_result=smath::mathSin(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Cos(") math_result=smath::mathCos(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Tng(") math_result=smath::mathTng(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Ctng(") math_result=smath::mathCtng(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="!") math_result=smath::mathFactorial(polish_entry[i-1].toString());
+                else if(object_string=="°") math_result=smath::mathDegreeToRadian(polish_entry[i-1].toString());
+                else if(object_string=="%") math_result=smath::mathPercent(polish_entry[i-1].toString());
+                else if(object_string=="√(") math_result=smath::mathSqrt(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="Module(") math_result=smath::mathModule(polish_entry[i-1].toString());
                 else if(object_string=="RoundUp(") math_result=smath::mathRoundUp(polish_entry[i-1].toString());
                 else if(object_string=="RoundDown(") math_result=smath::mathRoundDown(polish_entry[i-1].toString());
@@ -165,7 +167,7 @@ void CalculatorMath::simplifyExpression(){
             // if no nums continue
             if(count_nums==0) continue;
             object_string=polish_entry[i].toString();
-            if(object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::Mod || object_type==CalculatorObject::ObjectsTypes::PowOperator){
+            if(object_type==CalculatorObject::ObjectsTypes::Operator || object_type==CalculatorObject::ObjectsTypes::PowFunction){
                 if(count_nums<2){
                     count_nums=0;
                     continue;
@@ -180,16 +182,19 @@ void CalculatorMath::simplifyExpression(){
                 delete_mode=0;
             }
             else{
-                if(count_nums<1 || (object_type!=CalculatorObject::ObjectsTypes::Functins && object_type!=CalculatorObject::ObjectsTypes::Factorial && object_type!=CalculatorObject::ObjectsTypes::MinusBrackets)){
+                if(count_nums<1 || (object_type!=CalculatorObject::ObjectsTypes::Function && object_type!=CalculatorObject::ObjectsTypes::SpecialFunction && object_type!=CalculatorObject::ObjectsTypes::MinusBracket)){
                     count_nums=0;
                     continue;
                 }
                 if(object_string=="(-") math_result=smath::mathMul(polish_entry[i-1].toString(),"-1");
-                else if(object_string=="Sin(") math_result=smath::mathSin(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Cos(") math_result=smath::mathCos(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Tng(") math_result=smath::mathTng(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Ctng(") math_result=smath::mathCtng(polish_entry[i-1].toString(),function_radian_data,function_accuracy,div_accuracy);
+                else if(object_string=="Sin(") math_result=smath::mathSin(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Cos(") math_result=smath::mathCos(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Tng(") math_result=smath::mathTng(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Ctng(") math_result=smath::mathCtng(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="!") math_result=smath::mathFactorial(polish_entry[i-1].toString());
+                else if(object_string=="°") math_result=smath::mathDegreeToRadian(polish_entry[i-1].toString());
+                else if(object_string=="%") math_result=smath::mathPercent(polish_entry[i-1].toString());
+                else if(object_string=="√(") math_result=smath::mathSqrt(polish_entry[i-1].toString(),function_accuracy,div_accuracy);
                 else if(object_string=="Module(") math_result=smath::mathModule(polish_entry[i-1].toString());
                 else if(object_string=="RoundUp(") math_result=smath::mathRoundUp(polish_entry[i-1].toString());
                 else if(object_string=="RoundDown(") math_result=smath::mathRoundDown(polish_entry[i-1].toString());
@@ -242,7 +247,7 @@ CalculatorObject CalculatorMath::getResultWithVariable(const std::string& _point
             // calculate operators, pow and mode, use to nums
             object_type=polish_entry[i].getObjectType();
             object_string=polish_entry[i].toString();
-            if(object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator || object_type==CalculatorObject::ObjectsTypes::Mod){
+            if(object_type==CalculatorObject::ObjectsTypes::Operator || object_type==CalculatorObject::ObjectsTypes::PowFunction){
                 num_2=stack.top();
                 stack.pop();
                 num_1=stack.top();
@@ -259,11 +264,14 @@ CalculatorObject CalculatorMath::getResultWithVariable(const std::string& _point
                 num_1=stack.top();
                 stack.pop();
                 if(object_string=="(-") math_result=smath::mathMul(num_1.toString(),"-1");
-                else if(object_string=="Sin(") math_result=smath::mathSin(num_1.toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Cos(") math_result=smath::mathCos(num_1.toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Tng(") math_result=smath::mathTng(num_1.toString(),function_radian_data,function_accuracy,div_accuracy);
-                else if(object_string=="Ctng(") math_result=smath::mathCtng(num_1.toString(),function_radian_data,function_accuracy,div_accuracy);
+                else if(object_string=="Sin(") math_result=smath::mathSin(num_1.toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Cos(") math_result=smath::mathCos(num_1.toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Tng(") math_result=smath::mathTng(num_1.toString(),function_accuracy,div_accuracy);
+                else if(object_string=="Ctng(") math_result=smath::mathCtng(num_1.toString(),function_accuracy,div_accuracy);
                 else if(object_string=="!") math_result=smath::mathFactorial(num_1.toString());
+                else if(object_string=="°") math_result=smath::mathDegreeToRadian(num_1.toString());
+                else if(object_string=="%") math_result=smath::mathPercent(num_1.toString());
+                else if(object_string=="√(") math_result=smath::mathSqrt(num_1.toString(),function_accuracy,div_accuracy);
                 else if(object_string=="Module(") math_result=smath::mathModule(num_1.toString());
                 else if(object_string=="RoundUp(") math_result=smath::mathRoundUp(num_1.toString());
                 else if(object_string=="RoundDown(") math_result=smath::mathRoundDown(num_1.toString());
@@ -303,7 +311,7 @@ void CalculatorMath::setPolishEntry(const std::vector<CalculatorObject>& _arr){
         object_type=_arr[i].getObjectType();
 
         // brackets and none objects cant stand in polish entry
-        if(object_type==CalculatorObject::ObjectsTypes::OpenBrackets || object_type==CalculatorObject::ObjectsTypes::CloseBrackets) throw incorect_polish_entry("find brackets");
+        if(object_type==CalculatorObject::ObjectsTypes::OpenBracket || object_type==CalculatorObject::ObjectsTypes::CloseBracket) throw incorect_polish_entry("find brackets");
         if(object_type==CalculatorObject::ObjectsTypes::None) throw incorect_polish_entry("none type objects");
 
         // skip nums and variable
@@ -320,7 +328,7 @@ void CalculatorMath::setPolishEntry(const std::vector<CalculatorObject>& _arr){
 
         // check how much nums have before
         // operator
-        if(object_type==CalculatorObject::ObjectsTypes::Mod || object_type==CalculatorObject::ObjectsTypes::Operators || object_type==CalculatorObject::ObjectsTypes::PowOperator){
+        if(object_type==CalculatorObject::ObjectsTypes::Operator || object_type==CalculatorObject::ObjectsTypes::PowFunction){
             // check curent position and count nums
             if(static_cast<int>(i-2)<0 || check_stack.size()<2) throw incorect_polish_entry("no objects before operator");
 
@@ -333,7 +341,7 @@ void CalculatorMath::setPolishEntry(const std::vector<CalculatorObject>& _arr){
         }
 
         // function
-        if(object_type==CalculatorObject::ObjectsTypes::Functins || object_type==CalculatorObject::ObjectsTypes::Factorial || object_type==CalculatorObject::ObjectsTypes::MinusBrackets){
+        if(object_type==CalculatorObject::ObjectsTypes::Function || object_type==CalculatorObject::ObjectsTypes::SpecialFunction || object_type==CalculatorObject::ObjectsTypes::MinusBracket){
             // check curent position
             if(static_cast<int>(i-1)<0 || check_stack.size()<1) throw incorect_polish_entry("no nums before function");
 
@@ -357,11 +365,6 @@ void CalculatorMath::setDivAccuracy(const int& _accuracy){
 // function acuracy show how much element need to calculate Sin and Cos
 void CalculatorMath::setFunctionAccuracy(const int& _accuracy){
     function_accuracy=_accuracy;
-}
-
-// set flag what all nums to sin, cos, tang and ctang is radian or not
-void CalculatorMath::setFunctionRadianFlag(const bool& _flag){
-    function_radian_data=_flag;
 }
 
 /*

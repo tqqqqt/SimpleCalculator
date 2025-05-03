@@ -146,12 +146,12 @@ void calculatormath::test_getResult_special_operators(){
     QVector<CalculatorObject> input_vector(8);
     result.addNum('5');
     input_vector[0].addNum('2');
-    input_vector[1].addSymbol("^(");
+    input_vector[1].addFunction("^(");
     input_vector[2]=input_vector[0];
     input_vector[3].addSymbol(")");
     input_vector[4].addSymbol("+");
     input_vector[5].addNum('3');
-    input_vector[6].addSpecialFunction("mod");
+    input_vector[6].addSymbol("mod");
     input_vector[7]=input_vector[0];
 
     calculator.setVector(input_vector.toStdVector());
@@ -164,7 +164,7 @@ void calculatormath::test_getResult_functions(){
     CalculatorMath calculator;
     CalculatorObject curent_result, result;
     QVector<CalculatorObject> input_vector(15);
-    result.setFullNum("-2,1495654642");
+    result.setFullNum("-2,1504556503");
     input_vector[0].addFunction("Sin(");
     input_vector[1].addNum('2');
     input_vector[2].addSymbol(")");
@@ -183,7 +183,6 @@ void calculatormath::test_getResult_functions(){
 
     calculator.setVector(input_vector.toStdVector());
     calculator.setFunctionAccuracy(5);
-    calculator.setFunctionRadianFlag(true);
     curent_result=calculator.getResult();
 
     QCOMPARE(curent_result.toString(),result.toString());
@@ -262,12 +261,12 @@ void calculatormath::test_getResultWithVariable_special_operators(){
     QVector<CalculatorObject> input_vector(8);
     result.addNum('5');
     input_vector[0].addNum('2');
-    input_vector[1].addSymbol("^(");
+    input_vector[1].addFunction("^(");
     input_vector[2]=input_vector[0];
     input_vector[3].addSymbol(")");
     input_vector[4].addSymbol("+");
     input_vector[5].addNum('3');
-    input_vector[6].addSpecialFunction("mod");
+    input_vector[6].addSymbol("mod");
     input_vector[7]=input_vector[0];
 
     calculator.setVector(input_vector.toStdVector());
@@ -280,7 +279,7 @@ void calculatormath::test_getResultWithVariable_functions(){
     CalculatorMath calculator;
     CalculatorObject curent_result, result;
     QVector<CalculatorObject> input_vector(15);
-    result.setFullNum("-2,1495654642");
+    result.setFullNum("-2,1504556503");
     input_vector[0].addFunction("Sin(");
     input_vector[1].addNum('2');
     input_vector[2].addSymbol(")");
@@ -299,7 +298,6 @@ void calculatormath::test_getResultWithVariable_functions(){
 
     calculator.setVector(input_vector.toStdVector());
     calculator.setFunctionAccuracy(5);
-    calculator.setFunctionRadianFlag(true);
     curent_result=calculator.getResultWithVariable("1");
 
     QCOMPARE(curent_result.toString(),result.toString());
@@ -377,12 +375,12 @@ void calculatormath::test_simplifyExpression_special_operators(){
     int result_size=1;
     result.addNum('5');
     input_vector[0].addNum('2');
-    input_vector[1].addSymbol("^(");
+    input_vector[1].addFunction("^(");
     input_vector[2]=input_vector[0];
     input_vector[3].addSymbol(")");
     input_vector[4].addSymbol("+");
     input_vector[5].addNum('3');
-    input_vector[6].addSpecialFunction("mod");
+    input_vector[6].addSymbol("mod");
     input_vector[7]=input_vector[0];
 
     calculator.setVector(input_vector.toStdVector());
@@ -398,7 +396,7 @@ void calculatormath::test_simplifyExpression_functions(){
     CalculatorObject result;
     QVector<CalculatorObject> input_vector(15), curent_result;
     int result_size=1;
-    result.setFullNum("-2,1495654642");
+    result.setFullNum("-2,1504556503");
     input_vector[0].addFunction("Sin(");
     input_vector[1].addNum('2');
     input_vector[2].addSymbol(")");
@@ -416,7 +414,6 @@ void calculatormath::test_simplifyExpression_functions(){
     input_vector[14].addSymbol(")");
 
     calculator.setFunctionAccuracy(5);
-    calculator.setFunctionRadianFlag(true);
     calculator.setVector(input_vector.toStdVector());
     calculator.simplifyExpression();
     curent_result=QVector<CalculatorObject>::fromStdVector(calculator.getPolishEntry());

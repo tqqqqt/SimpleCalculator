@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>386</width>
-    <height>159</height>
+    <width>392</width>
+    <height>185</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,51 +21,15 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="2">
-     <widget class="QPushButton" name="pushButton_fact">
+    <item row="2" column="2">
+     <widget class="QPushButton" name="pushButton_round_down">
       <property name="font">
        <font>
         <pointsize>9</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>!</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="pushButton_cos">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Cos</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pushButton_sin">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Sin</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="pushButton_ctng">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Ctng</string>
+       <string>RoundDown</string>
       </property>
      </widget>
     </item>
@@ -81,6 +45,30 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pushButton_module">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Module</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pushButton_sin">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Sin</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="2">
      <widget class="QPushButton" name="pushButton_mod">
       <property name="font">
@@ -93,15 +81,15 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="pushButton_module">
+    <item row="1" column="1">
+     <widget class="QPushButton" name="pushButton_ctng">
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <pointsize>10</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>Module</string>
+       <string>Ctng</string>
       </property>
      </widget>
     </item>
@@ -117,15 +105,63 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="pushButton_round_down">
+    <item row="0" column="1">
+     <widget class="QPushButton" name="pushButton_cos">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Cos</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="pushButton_grad">
       <property name="font">
        <font>
         <pointsize>9</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>RoundDown</string>
+       <string>°</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="pushButton_fact">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>!</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="pushButton_sqrt">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>√</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QPushButton" name="pushButton_percent">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>%</string>
       </property>
      </widget>
     </item>
@@ -136,7 +172,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>386</width>
+     <width>392</width>
      <height>26</height>
     </rect>
    </property>

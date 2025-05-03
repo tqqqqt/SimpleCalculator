@@ -23,7 +23,7 @@ private slots:
     void test_addSymbol_open_bracket();
     void test_addSymbol_close_bracket();
     void test_addSymbol_operator();
-    void test_addSymbol_pow();
+    void test_addSymbol_mod();
 
     void test_addFunction_exception_input();
     void test_addFunction_not_none();
@@ -31,7 +31,7 @@ private slots:
 
     void test_addSpecialFunction_exception_input();
     void test_addSpecialFunction_not_none();
-    void test_addSpecialFunction_mod();
+    void test_addSpecialFunction_degree();
     void test_addSpecialFunction_factorial();
 
     void test_addVariable_not_none();
@@ -124,7 +124,7 @@ void calculatorobject::test_addNum_no_add_dot(){
 
 void calculatorobject::test_addSymbol_exception_input(){
     CalculatorObject object;
-    QString result="input not a {+, -, *, /, (-, (, ), ^( }";
+    QString result="input not a {+, -, *, /, (-, (, ), mod }";
 
     try{
         object.addSymbol("a");
@@ -186,11 +186,11 @@ void calculatorobject::test_addSymbol_operator(){
     QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_addSymbol_pow(){
+void calculatorobject::test_addSymbol_mod(){
     CalculatorObject object;
-    QString result="^(", curent_result="";
+    QString result="mod", curent_result="";
 
-    object.addSymbol("^(");
+    object.addSymbol("mod");
     curent_result=QString::fromStdString(object.toString());
 
     QCOMPARE(curent_result,result);
@@ -198,7 +198,7 @@ void calculatorobject::test_addSymbol_pow(){
 
 void calculatorobject::test_addFunction_exception_input(){
     CalculatorObject object;
-    QString result="input not a {Sin, Cos, Tan, Ctan, Module, Round }";
+    QString result="input not a {Sin, Cos, Tan, Ctan, Module, Round, ^( }";
 
     try{
         object.addFunction("a");
@@ -232,7 +232,7 @@ void calculatorobject::test_addFunction_correct(){
 
 void calculatorobject::test_addSpecialFunction_exception_input(){
     CalculatorObject object;
-    QString result="input not a mod or !";
+    QString result="input not a { !, °, % }";
 
     try{
         object.addSpecialFunction("a");
@@ -254,11 +254,11 @@ void calculatorobject::test_addSpecialFunction_not_none(){
     QCOMPARE(curent_result,result);
 }
 
-void calculatorobject::test_addSpecialFunction_mod(){
+void calculatorobject::test_addSpecialFunction_degree(){
     CalculatorObject object;
-    QString result="mod", curent_result="";
+    QString result="°", curent_result="";
 
-    object.addSpecialFunction("mod");
+    object.addSpecialFunction("°");
     curent_result=QString::fromStdString(object.toString());
 
     QCOMPARE(curent_result,result);
@@ -511,7 +511,7 @@ void calculatorobject::test_deleteLastSymbol_end_clear(){
 void calculatorobject::test_deleteLastSymbol_change_type(){
     CalculatorObject object;
     QString result="(-", curent_result="";
-    CalculatorObject::ObjectsTypes result_type=CalculatorObject::ObjectsTypes::MinusBrackets, curent_result_type;
+    CalculatorObject::ObjectsTypes result_type=CalculatorObject::ObjectsTypes::MinusBracket, curent_result_type;
 
     object.addSymbol("(-");
     object.addNum('2');

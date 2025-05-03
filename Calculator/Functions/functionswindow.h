@@ -31,6 +31,7 @@ private slots:
 signals:
     void pressFunction(const QString&);
     void pressSpecialFunction(const QString&);
+    void pressOperator(const QString&);
     void updateWindowState();
 };
 

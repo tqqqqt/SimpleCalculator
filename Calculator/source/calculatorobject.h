@@ -10,8 +10,8 @@
 class CalculatorObject: public ProgramObject
 {
 public:
-    enum class ObjectsTypes{ None=0, Num=1, MinusBrackets=2, OpenBrackets=3, CloseBrackets=4,
-                             Operators=5, PowOperator=6, Functins=7, Factorial=8, Mod=9, X_variable=10 };
+    enum class ObjectsTypes{ None=0, Num=1, MinusBracket=2, OpenBracket=3, CloseBracket=4,
+                             Operator=5, Function=6, SpecialFunction=7, PowFunction=8, X_variable=9 };
 private:
     std::string text;
     size_t length;
