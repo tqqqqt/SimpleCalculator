@@ -116,6 +116,11 @@ private slots:
     void test_mathMod_normal();
     void test_mathMod_first_num_negative();
 
+    void test_mathSqrt_exception();
+    void test_mathSqrt_num_zero();
+    void test_mathSqrt_num_one();
+    void test_mathSqrt_simple();
+
     void test_mathModule_empty_string();
     void test_mathModule_incorect_minus_position();
     void test_mathModule_positive_num();
@@ -1056,6 +1061,45 @@ void numbermath::test_mathMod_first_num_negative(){
     std::string num_1="-5", num_2="3";
 
     curent_result=QString::fromStdString(smath::mathMod(num_1,num_2));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathSqrt_exception(){
+    QString result="negative num in sqrt", curent_result="";
+
+    try{
+        curent_result=QString::fromStdString(smath::mathSqrt("-23"));
+        QCOMPARE(1,0);
+    }
+    catch(std::exception& exp){
+        QCOMPARE(exp.what(),result);
+    }
+}
+
+void numbermath::test_mathSqrt_num_zero(){
+    QString result="0", curent_result="";
+    std::string num="0";
+
+    curent_result=QString::fromStdString(smath::mathSqrt(num));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathSqrt_num_one(){
+    QString result="1", curent_result="";
+    std::string num="1";
+
+    curent_result=QString::fromStdString(smath::mathSqrt(num));
+
+    QCOMPARE(curent_result,result);
+}
+
+void numbermath::test_mathSqrt_simple(){
+    QString result="1,4142135624", curent_result="";
+    std::string num="2";
+
+    curent_result=QString::fromStdString(smath::mathSqrt(num,20,10));
 
     QCOMPARE(curent_result,result);
 }
