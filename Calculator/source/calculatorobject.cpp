@@ -88,7 +88,7 @@ void CalculatorObject::addSymbol(const std::string& _symbol){
 // add fucntion in object
 void CalculatorObject::addFunction(const std::string& _function){
     // check input
-    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(" && _function!="^(") throw incorect_add_function("input not a {Sin, Cos, Tan, Ctan, Module, Round, ^( }");
+    if(_function!="Sin(" && _function!="Cos(" && _function!="Tng(" && _function!="Ctng(" && _function!="Module(" && _function!="RoundUp(" && _function!="RoundDown(" && _function!="^(" && _function!="√(") throw incorect_add_function("input not a {Sin, Cos, Tan, Ctan, Module, Round, ^( }");
     // check object type to none
     if(object_type!=ObjectsTypes::None) return;
 
